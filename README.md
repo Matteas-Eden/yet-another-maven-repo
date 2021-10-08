@@ -1,5 +1,7 @@
 # Yet-Another-Maven-Repo
 Yeah, I'm just testing some shit with GitHub actions and workflows and stuff
-
-[![Run Unit Tests](.github/badges/test-badge.svg)](https://github.com/Matteas-Eden/yet-another-maven-repo/actions/workflows/run-test.yml)
-[![Run Unit Tests](.github/badges/cvrg-badge.svg)](https://github.com/Matteas-Eden/yet-another-maven-repo/actions/workflows/run-test.yml)
+<p align="center">
+  <a href="https://github.com/Matteas-Eden/yet-another-maven-repo/actions/workflows/run-test.yml">
+  <img width="44%" src=".github/badges/test-badge.svg"/> <img width="36.5%" src=".github/badges/cvrg-badge.svg"/>
+  </a>
+</p>
