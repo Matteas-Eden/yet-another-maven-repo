@@ -20,7 +20,7 @@ jobs:
         uses: dorny/test-reporter@v1
         if: success() || failure()
         with:
-          name: JUnit Tests
+          name: test
           path: target/test-results/*.xml
           reporter: java-junit
   generate-badge:
@@ -37,4 +37,4 @@ jobs:
         label: 'Test Result'
         status: ${{ needs.build.outputs.unit-tests.conclusion }}
         color: 'blue,555,daf'
-        path: '.github/workflows/badge.svg'
+        path: 'actions/workflows/badge.svg'
