@@ -33,4 +33,4 @@ jobs:
         label: 'Test Result'
         status: ${{ steps.unit-tests.conclusion }}
         color: 'blue,555,daf'
-        path: ${{ .github/workflows/run-test.yml/badge.svg }}
+        path: '.github/badge.svg'
