@@ -21,9 +21,10 @@ jobs:
         if: success() || failure()
         with:
           name: JUnit Tests
-          path: target/tes-results/*.xml
+          path: target/test-results/*.xml
           reporter: java-junit
   generate-badge:
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - name: Generate the badge SVG image
@@ -33,4 +34,4 @@ jobs:
         label: 'Test Result'
         status: ${{ steps.unit-tests.conclusion }}
         color: 'blue,555,daf'
-        path: '.github/badge.svg'
+        path: '.github/workflows/run-test.yml/badge.svg'
