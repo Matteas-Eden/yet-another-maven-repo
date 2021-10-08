@@ -5,6 +5,9 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    outputs:
+      conclusion: ${{steps.unit-tests.outputs.conclusion}}
 
     steps:
       - uses: actions/checkout@v2
@@ -35,6 +38,11 @@ jobs:
       id: badge
       with:
         label: 'Test Result'
-        status: ${{ needs.build.outputs.unit-tests.conclusion }}
+        status: ${{ needs.build.outputs.conclusion }}
         color: 'blue,555,daf'
-        path: 'actions/workflows/badge.svg'
+        path: '.github/workflows/badge.svg'
+    - name: Store badge
+      uses: actions/upload-artifact@v2
+      with:
+        name: Test Results Badge
+        path: '.github/workflows/badge.svg'
