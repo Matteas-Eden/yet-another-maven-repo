@@ -35,6 +35,8 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
+    - name: Create directory for badges
+      run: mkdir -p ".github/badges"
     - name: Generate the badge SVG image
       uses: emibcn/badge-action@v1
       id: badge
@@ -42,7 +44,7 @@ jobs:
         label: 'Test Result'
         status: ${{ needs.build.outputs.conclusion }}
         color: 'blue,555,daf'
-        path: '.github/workflows/badge.svg'
+        path: '.github/badges/badge.svg'
 #     - name: Store badge
 #       uses: actions/upload-artifact@v2
 #       with:
