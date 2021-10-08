@@ -32,17 +32,17 @@ public class PersonTest {
         assertEquals(26, person.getAge());
     }
 
-    @Test
-    public void personHasEyeColour() {
-        Person person = new Person("John", "Smith", 25, Color.BLUE, Color.BLACK);
-        assertEquals(Color.BLUE, person.getEyeColour());
-    }
-
-    @Test
-    public void personHasHairColour() {
-        Person person = new Person("John", "Smith", 25, Color.BLUE, Color.BLACK);
-        assertEquals(Color.BLACK, person.getHairColour());
-    }
+//    @Test
+//    public void personHasEyeColour() {
+//        Person person = new Person("John", "Smith", 25, Color.BLUE, Color.BLACK);
+//        assertEquals(Color.BLUE, person.getEyeColour());
+//    }
+//
+//    @Test
+//    public void personHasHairColour() {
+//        Person person = new Person("John", "Smith", 25, Color.BLUE, Color.BLACK);
+//        assertEquals(Color.BLACK, person.getHairColour());
+//    }
 
     @Test
     public void personDyesHair() {
