@@ -49,10 +49,12 @@ jobs:
       TEST_COLOUR: ${{ needs.build.outputs.conclusion == 'success' && 'success' || 'critical' }}
       COVER_COLOUR: ${{ needs.build.outputs.coverage >= 0.85 && 'success' || 'critical' }}
       RESULT: ${{ needs.build.outputs.conclusion == 'success' && 'PASS' || 'FAIL' }}
-      COVERAGE: ${{ needs.build.outputs.coverage ** 100 }}
+      COVERAGE_FLOAT: ${{ needs.build.outputs.coverage }}
     
     steps:
     - uses: actions/checkout@v2
+    - name: Configure environment
+      run: echo ::set-env name=COVERAGE::$(($COVERAGE_FLOAT * 100))
     - name: Create directory for badges
       run: mkdir -p ".github/badges"
     - name: Create test badge
