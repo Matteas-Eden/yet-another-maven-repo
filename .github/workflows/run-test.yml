@@ -1,6 +1,11 @@
 name: Run Unit Tests
 
-on: [push]
+on:
+  push:
+    paths-ignore:
+    - '**.md'
+    - 'badges/**'
+    
 
 jobs:
   build:
@@ -39,6 +44,7 @@ jobs:
       env:
         COLOUR: ${{ needs.build.outputs.conclusion == 'success' && 'green' || 'red' }}
         RESULT: ${{ needs.build.outputs.conclusion == 'success' && 'PASS' || 'FAIL' }}
+      run: echo 'Result is ${RESULT} so colour is ${COLOUR}'
     - name: Create directory for badges
       run: mkdir -p ".github/badges"
     - name: Generate the badge SVG image
