@@ -49,7 +49,7 @@ jobs:
       TEST_COLOUR: ${{ needs.build.outputs.conclusion == 'success' && 'success' || 'critical' }}
       COVER_COLOUR: ${{ needs.build.outputs.coverage >= 0.85 && 'success' || 'critical' }}
       RESULT: ${{ needs.build.outputs.conclusion == 'success' && 'PASS' || 'FAIL' }}
-      COVERAGE: ${{ needs.build.outputs.coverage * 100 }}
+      COVERAGE: ${{ needs.build.outputs.coverage ** 100 }}
     
     steps:
     - uses: actions/checkout@v2
