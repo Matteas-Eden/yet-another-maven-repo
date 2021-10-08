@@ -48,7 +48,7 @@ jobs:
     - name: Create directory for badges
       run: mkdir -p ".github/badges"
     - name: Create badge
-      run: curl https://img.shields.io/static/v1\?label\=Test%20Results\&message\=${{ env.RESULT }}\&color\=${{ env.COLOUR }}\&style\=for-the-badge\&link\=https://github.com/Matteas-Eden/yet-another-maven-repo/actions/workflows/run-test.yml" > .github/badges/badge.svg
+      run: curl https://img.shields.io/static/v1\?label\=Test%20Results\&message\=$RESULT\&color\=$COLOUR\&style\=for-the-badge\&link\=https://github.com/Matteas-Eden/yet-another-maven-repo/actions/workflows/run-test.yml > .github/badges/badge.svg
     - name: Commit badge
       run: |
         git config --local user.name 'github-actions[bot]'
