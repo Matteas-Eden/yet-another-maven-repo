@@ -35,6 +35,10 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
+    - name: Determine badge colour based on result
+      env:
+        COLOUR: ${{ needs.build.outputs.conclusion == 'success' && 'green' || 'red' }}
+        RESULT: ${{ needs.build.outputs.conclusion == 'success' && 'PASS' || 'FAIL' }}
     - name: Create directory for badges
       run: mkdir -p ".github/badges"
     - name: Generate the badge SVG image
@@ -42,14 +46,9 @@ jobs:
       id: badge
       with:
         label: 'Test Result'
-        status: ${{ needs.build.outputs.conclusion }}
-        color: 'blue,555,daf'
+        status: '${RESULT}'
+        color: '${COLOUR}'
         path: '.github/badges/badge.svg'
-#     - name: Store badge
-#       uses: actions/upload-artifact@v2
-#       with:
-#         name: Test Results Badge
-#         path: '.github/workflows/badge.svg'
     - name: Commit badge
       run: |
         git config --local user.name 'github-actions[bot]'
