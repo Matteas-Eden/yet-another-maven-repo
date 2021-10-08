@@ -1,20 +1,20 @@
-<svg width="145.6" height="20" viewBox="0 0 1456 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Test Result: ${RESULT}">
-  <title>Test Result: ${RESULT}</title>
+<svg width="81.5" height="20" viewBox="0 0 815 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Test Result: ">
+  <title>Test Result: </title>
   <linearGradient id="a" x2="0" y2="100%">
     <stop offset="0" stop-opacity=".1" stop-color="#EEE"/>
     <stop offset="1" stop-opacity=".1"/>
   </linearGradient>
-  <mask id="m"><rect width="1456" height="200" rx="30" fill="#FFF"/></mask>
+  <mask id="m"><rect width="815" height="200" rx="30" fill="#FFF"/></mask>
   <g mask="url(#m)">
     <rect width="715" height="200" fill="#555"/>
-    <rect width="741" height="200" fill="#${COLOUR}" x="715"/>
-    <rect width="1456" height="200" fill="url(#a)"/>
+    <rect width="100" height="200" fill="#" x="715"/>
+    <rect width="815" height="200" fill="url(#a)"/>
   </g>
   <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
     <text x="60" y="148" textLength="615" fill="#000" opacity="0.25">Test Result</text>
     <text x="50" y="138" textLength="615">Test Result</text>
-    <text x="770" y="148" textLength="641" fill="#000" opacity="0.25">${RESULT}</text>
-    <text x="760" y="138" textLength="641">${RESULT}</text>
+    <text x="770" y="148" textLength="0" fill="#000" opacity="0.25"></text>
+    <text x="760" y="138" textLength="0"></text>
   </g>
   
 </svg>
