@@ -53,8 +53,12 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        apt-get update
+        apt-get install bc -y
     - name: Configure environment
-      run: echo "COVERAGE=$((${COVERAGE_FLOAT:0:4} * 100))" >> $GITHUB_ENV
+      run: echo "COVERAGE=$(printf ".0f" "`echo ${COVERAGE_FLOAT:0:4} * 100 | bc -l`")" >> $GITHUB_ENV
     - name: Create directory for badges
       run: mkdir -p ".github/badges"
     - name: Create test badge
