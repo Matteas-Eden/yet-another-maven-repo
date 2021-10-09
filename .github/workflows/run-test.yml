@@ -48,7 +48,7 @@ jobs:
     env:
       TEST_COLOUR: ${{ needs.build.outputs.conclusion == 'success' && 'success' || 'critical' }}
       COVER_COLOUR: ${{ needs.build.outputs.coverage >= 0.85 && 'success' || 'critical' }}
-      RESULT: ${{ needs.build.outputs.conclusion == 'success' && 'PASS' || 'FAIL' }}
+      RESULT: ${{ needs.build.outputs.conclusion == 'success' && 'PASSING' || 'FAILING' }}
       COVERAGE_FLOAT: ${{ needs.build.outputs.coverage }}
     
     steps:
@@ -62,7 +62,7 @@ jobs:
     - name: Create directory for badges
       run: mkdir -p ".github/badges"
     - name: Create test badge
-      run: curl https://img.shields.io/static/v1\?label\=Test%20Results\&message\=$RESULT\&color\=$TEST_COLOUR\&style\=for-the-badge\&link\=https://github.com/Matteas-Eden/yet-another-maven-repo/actions/workflows/run-test.yml > .github/badges/test-badge.svg
+      run: curl https://img.shields.io/static/v1\?label\=Tests\&message\=$RESULT\&color\=$TEST_COLOUR\&style\=for-the-badge\&link\=https://github.com/Matteas-Eden/yet-another-maven-repo/actions/workflows/run-test.yml > .github/badges/test-badge.svg
     - name: Create coverage badge
       run: curl https://img.shields.io/static/v1\?label\=coverage\&message\=$COVERAGE%25\&color\=$COVER_COLOUR\&style\=for-the-badge\&link\=https://github.com/Matteas-Eden/yet-another-maven-repo/actions/workflows/run-test.yml > .github/badges/cvrg-badge.svg
     - name: Commit badges
