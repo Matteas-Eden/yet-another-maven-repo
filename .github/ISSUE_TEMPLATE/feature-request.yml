@@ -11,14 +11,14 @@ body:
       label: Describe the Feature
       description: Tell us about the feature you're requesting!
       placeholder: "The feature I'm requesting is..."
-     validations:
+    validations:
       required: true
   - type: dropdown
     id: importance
     attributes:
-      label: Importance ofFeature
+      label: Importance of Feature
       description: How important do you think this feature is?
       options:
-        - Super important!
-        - Kinda important?
-        - Not important.
+      - Super important!
+      - Kinda important?
+      - Not important.
