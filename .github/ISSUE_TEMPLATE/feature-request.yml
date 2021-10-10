@@ -6,7 +6,7 @@ assignees:
   - Matteas-Eden
 body:
   - type: textarea
-    id: description
+    id: feature-description
     attributes:
       label: Describe the Feature
       description: Tell us about the feature you're requesting!
