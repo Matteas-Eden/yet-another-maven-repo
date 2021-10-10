@@ -1,0 +1,24 @@
+name: Feature Request
+description: Request a feature you would like to see added
+title: "[Feature]"
+labels: ["enhancement"]
+assignees:
+  - Matteas-Eden
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the Feature
+      description: Tell us about the feature you're requesting!
+      placeholder: "The feature I'm requesting is..."
+     validations:
+      required: true
+  - type: dropdown
+    id: importance
+    attributes:
+      label: Importance ofFeature
+      description: How important do you think this feature is?
+      options:
+        - Super important!
+        - Kinda important?
+        - Not important.
