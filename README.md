@@ -1,5 +1,5 @@
 # Yet-Another-Maven-Repo
-Yeah, I'm just testing some shit with GitHub actions and workflows and stuff
+Yeah, I'm just testing some stuff out. Nothing much to see here.
 
 <details>
   <summary><b>Status Dashboard</b></summary>
