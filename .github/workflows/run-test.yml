@@ -5,8 +5,8 @@ on:
     paths-ignore:
     - '**.md'
     - 'badges/**'
+    - 'ISSUE_TEMPLATE/**'
     
-
 jobs:
   build:
     runs-on: ubuntu-latest
