@@ -5,7 +5,7 @@ on:
     paths-ignore:
     - '**.md'
     - 'badges/**'
-    - 'ISSUE_TEMPLATE/**'
+    - '.github/ISSUE_TEMPLATE/**'
     
 jobs:
   build:
