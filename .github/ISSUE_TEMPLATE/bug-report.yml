@@ -1,0 +1,32 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]"
+labels: ["bug"]
+assignees:
+  - Matteas-Eden
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+      placeholder: "So, what happened was... But what should have happened was..."
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+  - type: checkboxes
+    id: self-fix
+    attributes:
+      label: Did you try to fix it?
+      description: Have you taken reasonable steps to identify the cause of the issue?
+      options:
+        - label: Yes, I have taken the reasonable steps
