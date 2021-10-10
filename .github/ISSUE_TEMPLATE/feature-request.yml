@@ -22,3 +22,5 @@ body:
       - Super important!
       - Kinda important?
       - Not important.
+    validations:
+      required: true
