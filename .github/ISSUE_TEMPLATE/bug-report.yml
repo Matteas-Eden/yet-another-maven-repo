@@ -33,9 +33,9 @@ body:
   - type: dropdown
     id: operating-system
     attributes:
-      label: Which operating system are you running?
+      label: Which operating system(s) are you running?
       description: Regardless of which distribution of Linux you have, just pick 'Linux'
-      multiple: false
+      multiple: true
       options:
         - Windows
         - MacOS
