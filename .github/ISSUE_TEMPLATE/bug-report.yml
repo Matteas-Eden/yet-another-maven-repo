@@ -30,11 +30,12 @@ body:
       description: Have you taken reasonable steps to identify the cause of the issue?
       options:
         - label: Yes, I have taken the reasonable steps
-  - type: checkboxes
+  - type: dropdown
     id: operating-system
     attributes:
       label: Which operating system are you running?
       description: Regardless of which distribution of Linux you have, just pick 'Linux'
+      multiple: false
       options:
         - label: Windows
         - label: MacOS
