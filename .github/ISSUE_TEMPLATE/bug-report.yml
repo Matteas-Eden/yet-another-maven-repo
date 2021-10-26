@@ -37,6 +37,8 @@ body:
       description: Regardless of which distribution of Linux you have, just pick 'Linux'
       multiple: false
       options:
-        - label: Windows
-        - label: MacOS
-        - label: Linux
+        - Windows
+        - MacOS
+        - Linux
+      validations:
+        required: true
