@@ -25,12 +25,12 @@ public class PersonTest {
         assertEquals(25, person.getAge());
     }
 
-//    @Test
-//    void personHasBirthdayAndGetsOlder() {
-//        Person person = new Person("John", "Smith", 25, Color.BLUE, Color.BLACK);
-//        person.haveBirthday();
-//        assertEquals(26, person.getAge());
-//    }
+    @Test
+    void personHasBirthdayAndGetsOlder() {
+        Person person = new Person("John", "Smith", 25, Color.BLUE, Color.BLACK);
+        person.haveBirthday();
+        assertEquals(26, person.getAge());
+    }
 
     @Test
     void personHasEyeColour() {
@@ -38,11 +38,11 @@ public class PersonTest {
         assertEquals(Color.BLUE, person.getEyeColour());
     }
 
-//    @Test
-//    void personHasHairColour() {
-//        Person person = new Person("John", "Smith", 25, Color.BLUE, Color.BLACK);
-//        assertEquals(Color.BLACK, person.getHairColour());
-//    }
+    @Test
+    void personHasHairColour() {
+        Person person = new Person("John", "Smith", 25, Color.BLUE, Color.BLACK);
+        assertEquals(Color.BLACK, person.getHairColour());
+    }
 
     @Test
     public void personDyesHair() {
