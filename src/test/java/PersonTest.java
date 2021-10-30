@@ -45,7 +45,7 @@ public class PersonTest {
     }
 
     @Test
-    public void personDyesHair() {
+    void personDyesHair() {
         Person person = new Person("John", "Smith", 25, Color.BLUE, Color.BLACK);
         person.dyeHair(Color.RED);
         assertEquals(Color.RED, person.getHairColour());

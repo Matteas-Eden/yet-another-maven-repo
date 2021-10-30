@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class Person {
+class Person {
     private final String firstName;
     private final String lastName;
     private int age;
