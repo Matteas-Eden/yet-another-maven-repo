@@ -1,4 +1,5 @@
 import javax.swing.text.html.HTMLDocument;
+import java.awt.*;
 
 public class Student extends Person {
     public final HTMLDocument testScore;
