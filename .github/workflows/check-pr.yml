@@ -7,6 +7,12 @@ on:
       - synchronize
     branches:
       - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    branches:
+      - master
 
 jobs:
   build:
