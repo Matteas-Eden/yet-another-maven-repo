@@ -57,6 +57,7 @@ jobs:
         with:
           generate-branches-badge: false
           jacoco-csv-file: target/site/jacoco/jacoco.csv
+          on-missing-report: quiet
 
   generate-badge:
     runs-on: ubuntu-latest
