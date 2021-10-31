@@ -1,4 +1,4 @@
-import java.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLDocument;
 
 public class Student extends Person {
     public final HTMLDocument testScore;
