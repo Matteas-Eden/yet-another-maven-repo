@@ -42,7 +42,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         continue-on-error: true
         run: mvn --batch-mode --update-snapshots verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Matteas-Eden_yet-another-maven-repo
-      - name: test
+      - name: Generate Test Reports
         continue-on-error: true
         id: unit-tests
         uses: dorny/test-reporter@v1
