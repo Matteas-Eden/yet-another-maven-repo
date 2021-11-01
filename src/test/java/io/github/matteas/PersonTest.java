@@ -1,3 +1,5 @@
+package io.github.matteas;
+
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
