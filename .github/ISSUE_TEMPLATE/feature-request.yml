@@ -1,7 +1,7 @@
 name: Feature Request
 description: Request a feature you would like to see added
 title: "[Feature]"
-labels: ["enhancement"]
+labels: [ "enhancement" ]
 assignees:
   - Matteas-Eden
 body:
@@ -19,8 +19,8 @@ body:
       label: Importance of Feature
       description: How important do you think this feature is?
       options:
-      - Super important!
-      - Kinda important?
-      - Not important.
+        - Super important!
+        - Kinda important?
+        - Not important.
     validations:
       required: true

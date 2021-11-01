@@ -3,14 +3,14 @@ name: Run Unit Tests
 on:
   push:
     paths-ignore:
-    - '**.md'
-    - 'badges/**'
-    - '.github/ISSUE_TEMPLATE/**'
-    
+      - '**.md'
+      - 'badges/**'
+      - '.github/ISSUE_TEMPLATE/**'
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     outputs:
       conclusion: ${{steps.unit-tests.outputs.conclusion}}
       coverage: ${{steps.jacoco.outputs.coverage}}
@@ -47,38 +47,38 @@ jobs:
 
   generate-badge:
     runs-on: ubuntu-latest
-    
+
     needs: build
     env:
       TEST_COLOUR: ${{ needs.build.outputs.conclusion == 'success' && 'success' || 'critical' }}
       COVER_COLOUR: ${{ needs.build.outputs.coverage >= 0.85 && 'success' || 'critical' }}
       RESULT: ${{ needs.build.outputs.conclusion == 'success' && 'PASSING' || 'FAILING' }}
       COVERAGE_FLOAT: ${{ needs.build.outputs.coverage }}
-    
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install bc -y
-    - name: Configure environment
-      run: echo "COVERAGE=$(printf "%.0f" "`echo "${COVERAGE_FLOAT:0:4} * 100" | bc -l`")" >> $GITHUB_ENV
-    - name: Create directory for badges
-      run: mkdir -p ".github/badges"
-    - name: Create test badge
-      run: curl https://img.shields.io/static/v1\?label\=Tests\&message\=$RESULT\&color\=$TEST_COLOUR\&style\=for-the-badge\&link\=https://github.com/Matteas-Eden/yet-another-maven-repo/actions/workflows/run-test.yml > .github/badges/test-badge.svg
-    - name: Create coverage badge
-      run: curl https://img.shields.io/static/v1\?label\=coverage\&message\=$COVERAGE%25\&color\=$COVER_COLOUR\&style\=for-the-badge\&link\=https://github.com/Matteas-Eden/yet-another-maven-repo/actions/workflows/run-test.yml > .github/badges/cvrg-badge.svg
-    - name: Commit badges
-      continue-on-error: true
-      run: |
-        git config --local user.name 'github-actions[bot]'
-        git config --local user.email 'github-actions[bot]@users.noreply.github.com'
-        git add .github
-        git commit -m "Update badges"
-    - name: Push to master
-      continue-on-error: true
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{github.token}}
-        branch: master
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install bc -y
+      - name: Configure environment
+        run: echo "COVERAGE=$(printf "%.0f" "`echo "${COVERAGE_FLOAT:0:4} * 100" | bc -l`")" >> $GITHUB_ENV
+      - name: Create directory for badges
+        run: mkdir -p ".github/badges"
+      - name: Create test badge
+        run: curl https://img.shields.io/static/v1\?label\=Tests\&message\=$RESULT\&color\=$TEST_COLOUR\&style\=for-the-badge\&link\=https://github.com/Matteas-Eden/yet-another-maven-repo/actions/workflows/run-test.yml > .github/badges/test-badge.svg
+      - name: Create coverage badge
+        run: curl https://img.shields.io/static/v1\?label\=coverage\&message\=$COVERAGE%25\&color\=$COVER_COLOUR\&style\=for-the-badge\&link\=https://github.com/Matteas-Eden/yet-another-maven-repo/actions/workflows/run-test.yml > .github/badges/cvrg-badge.svg
+      - name: Commit badges
+        continue-on-error: true
+        run: |
+          git config --local user.name 'github-actions[bot]'
+          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .github
+          git commit -m "Update badges"
+      - name: Push to master
+        continue-on-error: true
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{github.token}}
+          branch: master
