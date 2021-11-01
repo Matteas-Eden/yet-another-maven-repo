@@ -1,3 +1,5 @@
+package io.github.matteas;
+
 import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
 
