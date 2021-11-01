@@ -6,7 +6,7 @@ import java.awt.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class StudentTest {
+class StudentTest {
     @Test
     void studentHasTestScore() {
         // GIVEN a test score
