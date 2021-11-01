@@ -1,3 +1,5 @@
+package io.github.matteas;
+
 import java.awt.*;
 
 class Person {

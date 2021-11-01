@@ -1,3 +1,5 @@
+package io.github.matteas;
+
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
@@ -5,7 +7,7 @@ import java.awt.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class PersonTest {
+class PersonTest {
 
     @Test
     void personHasFirstName() {
