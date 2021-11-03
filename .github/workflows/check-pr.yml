@@ -11,6 +11,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ github.pull_request.repository.fork == 'true' }}
 
     outputs:
       conclusion: ${{steps.unit-tests.outputs.conclusion}}
