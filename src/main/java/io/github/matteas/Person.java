@@ -1,12 +1,12 @@
 package io.github.matteas;
 
-import java.awt.*;
+import java.awt.Color;
 
 class Person {
     private final String firstName;
     private final String lastName;
     private int age;
-    private Color eyeColour;
+    private final Color eyeColour;
     private Color hairColour;
 
     public Person(String firstName, String lastName, int age, Color eyeColour, Color hairColour) {
