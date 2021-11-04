@@ -4,7 +4,7 @@ import java.awt.Color;
 import javax.swing.text.html.HTMLDocument;
 
 public class Student extends Person {
-    private final HTMLDocument testScore;
+    public final HTMLDocument testScore;
 
     public Student(String firstName, String lastName, int age, Color eyeColour,
                    Color hairColour, HTMLDocument testScore) {
