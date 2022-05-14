@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.github.matteas.trivial.Repl;
-import io.github.matteas.trivial.combinator.EvalError;
 
 import static io.github.matteas.trivial.combinator.ffi.BoolExporter.exportBool;
 
