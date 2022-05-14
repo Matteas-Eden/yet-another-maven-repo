@@ -13,6 +13,7 @@ public class PairExporter<
 > implements Exporter<Pair<X, Y>> {
     private final XE xExporter;
     private final YE yExporter;
+    
     public PairExporter(XE xExporter, YE yExporter) {
         this.xExporter = xExporter;
         this.yExporter = yExporter;
@@ -28,7 +29,7 @@ public class PairExporter<
                     xExporter.export(x),
                     yExporter.export(y)
                 ))
-            )
+        )
             .filter(Pair.class::isInstance)
             .map(Pair.class::cast)
             .orElseThrow(() -> new EvalError("Type Error: Result is not a pair"));

@@ -12,13 +12,17 @@ public class Tokens {
             this.remaining = remaining;
         }
     }
+    
     private final List<String> tokens;
+    
     public Tokens(List<String> tokens) {
         this.tokens = tokens;
     }
+    
     public boolean isEmpty() {
         return tokens.isEmpty();
     }
+    
     public Optional<Next> next() {
         if (tokens.isEmpty()) {
             return Optional.empty();
@@ -29,6 +33,7 @@ public class Tokens {
             ));
         }
     }
+    
     public String toString() {
         return String.join(",", tokens);
     }

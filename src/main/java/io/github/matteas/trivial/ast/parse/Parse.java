@@ -84,14 +84,17 @@ public class Parse {
 
         return parseApplication(tokens)
             .or(() -> parseExpression(tokens))
-            .match(success -> {
-                if (!success.remainingTokens.isEmpty()) {
-                    throw new RuntimeException("Unexpected tokens");
+            .match(
+                success -> {
+                    if (!success.remainingTokens.isEmpty()) {
+                        throw new RuntimeException("Unexpected tokens");
+                    }
+                    //System.out.println("Parsed: " + success.expression.toString());
+                    return success.ast;
+                },
+                failure -> {
+                    throw failure;
                 }
-                //System.out.println("Parsed: " + success.expression.toString());
-                return success.ast;
-            }, failure -> {
-                throw failure;
-            });
-  }
+            );
+    }
 }
