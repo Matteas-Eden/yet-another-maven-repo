@@ -19,4 +19,15 @@ public class Pair<X, Y> implements Combinator {
     public String toString() {
         return "(" + x.toString() + "," + y.toString() + ")";
     }
+
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (getClass() != other.getClass()) {
+            return false;
+        }
+        final var otherPair = getClass().cast(other);
+        return x.equals(otherPair.x) && y.equals(otherPair.y);
+    }
 }

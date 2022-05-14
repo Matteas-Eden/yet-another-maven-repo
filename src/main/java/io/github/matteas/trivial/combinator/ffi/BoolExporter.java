@@ -16,6 +16,8 @@ public class BoolExporter implements Exporter<Boolean> {
             throw new EvalError("Type Error: Result is not a bool");
         }
     }
+
+    public static final BoolExporter boolExporter = new BoolExporter();
     
     public Boolean export(Combinator combinator) throws EvalError {
         return Optional.of(
@@ -30,6 +32,6 @@ public class BoolExporter implements Exporter<Boolean> {
     }
 
     public static boolean exportBool(Combinator combinator) throws EvalError {
-        return new BoolExporter().export(combinator);
+        return boolExporter.export(combinator);
     }
 }

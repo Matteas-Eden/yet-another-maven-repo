@@ -3,8 +3,11 @@ package io.github.matteas.trivial.std;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.github.matteas.trivial.Repl;
+import io.github.matteas.trivial.combinator.EvalError;
+
 import static io.github.matteas.trivial.combinator.ffi.BoolExporter.exportBool;
 
 class BoolTest {
@@ -13,6 +16,19 @@ class BoolTest {
         final var repl = new Repl();
         assertEquals(true, exportBool(repl.eval("Bool.True").get()));
         assertEquals(false, exportBool(repl.eval("Bool.False").get()));
+    }
+    
+    @Test
+    void print() throws Exception {
+        final var repl = new Repl();
+        assertEquals(true, exportBool(repl.eval("Print.Bool Bool.True").get()));
+        assertEquals(false, exportBool(repl.eval("Print.Bool Bool.False").get()));
+    }
+
+    @Test
+    void invalid() throws Exception {
+        final var repl = new Repl();
+        assertThrows(EvalError.class, () -> repl.eval("Print.Bool M"));
     }
     
     @Test

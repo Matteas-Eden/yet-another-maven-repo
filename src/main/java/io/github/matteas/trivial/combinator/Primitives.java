@@ -1,6 +1,8 @@
 package io.github.matteas.trivial.combinator;
 
 import io.github.matteas.trivial.combinator.ffi.BoolExporter;
+import static io.github.matteas.trivial.combinator.ffi.BoolExporter.exportBool;
+import static io.github.matteas.trivial.combinator.ffi.BoolExporter.boolExporter;
 import io.github.matteas.trivial.combinator.ffi.PairExporter;
 import java.util.Map;
 
@@ -15,7 +17,7 @@ public class Primitives {
         // Foreign Function Interface
 
         "Print.Bool", bool -> {
-            System.out.println(new BoolExporter().export(bool));
+            System.out.println(exportBool(bool));
             return bool;
         },
         "Print.PairBoolBool", pair -> {
@@ -24,10 +26,7 @@ public class Primitives {
                 Boolean,
                 BoolExporter,
                 BoolExporter
-            >(
-                new BoolExporter(),
-                new BoolExporter()
-            );
+            >(boolExporter, boolExporter);
             System.out.println(exporter.export(pair));
             return pair;
         }
