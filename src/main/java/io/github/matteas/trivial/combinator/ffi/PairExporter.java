@@ -23,6 +23,7 @@ public class PairExporter<
     // supplied, and so checking against the raw Pair.class::isInstance
     // is enough.
     @SuppressWarnings("unchecked")
+    @Override
     public Pair<X, Y> export(Combinator combinator) throws EvalError {
         return Optional.of(
                 combinator.apply(x -> y -> new Pair<>(

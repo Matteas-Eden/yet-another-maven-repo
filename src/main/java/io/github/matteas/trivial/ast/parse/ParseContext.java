@@ -9,6 +9,7 @@ class ParseContext {
         this.tokens = tokens;
     }
     
+    @Override
     public String toString() {
         return grammarRule + " with tokens: " + tokens.toString();
     }

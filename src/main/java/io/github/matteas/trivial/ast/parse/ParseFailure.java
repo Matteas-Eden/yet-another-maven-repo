@@ -35,10 +35,12 @@ class ParseFailure extends RuntimeException implements ParseResult {
                 .collect(Collectors.toUnmodifiableList());
     }
 
+    @Override
     public <T> T match(Function<ParseSuccess, T> success, Function<ParseFailure, T> failure) {
         return failure.apply(this);
     }
 
+    @Override
     public ParseResult withContext(ParseContext context) {
         return new ParseFailure(this, context);
     }

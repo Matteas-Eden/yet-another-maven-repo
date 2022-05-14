@@ -12,6 +12,7 @@ public class BoolExporter implements Exporter<Boolean> {
             this.value = value;
         }
         
+        @Override
         public Combinator apply(Combinator argument) throws EvalError {
             throw new EvalError("Type Error: Result is not a bool");
         }
@@ -19,6 +20,7 @@ public class BoolExporter implements Exporter<Boolean> {
 
     public static final BoolExporter boolExporter = new BoolExporter();
     
+    @Override
     public Boolean export(Combinator combinator) throws EvalError {
         return Optional.of(
             combinator

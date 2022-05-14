@@ -13,10 +13,12 @@ public class AstApply implements Ast {
         this.argument = argument;
     }
 
+    @Override
     public Combinator eval(Map<String, Combinator> scope) throws EvalError {
         return function.eval(scope).apply(argument.eval(scope));
     }
 
+    @Override
     public String toString() {
         return "Apply(" + function.toString() + ", " + argument.toString() + ")";
     }

@@ -11,11 +11,13 @@ public class AstIdentifier implements Ast {
         this.identifier = identifier;
     }
     
+    @Override
     public Combinator eval(Map<String, Combinator> scope) throws EvalError {
         // System.out.println("Id[" + identifier + "].eval");
         return scope.get(identifier);
     }
     
+    @Override
     public String toString() {
         return "Id('" + identifier + "')";
     }

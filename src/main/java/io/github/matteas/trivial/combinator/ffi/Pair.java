@@ -12,14 +12,17 @@ public class Pair<X, Y> implements Combinator {
         this.y = y;
     }
 
+    @Override
     public Combinator apply(Combinator argument) throws EvalError {
         throw new EvalError("Type Error: Result is not a pair");
     }
 
+    @Override
     public String toString() {
         return "(" + x.toString() + "," + y.toString() + ")";
     }
 
+    @Override
     public boolean equals(Object other) {
         if (this == other) {
             return true;

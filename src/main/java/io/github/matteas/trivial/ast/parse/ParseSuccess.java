@@ -12,14 +12,17 @@ class ParseSuccess implements ParseResult {
         this.remainingTokens = remainingTokens;
     }
     
+    @Override
     public <T> T match(Function<ParseSuccess, T> success, Function<ParseFailure, T> failure) {
         return success.apply(this);
     }
     
+    @Override
     public ParseResult withContext(ParseContext context) {
         return this;
     }
     
+    @Override
     public String toString() {
         return ast.toString();
     }
