@@ -28,4 +28,8 @@ public class BoolExporter implements Exporter<Boolean> {
             .map(v -> v.value)
             .orElseThrow(() -> new EvalError("Type Error: Result is not a bool"));
     }
+
+    public static boolean exportBool(Combinator combinator) throws EvalError {
+        return new BoolExporter().export(combinator);
+    }
 }

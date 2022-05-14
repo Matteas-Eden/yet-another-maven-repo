@@ -2,6 +2,7 @@ package io.github.matteas.trivial;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Optional;
 import io.github.matteas.trivial.combinator.Combinator;
 import static io.github.matteas.trivial.combinator.Primitives.PRIMITIVES;
 import io.github.matteas.trivial.combinator.EvalError;
@@ -12,39 +13,43 @@ public class Repl {
     private Map<String, Combinator> scope = new HashMap<>(PRIMITIVES);
 
     public Repl() {
-        eval(STANDARD_LIBRARY);
+        try {
+            eval(STANDARD_LIBRARY);
+        } catch (Exception exception) {
+            throw new RuntimeException("Error while evaluating the standard library", exception);
+        }
     }
 
-    public void eval(String input) {
+    public Optional<Combinator> eval(String input) throws Exception {
         // System.out.println("Input: " + input);
-        final var lines = input.split(";");
-        for (final var line : lines) {
-            // System.out.println("Line: " + line);
-            final var aliasParts = line.split("=");
+        final var statements = input.split(";");
+        Optional<Combinator> finalValue = Optional.empty();
+        for (final var statement : statements) {
+            // System.out.println("statement: " + statement);
+            final var aliasParts = statement.split("=");
             if (aliasParts.length > 2) {
-                System.out.println("Syntax error");
-                return;
+                throw new Exception("Syntax error: At most one '=' per statement, but got: " + statement);
             } else if (aliasParts.length == 2) {
                 final var aliasName = aliasParts[0].trim();
                 final var aliasExpression = parse(aliasParts[1]);
                 // System.out.println("Adding alias " + aliasName);
                 try {
                     final var aliasCombinator = aliasExpression.eval(scope);
+                    finalValue = Optional.of(aliasCombinator);
                     scope.put(aliasName, aliasCombinator);
                 } catch (EvalError error) {
-                    System.out.println(error);
-                    return;
+                    throw new Exception("Error while evaluating: " + statement, error);
                 }
             } else {
                 final var expression = parse(aliasParts[0]);
                 try {
-                    final var result = expression.eval(scope);
+                    finalValue = Optional.of(expression.eval(scope));
                     // System.out.println("Eval: " + result.toString());
                 } catch (EvalError error) {
-                    System.out.println(error);
-                    return;
+                    throw new Exception("Error while evaluating: " + statement, error);
                 }
             }
         }
+        return finalValue;
     }
 }
