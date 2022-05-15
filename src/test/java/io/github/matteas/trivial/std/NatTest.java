@@ -3,6 +3,8 @@ package io.github.matteas.trivial.std;
 import java.util.function.UnaryOperator;
 import java.util.function.BinaryOperator;
 import java.util.function.BiPredicate;
+
+import org.junit.jupiter.api.DisplayName;
 import org.junitpioneer.jupiter.cartesian.CartesianTest;
 import org.junitpioneer.jupiter.cartesian.CartesianTest.Enum;
 import org.junitpioneer.jupiter.params.IntRangeSource;
@@ -78,6 +80,7 @@ class NatTest {
         assertEquals(x, exportNat(repl.eval("Nat." + x).get()));
     }
     
+    @org.junit.jupiter.api.Disabled
     @CartesianTest
     void unaryOperations(
         @Enum UnaryOperation operation,
@@ -94,6 +97,7 @@ class NatTest {
         );
     }
     
+    @org.junit.jupiter.api.Disabled
     @CartesianTest
     void binaryOperations(
         @Enum BinaryOperation operation,
@@ -112,6 +116,7 @@ class NatTest {
         );
     }
     
+    @org.junit.jupiter.api.Disabled
     @CartesianTest
     void predicates(
         @Enum Predicate predicate,
@@ -129,8 +134,14 @@ class NatTest {
             )).get())
         );
     }
+
+    @DisplayName("Test DisplayName reporting")
+    @org.junit.jupiter.api.Test
+    void hello() {
+        throw new RuntimeException("This is the exception message.");
+    }
     
-    @CartesianTest
+    @CartesianTest()
     void isZero(
         @IntRangeSource(from = 0, to = MAX_NAT_TO_TEST, closed = true) int x
     ) throws Exception {

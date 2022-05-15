@@ -15,6 +15,9 @@
                 <version>3.0.0-M5</version>
                 <configuration>
                     <reportsDirectory>${basedir}/target/test-results/</reportsDirectory>
+                    <statelessTestsetReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
+                        <usePhrasedTestCaseMethodName>true</usePhrasedTestCaseMethodName>
+                    </statelessTestsetReporter>
                 </configuration>
             </plugin>
             <plugin>

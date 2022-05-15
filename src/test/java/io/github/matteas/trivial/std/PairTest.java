@@ -10,6 +10,7 @@ import static io.github.matteas.trivial.combinator.ffi.BoolExporter.boolExporter
 import io.github.matteas.trivial.combinator.ffi.BoolExporter;
 import io.github.matteas.trivial.combinator.ffi.PairExporter;
 
+@org.junit.jupiter.api.Disabled
 class PairTest {
     @Test
     void pair() throws Exception {

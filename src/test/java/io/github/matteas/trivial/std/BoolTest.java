@@ -10,6 +10,7 @@ import io.github.matteas.trivial.combinator.EvalError;
 
 import static io.github.matteas.trivial.combinator.ffi.BoolExporter.exportBool;
 
+@org.junit.jupiter.api.Disabled
 class BoolTest {
     @Test
     void constants() throws Exception {
