@@ -17,7 +17,7 @@ import static io.github.matteas.trivial.combinator.ffi.IntExporter.exportInt;
 import static io.github.matteas.trivial.combinator.ffi.NatExporter.exportNat;
 
 class IntTest {
-    static final int MAX_INT_TO_TEST = 4;
+    static final int MAX_INT_TO_TEST = 2;
     
     enum UnaryOperation {
         Succ("Neg", (x) -> -x);
