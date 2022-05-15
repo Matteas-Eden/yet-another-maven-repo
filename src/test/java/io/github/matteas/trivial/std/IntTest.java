@@ -7,11 +7,14 @@ import org.junitpioneer.jupiter.cartesian.CartesianTest;
 import org.junitpioneer.jupiter.cartesian.CartesianTest.Enum;
 import org.junitpioneer.jupiter.params.IntRangeSource;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.github.matteas.trivial.Repl;
 
 import static io.github.matteas.trivial.combinator.ffi.IntExporter.exportInt;
+import static io.github.matteas.trivial.combinator.ffi.NatExporter.exportNat;
 
 class IntTest {
     static final int MAX_INT_TO_TEST = 4;
@@ -86,6 +89,70 @@ class IntTest {
             )).get())
         );
     }
+
+    @CartesianTest(name = "Int.Mul._helperAddFirstFirst on (Pair Nat.{0} Nat.{1}) and (Pair Nat.{2} Nat.{3}) is correct")
+    void mulHelperAddFirstFirst(
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int a,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int b,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int c,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int d
+    ) throws Exception {
+        final var repl = new Repl();
+        assertEquals(
+            a * c,
+            exportNat(repl.eval(String.format(
+                "Int.Mul._helperAddFirstFirst (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
+                a, b, c, d
+            )).get()));
+    }
+
+    @CartesianTest(name = "Int.Mul._helperAddFirstSecond on (Pair Nat.{0} Nat.{1}) and (Pair Nat.{2} Nat.{3}) is correct")
+    void mulHelperAddFirstSecond(
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int a,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int b,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int c,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int d
+    ) throws Exception {
+        final var repl = new Repl();
+        assertEquals(
+            a * d,
+            exportNat(repl.eval(String.format(
+                "Int.Mul._helperAddFirstSecond (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
+                a, b, c, d
+            )).get()));
+    }
+
+    @CartesianTest(name = "Int.Mul._helperAddSecondFirst on (Pair Nat.{0} Nat.{1}) and (Pair Nat.{2} Nat.{3}) is correct")
+    void mulHelperAddSecondFirst(
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int a,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int b,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int c,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int d
+    ) throws Exception {
+        final var repl = new Repl();
+        assertEquals(
+            b * c,
+            exportNat(repl.eval(String.format(
+                "Int.Mul._helperAddSecondFirst (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
+                a, b, c, d
+            )).get()));
+    }
+
+    @CartesianTest(name = "Int.Mul._helperAddSecondSecond on (Pair Nat.{0} Nat.{1}) and (Pair Nat.{2} Nat.{3}) is correct")
+    void mulHelperAddSecondSecond(
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int a,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int b,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int c,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int d
+    ) throws Exception {
+        final var repl = new Repl();
+        assertEquals(
+            b * d,
+            exportNat(repl.eval(String.format(
+                "Int.Mul._helperAddSecondSecond (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
+                a, b, c, d
+            )).get()));
+    }
     
     @CartesianTest(name = "Binary operation Int.{0} on Int.{1} and Int.{2} is correct")
     void binaryOperations(
@@ -98,9 +165,7 @@ class IntTest {
             operation.apply(x, y),
             exportInt(repl.eval(String.format(
                 "Int.%s Int.%d Int.%d",
-                operation.name,
-                x,
-                y
+                operation.name, x, y
             )).get())
         );
     }
