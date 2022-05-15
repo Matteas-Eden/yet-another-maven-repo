@@ -18,7 +18,7 @@ public class AstApply implements Ast {
         try{
             return function.eval(scope).apply(argument.eval(scope));
         } catch (EvalError error) {
-            throw new EvalError("Error evaluating function application" + toString(), error);
+            throw new EvalError("Error evaluating function application: " + toString(), error);
         }
     }
 
