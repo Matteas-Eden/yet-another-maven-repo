@@ -65,7 +65,7 @@ class IntTest {
     
     @CartesianTest(name = "Number Int.{0} is exported as the number {0}")
     void constants(
-        @IntRangeSource(from = 0, to = 100, closed = true) int x
+        @IntRangeSource(from = -100, to = 100, closed = true) int x
     ) throws Exception {
         final var repl = new Repl();
         assertEquals(x, exportInt(repl.eval("Int." + x).get()));
