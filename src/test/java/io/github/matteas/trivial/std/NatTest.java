@@ -136,7 +136,7 @@ class NatTest {
         assertEquals(
             x == 0,
             exportBool(repl.eval(String.format(
-                "Nat.isZero Nat.%d",
+                "Nat.IsZero Nat.%d",
                 x
             )).get())
         );
