@@ -33,7 +33,7 @@ public class StandardLibrary {
         + "Nat.Pred._helperIncrement = S (B Pair Pair.Second) (B Nat.Succ Pair.Second);"
         + "Nat.Pred = B Pair.First (C (C I Nat.Pred._helperIncrement) (Pair Nat.0 Nat.0));"
         + "Nat.Add = C I Nat.Succ;"
-        + "Nat.Sub = C I Nat.Pred;"
+        + "Nat.Sub = C (C I Nat.Pred);"
         + "Nat.Mul = B;"
         + "Nat.Pow = B (C I) I;"
         + "Nat.IsZero = C (C I (K Bool.False)) Bool.True;"
