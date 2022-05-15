@@ -4,7 +4,6 @@ import java.util.function.UnaryOperator;
 import java.util.function.BinaryOperator;
 import java.util.function.BiPredicate;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junitpioneer.jupiter.cartesian.CartesianTest;
 import org.junitpioneer.jupiter.cartesian.CartesianTest.Enum;
 import org.junitpioneer.jupiter.params.IntRangeSource;
@@ -95,7 +94,6 @@ class NatTest {
         assertEquals(x, exportNat(repl.eval("Nat." + x).get()));
     }
     
-    @org.junit.jupiter.api.Disabled
     @CartesianTest(name = "Unary operation Nat.{0} on Nat.{1} is correct")
     void unaryOperations(
         @Enum UnaryOperation operation,
@@ -112,7 +110,6 @@ class NatTest {
         );
     }
     
-    @org.junit.jupiter.api.Disabled
     @CartesianTest(name = "Binary operation Nat.{0} on Nat.{1} and Nat.{2} is correct")
     void binaryOperations(
         @Enum BinaryOperation operation,
@@ -131,7 +128,6 @@ class NatTest {
         );
     }
     
-    @org.junit.jupiter.api.Disabled
     @CartesianTest(name = "Predicate Nat.{0} on Nat.{1} and Nat.{2} is correct")
     void predicates(
         @Enum Predicate predicate,
