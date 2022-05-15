@@ -14,7 +14,7 @@ public class Pair<X, Y> implements Combinator {
 
     @Override
     public Combinator apply(Combinator argument) throws EvalError {
-        throw new EvalError("Type Error: Result is not a pair");
+        throw new TypeError("Result is not a pair");
     }
 
     @Override

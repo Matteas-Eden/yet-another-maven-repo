@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.github.matteas.trivial.Repl;
+import io.github.matteas.trivial.combinator.EvalError;
 
 import static io.github.matteas.trivial.combinator.ffi.BoolExporter.exportBool;
 
@@ -27,7 +28,7 @@ class BoolTest {
     @Test
     void invalid() throws Exception {
         final var repl = new Repl();
-        assertThrows(Exception.class, () -> repl.eval("Print.Bool M"));
+        assertThrows(EvalError.class, () -> repl.eval("Print.Bool M"));
     }
     
     @Test

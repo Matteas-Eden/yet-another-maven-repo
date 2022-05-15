@@ -14,7 +14,11 @@ public class AstIdentifier implements Ast {
     @Override
     public Combinator eval(Map<String, Combinator> scope) throws EvalError {
         // System.out.println("Id[" + identifier + "].eval");
-        return scope.get(identifier);
+        try {
+            return scope.resolve(identifier);
+        } catch (EvalError error) {
+            throw new EvalError("Error evaluating identifier" + identifier, error);
+        }
     }
     
     @Override

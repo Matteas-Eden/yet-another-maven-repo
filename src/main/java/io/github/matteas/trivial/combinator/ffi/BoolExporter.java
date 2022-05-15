@@ -14,7 +14,7 @@ public class BoolExporter implements Exporter<Boolean> {
         
         @Override
         public Combinator apply(Combinator argument) throws EvalError {
-            throw new EvalError("Type Error: Result is not a bool");
+            throw new TypeError("Result is not a bool");
         }
     }
 
@@ -22,15 +22,19 @@ public class BoolExporter implements Exporter<Boolean> {
     
     @Override
     public Boolean export(Combinator combinator) throws EvalError {
-        return Optional.of(
-            combinator
-                .apply(new DummyBoolCombinator(true))
-                .apply(new DummyBoolCombinator(false))
-        )
-            .filter(DummyBoolCombinator.class::isInstance)
-            .map(DummyBoolCombinator.class::cast)
-            .map(v -> v.value)
-            .orElseThrow(() -> new EvalError("Type Error: Result is not a bool"));
+        try {
+            return Optional.of(
+                combinator
+                    .apply(new DummyBoolCombinator(true))
+                    .apply(new DummyBoolCombinator(false))
+            )
+                .filter(DummyBoolCombinator.class::isInstance)
+                .map(DummyBoolCombinator.class::cast)
+                .map(v -> v.value)
+                .orElseThrow(() -> new TypeError("Result is not a bool"));
+        } catch (EvalError error) {
+            throw new EvalError("Error exporting boolean", error);
+        }
     }
 
     public static boolean exportBool(Combinator combinator) throws EvalError {

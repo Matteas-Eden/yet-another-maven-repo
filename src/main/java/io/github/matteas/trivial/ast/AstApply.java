@@ -15,7 +15,11 @@ public class AstApply implements Ast {
 
     @Override
     public Combinator eval(Map<String, Combinator> scope) throws EvalError {
-        return function.eval(scope).apply(argument.eval(scope));
+        try{
+            return function.eval(scope).apply(argument.eval(scope));
+        } catch (EvalError error) {
+            throw new EvalError("Error evaluating function application" + toString()), error);
+        }
     }
 
     @Override

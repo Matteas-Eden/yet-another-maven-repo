@@ -1,7 +1,5 @@
 package io.github.matteas.trivial;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Optional;
 import io.github.matteas.trivial.combinator.Combinator;
 import static io.github.matteas.trivial.combinator.Primitives.PRIMITIVES;
@@ -10,7 +8,7 @@ import static io.github.matteas.trivial.ast.parse.Parse.parse;
 import static io.github.matteas.trivial.StandardLibrary.STANDARD_LIBRARY;
 
 public class Repl {
-    private Map<String, Combinator> scope = new HashMap<>(PRIMITIVES);
+    private Scope scope = new Scope(PRIMITIVES);
 
     public Repl() {
         try {
@@ -20,7 +18,7 @@ public class Repl {
         }
     }
 
-    public Optional<Combinator> eval(String input) throws Exception {
+    public Optional<Combinator> eval(String input) throws EvalError {
         // System.out.println("Input: " + input);
         final var statements = input.split(";");
         Optional<Combinator> finalValue = Optional.empty();
@@ -36,9 +34,9 @@ public class Repl {
                 try {
                     final var aliasCombinator = aliasExpression.eval(scope);
                     finalValue = Optional.of(aliasCombinator);
-                    scope.put(aliasName, aliasCombinator);
+                    scope.assign(aliasName, aliasCombinator);
                 } catch (EvalError error) {
-                    throw new Exception("Error while evaluating: " + statement, error);
+                    throw new EvalError("Error while evaluating statement: " + statement, error);
                 }
             } else {
                 final var expression = parse(aliasParts[0]);
@@ -46,7 +44,7 @@ public class Repl {
                     finalValue = Optional.of(expression.eval(scope));
                     // System.out.println("Eval: " + result.toString());
                 } catch (EvalError error) {
-                    throw new Exception("Error while evaluating: " + statement, error);
+                    throw new EvalError("Error while evaluating statement: " + statement, error);
                 }
             }
         }

@@ -25,14 +25,18 @@ public class PairExporter<
     @SuppressWarnings("unchecked")
     @Override
     public Pair<X, Y> export(Combinator combinator) throws EvalError {
-        return Optional.of(
-                combinator.apply(x -> y -> new Pair<>(
-                    xExporter.export(x),
-                    yExporter.export(y)
-                ))
-        )
-            .filter(Pair.class::isInstance)
-            .map(Pair.class::cast)
-            .orElseThrow(() -> new EvalError("Type Error: Result is not a pair"));
+        try {
+            return Optional.of(
+                    combinator.apply(x -> y -> new Pair<>(
+                        xExporter.export(x),
+                        yExporter.export(y)
+                    ))
+            )
+                .filter(Pair.class::isInstance)
+                .map(Pair.class::cast)
+                .orElseThrow(() -> new TypeError("Result is not a pair"));
+        } catch (EvalError error) {
+            throw new EvalError("Error exporting pair", error);
+        }
     }
 }
