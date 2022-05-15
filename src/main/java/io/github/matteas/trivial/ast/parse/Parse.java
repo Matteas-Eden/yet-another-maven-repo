@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class Parse {
     private static ParseResult parseIdentifier(Tokens tokens) {
         return tokens.next().<ParseResult>map(next -> {
-            if (next.token.matches("[a-zA-Z0-9.]+")) {
+            if (next.token.matches("[a-zA-Z0-9._]+")) {
                 return new ParseSuccess(
                     new AstIdentifier(next.token),
                     next.remaining
