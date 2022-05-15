@@ -6,7 +6,7 @@ import java.util.HashMap;
 import io.github.matteas.trivial.combinator.Combinator;
 import io.github.matteas.trivial.combinator.EvalError;
 
-public class Namespace {
+public class Scope {
     public class NameNotFoundException extends EvalError {
         public NameNotFoundException(String name) {
             super(String.format("Cannot find definition for identifier '%s'", name));
@@ -16,7 +16,7 @@ public class Namespace {
     private final Map<String, Combinator> names;
     // TODO: Sub namespaces, import statements, etc.
 
-    public Namespace(Map<String, Combinator> primitives) {
+    public Scope(Map<String, Combinator> primitives) {
         this.names = new HashMap<>(primitives);
     }
 

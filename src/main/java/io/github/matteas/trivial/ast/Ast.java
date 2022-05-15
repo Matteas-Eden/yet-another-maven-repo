@@ -2,9 +2,8 @@ package io.github.matteas.trivial.ast;
 
 import io.github.matteas.trivial.combinator.Combinator;
 import io.github.matteas.trivial.combinator.EvalError;
-
-import java.util.Map;
+import io.github.matteas.trivial.Scope;
 
 public interface Ast {
-    Combinator eval(Map<String, Combinator> scope) throws EvalError;
+    Combinator eval(Scope scope) throws EvalError;
 }

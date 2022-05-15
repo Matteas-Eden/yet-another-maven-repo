@@ -26,7 +26,7 @@ public class Repl {
             // System.out.println("statement: " + statement);
             final var aliasParts = statement.split("=");
             if (aliasParts.length > 2) {
-                throw new Exception("Syntax error: At most one '=' per statement, but got: " + statement);
+                throw new EvalError("Syntax error: At most one '=' per statement, but got: " + statement);
             } else if (aliasParts.length == 2) {
                 final var aliasName = aliasParts[0].trim();
                 final var aliasExpression = parse(aliasParts[1]);

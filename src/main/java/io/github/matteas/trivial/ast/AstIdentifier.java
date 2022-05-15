@@ -2,7 +2,7 @@ package io.github.matteas.trivial.ast;
 
 import io.github.matteas.trivial.combinator.Combinator;
 import io.github.matteas.trivial.combinator.EvalError;
-import java.util.Map;
+import io.github.matteas.trivial.Scope;
 
 public class AstIdentifier implements Ast {
     final String identifier;
@@ -12,7 +12,7 @@ public class AstIdentifier implements Ast {
     }
     
     @Override
-    public Combinator eval(Map<String, Combinator> scope) throws EvalError {
+    public Combinator eval(Scope scope) throws EvalError {
         // System.out.println("Id[" + identifier + "].eval");
         try {
             return scope.resolve(identifier);
