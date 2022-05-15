@@ -16,7 +16,7 @@ import static io.github.matteas.trivial.combinator.ffi.NatExporter.exportNat;
 import static io.github.matteas.trivial.combinator.ffi.BoolExporter.exportBool;
 
 class NatTest {
-    static final int MAX_NAT_TO_TEST= 3;
+    static final int MAX_NAT_TO_TEST = 4;
     
     enum UnaryOperation {
         Succ("Succ", (x) -> x + 1),
@@ -43,8 +43,9 @@ class NatTest {
     enum BinaryOperation {
         Add("Add", (x, y) -> x + y),
         Sub("Sub", (x, y) -> x > y ? x - y : 0),
-        Mul("Mul", (x, y) -> x * y);
+        Mul("Mul", (x, y) -> x * y),
         //Div("Div", (x, y) -> x / y); TODO
+        Pow("Pow", (x, y) -> (int)Math.pow((double)x, (double)y));
         
         public final String name;
         private final BinaryOperator<Integer> fn;
@@ -88,7 +89,7 @@ class NatTest {
     
     @CartesianTest(name = "Number Nat.{0} is exported as the number {0}")
     void constants(
-        @IntRangeSource(from = 0, to = MAX_NAT_TO_TEST, closed = true) int x
+        @IntRangeSource(from = 0, to = 100, closed = true) int x
     ) throws Exception {
         final var repl = new Repl();
         assertEquals(x, exportNat(repl.eval("Nat." + x).get()));
