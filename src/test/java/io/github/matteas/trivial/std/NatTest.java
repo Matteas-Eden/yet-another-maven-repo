@@ -34,6 +34,11 @@ class NatTest {
         public int apply(int x) {
             return fn.apply(x);
         }
+
+        @Override
+        public String toString() {
+            return name;
+        }
     }
     
     enum BinaryOperation {
@@ -53,6 +58,11 @@ class NatTest {
         public int apply(int x, int y) {
             return fn.apply(x, y);
         }
+
+        @Override
+        public String toString() {
+            return name;
+        }
     }
     
     enum Predicate {
@@ -70,9 +80,14 @@ class NatTest {
         public boolean test(int x, int y) {
             return fn.test(x, y);
         }
+
+        @Override
+        public String toString() {
+            return name;
+        }
     }
     
-    @CartesianTest
+    @CartesianTest(name = "Number Nat.{0} is exported as the number {0}")
     void constants(
         @IntRangeSource(from = 0, to = MAX_NAT_TO_TEST, closed = true) int x
     ) throws Exception {
@@ -81,7 +96,7 @@ class NatTest {
     }
     
     @org.junit.jupiter.api.Disabled
-    @CartesianTest
+    @CartesianTest(name = "Unary operation Nat.{0} on Nat.{1} is correct")
     void unaryOperations(
         @Enum UnaryOperation operation,
         @IntRangeSource(from = 0, to = MAX_NAT_TO_TEST, closed = true) int x
@@ -98,7 +113,7 @@ class NatTest {
     }
     
     @org.junit.jupiter.api.Disabled
-    @CartesianTest
+    @CartesianTest(name = "Binary operation Nat.{0} on Nat.{1} and Nat.{2} is correct")
     void binaryOperations(
         @Enum BinaryOperation operation,
         @IntRangeSource(from = 0, to = MAX_NAT_TO_TEST, closed = true) int x,
@@ -117,7 +132,7 @@ class NatTest {
     }
     
     @org.junit.jupiter.api.Disabled
-    @CartesianTest
+    @CartesianTest(name = "Predicate Nat.{0} on Nat.{1} and Nat.{2} is correct")
     void predicates(
         @Enum Predicate predicate,
         @IntRangeSource(from = 0, to = MAX_NAT_TO_TEST, closed = true) int x,
@@ -134,14 +149,8 @@ class NatTest {
             )).get())
         );
     }
-
-    @DisplayName("Test DisplayName reporting")
-    @org.junit.jupiter.api.Test
-    void hello() {
-        throw new RuntimeException("This is the exception message.");
-    }
     
-    @CartesianTest()
+    @CartesianTest(name = "Nat.IsZero on Nat.{0} is correct")
     void isZero(
         @IntRangeSource(from = 0, to = MAX_NAT_TO_TEST, closed = true) int x
     ) throws Exception {
