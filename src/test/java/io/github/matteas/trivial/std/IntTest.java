@@ -101,7 +101,7 @@ class IntTest {
         assertEquals(
             a * c,
             exportNat(repl.eval(String.format(
-                "Int.Mul._helperMulFirstFirst (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
+                "Int.Mul._helperMulFirstFirst (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat.%d)",
                 a, b, c, d
             )).get()));
     }
@@ -117,7 +117,7 @@ class IntTest {
         assertEquals(
             a * d,
             exportNat(repl.eval(String.format(
-                "Int.Mul._helperMulFirstSecond (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
+                "Int.Mul._helperMulFirstSecond (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat.%d)",
                 a, b, c, d
             )).get()));
     }
@@ -133,7 +133,7 @@ class IntTest {
         assertEquals(
             b * c,
             exportNat(repl.eval(String.format(
-                "Int.Mul._helperMulSecondFirst (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
+                "Int.Mul._helperMulSecondFirst (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat.%d)",
                 a, b, c, d
             )).get()));
     }
@@ -149,7 +149,7 @@ class IntTest {
         assertEquals(
             b * d,
             exportNat(repl.eval(String.format(
-                "Int.Mul._helperMulSecondSecond (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
+                "Int.Mul._helperMulSecondSecond (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat.%d)",
                 a, b, c, d
             )).get()));
     }
