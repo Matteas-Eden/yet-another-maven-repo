@@ -36,7 +36,7 @@ class NatTest {
     
     enum BinaryOperation {
         Add("Add", (x, y) -> x + y),
-        Sub("Sub", (x, y) -> x - y),
+        Sub("Sub", (x, y) -> x > y ? x - y : 0),
         Mul("Mul", (x, y) -> x * y);
         //Div("Div", (x, y) -> x / y); TODO
         
