@@ -34,7 +34,7 @@ public class PairExporter<
             )
                 .filter(Pair.class::isInstance)
                 .map(Pair.class::cast)
-                .orElseThrow(() -> new TypeError("Result is not a pair"));
+                .orElseThrow(() -> new TypeError("Result is not a pair: A different combinator was returned"));
         } catch (EvalError error) {
             throw new EvalError("Error exporting pair", error);
         }

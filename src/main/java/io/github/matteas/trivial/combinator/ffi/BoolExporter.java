@@ -14,7 +14,7 @@ public class BoolExporter implements Exporter<Boolean> {
         
         @Override
         public Combinator apply(Combinator argument) throws EvalError {
-            throw new TypeError("Result is not a bool");
+            throw new TypeError("Result is not a bool: Combinator attempted to invoke the bool as a function");
         }
     }
 
@@ -31,7 +31,7 @@ public class BoolExporter implements Exporter<Boolean> {
                 .filter(DummyBoolCombinator.class::isInstance)
                 .map(DummyBoolCombinator.class::cast)
                 .map(v -> v.value)
-                .orElseThrow(() -> new TypeError("Result is not a bool"));
+                .orElseThrow(() -> new TypeError("Result is not a bool: A different combinator was returned"));
         } catch (EvalError error) {
             throw new EvalError("Error exporting boolean", error);
         }

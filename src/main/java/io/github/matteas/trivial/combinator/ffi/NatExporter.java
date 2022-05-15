@@ -14,7 +14,7 @@ public class NatExporter implements Exporter<Integer> {
         
         @Override
         public Combinator apply(Combinator argument) throws EvalError {
-            throw new TypeError("Result is not a nat");
+            throw new TypeError("Result is not a nat: The combinator attempted to invoke the nat as a function");
         }
     }
 
@@ -27,7 +27,7 @@ public class NatExporter implements Exporter<Integer> {
                 combinator
                     .apply(n -> {
                         if (!(n instanceof DummyNatCombinator)) {
-                            throw new TypeError("Result is not a nat");
+                            throw new TypeError("Result is not a nat: Combinator did not call our function with our specified argument");
                         }
                         final var nat = (DummyNatCombinator)n;
                         return new DummyNatCombinator(nat.value + 1);
@@ -37,7 +37,7 @@ public class NatExporter implements Exporter<Integer> {
                 .filter(DummyNatCombinator.class::isInstance)
                 .map(DummyNatCombinator.class::cast)
                 .map(v -> v.value)
-                .orElseThrow(() -> new TypeError("Result is not a nat"));
+                .orElseThrow(() -> new TypeError("Result is not a nat: A different combinator was returned"));
         } catch (EvalError error) {
             throw new EvalError("Error exporting natural number", error);
         }
