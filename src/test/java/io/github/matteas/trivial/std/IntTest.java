@@ -153,6 +153,38 @@ class IntTest {
                 a, b, c, d
             )).get()));
     }
+
+    @CartesianTest(name = "Int.Mul._helperSumOfProductsSame on (Pair Nat.{0} Nat.{1}) and (Pair Nat.{2} Nat.{3}) is correct")
+    void mulHelperSumOfProductsSame(
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int a,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int b,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int c,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int d
+    ) throws Exception {
+        final var repl = new Repl();
+        assertEquals(
+            a * c + b * d,
+            exportNat(repl.eval(String.format(
+                "Int.Mul._helperSumOfProductsSame (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat.%d)",
+                a, b, c, d
+            )).get()));
+    }
+
+    @CartesianTest(name = "Int.Mul._helperSumOfProductsDifferent on (Pair Nat.{0} Nat.{1}) and (Pair Nat.{2} Nat.{3}) is correct")
+    void mulHelperSumOfProductsDifferent(
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int a,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int b,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int c,
+        @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int d
+    ) throws Exception {
+        final var repl = new Repl();
+        assertEquals(
+            a * d + b * c,
+            exportNat(repl.eval(String.format(
+                "Int.Mul._helperSumOfProductsDifferent (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat.%d)",
+                a, b, c, d
+            )).get()));
+    }
     
     @CartesianTest(name = "Binary operation Int.{0} on Int.{1} and Int.{2} is correct")
     void binaryOperations(
