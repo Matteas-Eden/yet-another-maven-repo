@@ -8,12 +8,17 @@ import org.junitpioneer.jupiter.cartesian.CartesianTest;
 import org.junitpioneer.jupiter.cartesian.CartesianTest.Enum;
 import org.junitpioneer.jupiter.params.IntRangeSource;
 
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.github.matteas.trivial.Repl;
 
 import static io.github.matteas.trivial.combinator.ffi.NatExporter.exportNat;
 import static io.github.matteas.trivial.combinator.ffi.BoolExporter.exportBool;
+import io.github.matteas.trivial.combinator.ffi.Pair;
+import io.github.matteas.trivial.combinator.ffi.PairExporter;
+import io.github.matteas.trivial.combinator.ffi.NatExporter;
+import static io.github.matteas.trivial.combinator.ffi.NatExporter.natExporter;
 
 class NatTest {
     static final int MAX_NAT_TO_TEST = 4;
@@ -108,6 +113,29 @@ class NatTest {
                 operation.name,
                 x
             )).get())
+        );
+    }
+
+    @Test
+    void predecessorHelper() throws Exception {
+        final var repl = new Repl();
+        final var exporter = new PairExporter<
+            Integer,
+            Integer,
+            NatExporter,
+            NatExporter
+        >(natExporter, natExporter);
+        assertEquals(
+            new Pair<>(0, 1),
+            exporter.export(repl.eval("Nat.Pred._helperIncrement (Pair Nat.0 Nat.0)").get())
+        );
+        assertEquals(
+            new Pair<>(1, 2),
+            exporter.export(repl.eval("Nat.Pred._helperIncrement (Pair Nat.0 Nat.1)").get())
+        );
+        assertEquals(
+            new Pair<>(2, 3),
+            exporter.export(repl.eval("Nat.Pred._helperIncrement (Pair Nat.1 Nat.2)").get())
         );
     }
     
