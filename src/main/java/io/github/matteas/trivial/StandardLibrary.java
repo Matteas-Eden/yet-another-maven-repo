@@ -155,7 +155,7 @@ public class StandardLibrary {
         + "Int.Mul._helperMulSecondSecond = C (B B (B Nat.Mul Pair.Second)) Pair.Second;"
         + "Int.Mul._helperSumOfProductsSame = S (B S (B B Nat.Add Int.Mul._helperMulFirstFirst)) Int.Mul._helperMulSecondSecond;"
         + "Int.Mul._helperSumOfProductsDifferent = S (B S (B B Nat.Add Int.Mul._helperMulFirstSecond)) Int.Mul._helperMulSecondFirst;"
-        + "Int.Mul = S (B S (B (B Pair) Int.Mul._helperSumOfProductSame)) Int.Mul._helperSumOfProductDifferent;"
+        + "Int.Mul = S (B S (B (B Pair) Int.Mul._helperSumOfProductsSame)) Int.Mul._helperSumOfProductsDifferent;"
         + "Int.0 = Int.FromNat Nat.0;"
         + "Int.1 = Int.FromNat Nat.1;"
         + "Int.2 = Int.FromNat Nat.2;"
