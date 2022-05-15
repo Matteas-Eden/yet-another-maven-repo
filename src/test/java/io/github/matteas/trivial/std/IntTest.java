@@ -90,8 +90,8 @@ class IntTest {
         );
     }
 
-    @CartesianTest(name = "Int.Mul._helperAddFirstFirst on (Pair Nat.{0} Nat.{1}) and (Pair Nat.{2} Nat.{3}) is correct")
-    void mulHelperAddFirstFirst(
+    @CartesianTest(name = "Int.Mul._helperMulFirstFirst on (Pair Nat.{0} Nat.{1}) and (Pair Nat.{2} Nat.{3}) is correct")
+    void mulHelperMulFirstFirst(
         @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int a,
         @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int b,
         @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int c,
@@ -101,13 +101,13 @@ class IntTest {
         assertEquals(
             a * c,
             exportNat(repl.eval(String.format(
-                "Int.Mul._helperAddFirstFirst (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
+                "Int.Mul._helperMulFirstFirst (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
                 a, b, c, d
             )).get()));
     }
 
-    @CartesianTest(name = "Int.Mul._helperAddFirstSecond on (Pair Nat.{0} Nat.{1}) and (Pair Nat.{2} Nat.{3}) is correct")
-    void mulHelperAddFirstSecond(
+    @CartesianTest(name = "Int.Mul._helperMulFirstSecond on (Pair Nat.{0} Nat.{1}) and (Pair Nat.{2} Nat.{3}) is correct")
+    void mulHelperMulFirstSecond(
         @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int a,
         @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int b,
         @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int c,
@@ -117,13 +117,13 @@ class IntTest {
         assertEquals(
             a * d,
             exportNat(repl.eval(String.format(
-                "Int.Mul._helperAddFirstSecond (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
+                "Int.Mul._helperMulFirstSecond (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
                 a, b, c, d
             )).get()));
     }
 
-    @CartesianTest(name = "Int.Mul._helperAddSecondFirst on (Pair Nat.{0} Nat.{1}) and (Pair Nat.{2} Nat.{3}) is correct")
-    void mulHelperAddSecondFirst(
+    @CartesianTest(name = "Int.Mul._helperMulSecondFirst on (Pair Nat.{0} Nat.{1}) and (Pair Nat.{2} Nat.{3}) is correct")
+    void mulHelperMulSecondFirst(
         @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int a,
         @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int b,
         @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int c,
@@ -133,13 +133,13 @@ class IntTest {
         assertEquals(
             b * c,
             exportNat(repl.eval(String.format(
-                "Int.Mul._helperAddSecondFirst (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
+                "Int.Mul._helperMulSecondFirst (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
                 a, b, c, d
             )).get()));
     }
 
-    @CartesianTest(name = "Int.Mul._helperAddSecondSecond on (Pair Nat.{0} Nat.{1}) and (Pair Nat.{2} Nat.{3}) is correct")
-    void mulHelperAddSecondSecond(
+    @CartesianTest(name = "Int.Mul._helperMulSecondSecond on (Pair Nat.{0} Nat.{1}) and (Pair Nat.{2} Nat.{3}) is correct")
+    void mulHelperMulSecondSecond(
         @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int a,
         @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int b,
         @IntRangeSource(from = 0, to = MAX_INT_TO_TEST, closed = true) int c,
@@ -149,7 +149,7 @@ class IntTest {
         assertEquals(
             b * d,
             exportNat(repl.eval(String.format(
-                "Int.Mul._helperAddSecondSecond (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
+                "Int.Mul._helperMulSecondSecond (Pair Nat.%d Nat.%d) (Pair Nat.%d Nat%d)",
                 a, b, c, d
             )).get()));
     }
