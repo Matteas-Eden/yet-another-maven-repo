@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import io.github.matteas.trivial.combinator.Combinator;
-import io.github.matteas.trivial.combinator.EvalError
+import io.github.matteas.trivial.combinator.EvalError;
 
 public class Namespace {
     public class NameNotFoundException extends EvalError {
@@ -26,7 +26,7 @@ public class Namespace {
 
     public Combinator resolve(String name) throws NameNotFoundException {
         if (!names.containsKey(name)) {
-            throw NameNotFoundException(name);
+            throw new NameNotFoundException(name);
         }
         return names.get(name);
     }
