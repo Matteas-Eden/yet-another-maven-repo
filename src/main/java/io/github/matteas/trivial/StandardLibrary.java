@@ -36,7 +36,7 @@ public class StandardLibrary {
         + "Nat.Sub = C I Nat.Pred;"
         + "Nat.Mul = B;"
         + "Nat.Pow = B (C I) I;"
-        + "Nat.IsZero = C (C (K Bool.False)) Bool.True;"
+        + "Nat.IsZero = C (C I (K Bool.False)) Bool.True;"
         + "Nat.Leq = B (B Nat.IsZero) Nat.Sub;"
         + "Nat.Eq = S (B S (B (B Bool.And) Nat.Leq)) (C Nat.Leq);"
         + "Nat.1 = Nat.Succ Nat.0;"
