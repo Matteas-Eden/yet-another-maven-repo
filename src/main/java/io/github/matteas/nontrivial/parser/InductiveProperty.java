@@ -3,6 +3,7 @@ package io.github.matteas.nontrivial.parser;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.function.Supplier;
+import java.util.Optional;
 
 /**
  * A cell in a Propagation Network used to find the steady state value.
