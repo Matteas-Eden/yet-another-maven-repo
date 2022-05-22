@@ -185,7 +185,7 @@ public abstract class Syntax<V extends Value, K extends TokenKind> {
                         left.acceptableKinds,
                         left.canAcceptEmptyTokenSequence,
                         right.acceptableKinds,
-                        right.canAcceptEmptyTokenSequence,
+                        right.canAcceptEmptyTokenSequence
                     ),
                     () -> {
                         final Set<ShouldNotFollowEntry<V, K>> entries = Stream.concat(
@@ -301,7 +301,7 @@ public abstract class Syntax<V extends Value, K extends TokenKind> {
                         left.shouldNotFollow,
                         left.canAcceptSomeTokenSequence,
                         right.canAcceptEmptyTokenSequence,
-                        right.shouldNotFollow,
+                        right.shouldNotFollow
                     ),
                     () -> {
                         final Set<ShouldNotFollowEntry<V, K>> entries = new HashSet<>();
@@ -405,15 +405,15 @@ public abstract class Syntax<V extends Value, K extends TokenKind> {
         private Optional<Syntax<V, K>> realizedSyntax;
         
         private final InductiveProperty.Deferred<Set<K>> deferredAcceptableKinds
-            = new InductiveProperty.Deferred<>(Collections.emptySet()),
+            = new InductiveProperty.Deferred<>(Collections.emptySet());
         private final InductiveProperty.Deferred<Optional<V>> deferredCanAcceptEmptyTokenSequence
-            = new InductiveProperty.Deferred<>(Optional.empty()),
+            = new InductiveProperty.Deferred<>(Optional.empty());
         private final InductiveProperty.Deferred<Boolean> deferredCanAcceptSomeTokenSequence
-            = new InductiveProperty.Deferred<>(false),
+            = new InductiveProperty.Deferred<>(false);
         private final InductiveProperty.Deferred<Set<ShouldNotFollowEntry>> deferredShouldNotFollow
-            = new InductiveProperty.Deferred<>(Collections.emptySet()),
-        private final InductiveProperty.Deferred<Set<Conflict> deferredConflicts
-            = new InductiveProperty.Deferred<>(Collections.emptySet())
+            = new InductiveProperty.Deferred<>(Collections.emptySet());
+        private final InductiveProperty.Deferred<Set<Conflict>> deferredConflicts
+            = new InductiveProperty.Deferred<>(Collections.emptySet());
 
         public Deferred(Supplier<Syntax<V, K>> syntaxGetter) {
             super(

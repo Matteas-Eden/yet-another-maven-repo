@@ -92,7 +92,7 @@ public abstract class ValidSyntax<V extends Value, K extends TokenKind> {
             Set<K> acceptableKinds,
             Optional<V> canAcceptEmptyTokenSequence,
             boolean canAcceptSomeTokenSequence,
-            Set<ShouldNotFollow> shouldNotFollow,
+            Set<ShouldNotFollow> shouldNotFollow
         ) {
             super(
                 acceptableKinds,
@@ -124,7 +124,7 @@ public abstract class ValidSyntax<V extends Value, K extends TokenKind> {
             Set<K> acceptableKinds,
             Optional<V> canAcceptEmptyTokenSequence,
             boolean canAcceptSomeTokenSequence,
-            Set<ShouldNotFollow> shouldNotFollow,
+            Set<ShouldNotFollow> shouldNotFollow
         ) {
             super(
                 acceptableKinds,
