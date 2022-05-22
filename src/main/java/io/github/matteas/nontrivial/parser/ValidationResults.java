@@ -1,28 +1,32 @@
 package io.github.matteas.nontrivial.parser;
 
-interface ValidationResult {
-    <T> T match(Function<Ok, T> success, Function<Error, T> failure);
+import java.util.function.Function;
+
+interface ValidationResult<V extends Value, K extends TokenKind> {
+    <T> T match(Function<ValidSyntax<V, K>, T> success, Function<Syntax<V, K>, T> failure);
     
-    public class Ok implements ValidationResult {
-        public final ValidSyntax syntax;
+    public class Ok<V extends Value, K extends TokenKind> implements ValidationResult<V, K> {
+        public final ValidSyntax<V, K> syntax;
         
-        public Ok(ValidSyntax syntax) {
+        public Ok(ValidSyntax<V, K> syntax) {
             this.syntax = syntax;
         }
 
-        <T> T match(Function<ValidSyntax, T> success, Function<Syntax, T> failure) {
+        @Override
+        public <T> T match(Function<ValidSyntax<V, K>, T> success, Function<Syntax<V, K>, T> failure) {
             return success.apply(syntax);
         }
     }
     
-    public class Error implements ValidationResult {
-        public final Syntax syntax;
+    public class Error<V extends Value, K extends TokenKind> implements ValidationResult<V, K> {
+        public final Syntax<V, K> syntax;
         
-        public Error(Syntax syntax) {
+        public Error(Syntax<V, K> syntax) {
             this.syntax = syntax;
         }
 
-        <T> T match(Function<ValidSyntax, T> success, Function<Syntax, T> failure) {
+        @Override
+        public <T> T match(Function<ValidSyntax<V, K>, T> success, Function<Syntax<V, K>, T> failure) {
             return failure.apply(syntax);
         }
     }
