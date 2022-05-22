@@ -67,8 +67,6 @@ public class Focus<V extends Value, K extends TokenKind, T extends Token> {
          */
         Focus<V, K> unfocusToNextSyntax(V v);
         
-        boolean isRoot();
-    
         public static class FollowBy<V extends Value, K extends TokenKind> implements Context<V, K> {
             public final ValidSyntax<V, K> syntax;
             public final Context<V, K> next;
@@ -81,11 +79,6 @@ public class Focus<V extends Value, K extends TokenKind, T extends Token> {
             @Override
             public Focus<V, K> unfocusToNextSyntax(V v) {
                 return new Focus<>(syntax, new Prepend(v, next));
-            }
-            
-            @Override
-            public boolean isRoot() {
-                return false;
             }
         }
         
@@ -101,11 +94,6 @@ public class Focus<V extends Value, K extends TokenKind, T extends Token> {
             public Focus<V, K> unfocusToNextSyntax(V v) {
                 return next.unfocusToNextSyntax(v.prepend(value));
             }
-            
-            @Override
-            public boolean isRoot() {
-                return false;
-            }
         }
         
         public static class Apply<V extends Value, K extends TokenKind> implements Context<V, K> {
@@ -120,22 +108,12 @@ public class Focus<V extends Value, K extends TokenKind, T extends Token> {
             public Focus<V, K> unfocusToNextSyntax(V v) {
                 return next.unfocusToNextSyntax(mapper.map(v));
             }
-            
-            @Override
-            public boolean isRoot() {
-                return false;
-            }
         }
         
         public static class Root<V extends Value, K extends TokenKind> implements Context<V, K> {
             @Override
             public Focus<V, K> unfocusToNextSyntax(V v) {
                 return new Focus<>(new ValidSyntax.ValueNode(v), this);
-            }
-            
-            @Override
-            public boolean isRoot() {
-                return true;
             }
         }
     }
