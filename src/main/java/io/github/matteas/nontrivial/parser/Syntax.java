@@ -394,26 +394,44 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
         private final Supplier<Syntax<V, K>> syntaxGetter;
         private Optional<Syntax<V, K>> realizedSyntax;
         
-        private final InductiveProperty.Deferred<Set<K>> deferredAcceptableKinds
-            = new InductiveProperty.Deferred<>(Collections.emptySet());
-        private final InductiveProperty.Deferred<Optional<V>> deferredCanAcceptEmptyTokenSequence
-            = new InductiveProperty.Deferred<>(Optional.empty());
-        private final InductiveProperty.Deferred<Boolean> deferredCanAcceptSomeTokenSequence
-            = new InductiveProperty.Deferred<>(false);
-        private final InductiveProperty.Deferred<Set<ShouldNotFollowEntry<V, K>>> deferredShouldNotFollow
-            = new InductiveProperty.Deferred<>(Collections.emptySet());
-        private final InductiveProperty.Deferred<Set<Conflict>> deferredConflicts
-            = new InductiveProperty.Deferred<>(Collections.emptySet());
+        private final InductiveProperty.Deferred<Set<K>> deferredAcceptableKinds;
+        private final InductiveProperty.Deferred<Optional<V>> deferredCanAcceptEmptyTokenSequence;
+        private final InductiveProperty.Deferred<Boolean> deferredCanAcceptSomeTokenSequence;
+        private final InductiveProperty.Deferred<Set<ShouldNotFollowEntry<V, K>>> deferredShouldNotFollow;
+        private final InductiveProperty.Deferred<Set<Conflict>> deferredConflicts;
 
         public Deferred(Supplier<Syntax<V, K>> syntaxGetter) {
+            this(
+                syntaxGetter,
+                new InductiveProperty.Deferred<>(Collections.emptySet()),
+                new InductiveProperty.Deferred<>(Optional.empty()),
+                new InductiveProperty.Deferred<>(false),
+                new InductiveProperty.Deferred<>(Collections.emptySet()),
+                new InductiveProperty.Deferred<>(Collections.emptySet())
+            );
+        }
+
+        private Deferred(
+            Supplier<Syntax<V, K>> syntaxGetter,
+            InductiveProperty.Deferred<Set<K>> acceptableKinds,
+            InductiveProperty.Deferred<Optional<V>> canAcceptEmptyTokenSequence,
+            InductiveProperty.Deferred<Boolean> canAcceptSomeTokenSequence,
+            InductiveProperty.Deferred<Set<ShouldNotFollowEntry<V, K>>> shouldNotFollow,
+            InductiveProperty.Deferred<Set<Conflict>> conflicts
+        ) {
             super(
-                deferredAcceptableKinds,
-                deferredCanAcceptEmptyTokenSequence,
-                deferredCanAcceptSomeTokenSequence,
-                deferredShouldNotFollow,
-                deferredConflicts
+                acceptableKinds,
+                canAcceptEmptyTokenSequence,
+                canAcceptSomeTokenSequence,
+                shouldNotFollow,
+                conflicts
             );
             this.syntaxGetter = syntaxGetter;
+            this.deferredAcceptableKinds = acceptableKinds;
+            this.deferredCanAcceptEmptyTokenSequence = canAcceptEmptyTokenSequence;
+            this.deferredCanAcceptSomeTokenSequence = canAcceptSomeTokenSequence;
+            this.deferredShouldNotFollow = shouldNotFollow;
+            this.deferredConflicts = conflicts;
         }
 
         @Override
