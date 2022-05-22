@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-public abstract class ValidSyntax<V extends Value, K extends TokenKind> {
+public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
     /**
      * Also known in literature as the "FIRST" set.
      * This is the {@link Set} of {@link TokenKind} that starts
@@ -47,7 +47,7 @@ public abstract class ValidSyntax<V extends Value, K extends TokenKind> {
      */
     public abstract Focus<V, K> focus(K kind, Focus.Context<V, K> context);
 
-    public static class Success<V extends Value, K extends TokenKind> extends ValidSyntax<V, K> {
+    public static class Success<V extends Value<V>, K extends TokenKind> extends ValidSyntax<V, K> {
         public final V value;
         
         public Success(V value) {
@@ -62,7 +62,7 @@ public abstract class ValidSyntax<V extends Value, K extends TokenKind> {
         }
     }
 
-    public static class Element<V extends Value, K extends TokenKind> extends ValidSyntax<V, K> {
+    public static class Element<V extends Value<V>, K extends TokenKind> extends ValidSyntax<V, K> {
         public final K kind;
         
         public Element(K kind) {
@@ -83,7 +83,7 @@ public abstract class ValidSyntax<V extends Value, K extends TokenKind> {
         }
     }
     
-    public static class Disjunction<V extends Value, K extends TokenKind> extends ValidSyntax<V, K> {
+    public static class Disjunction<V extends Value<V>, K extends TokenKind> extends ValidSyntax<V, K> {
         public final ValidSyntax<V, K> left;
         public final ValidSyntax<V, K> right;
 
@@ -115,7 +115,7 @@ public abstract class ValidSyntax<V extends Value, K extends TokenKind> {
         }
     }
     
-    public static class Sequence<V extends Value, K extends TokenKind> extends ValidSyntax<V, K> {
+    public static class Sequence<V extends Value<V>, K extends TokenKind> extends ValidSyntax<V, K> {
         public final ValidSyntax<V, K> left;
         public final ValidSyntax<V, K> right;
 
@@ -154,7 +154,7 @@ public abstract class ValidSyntax<V extends Value, K extends TokenKind> {
         }
     }
     
-    public static class Transform<V extends Value, K extends TokenKind> extends ValidSyntax<V, K> {
+    public static class Transform<V extends Value<V>, K extends TokenKind> extends ValidSyntax<V, K> {
         public final UnaryOperator<V> transformation;
         public final ValidSyntax<V, K> syntax;
 
