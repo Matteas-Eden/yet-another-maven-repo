@@ -1,11 +1,12 @@
 package io.github.matteas.nontrivial.parser;
 
 import java.util.function.UnaryOperator;
+import java.util.Optional;
 
 /**
  * Also known as a Huet zipper, the derivative of the type {@link Syntax}, or the one-hole context of {@link Syntax}.
  */
-public class Focus<V extends Value, K extends TokenKind, T extends Token> {
+public class Focus<V extends Value, K extends TokenKind> {
     /**
      * The current focal point in the syntax tree.
      */
@@ -19,7 +20,7 @@ public class Focus<V extends Value, K extends TokenKind, T extends Token> {
      */
     public final Context<V, K> context;
 
-    public Focus(ValidSyntax<V, K> syntax, Context context) {
+    public Focus(ValidSyntax<V, K> syntax, Context<V, K> context) {
         this.syntax = syntax;
         this.context = context;
     }
@@ -38,10 +39,10 @@ public class Focus<V extends Value, K extends TokenKind, T extends Token> {
     private Optional<Focus<V, K>> unfocusToNext(K kind) {
         if (syntax.accepts(kind)) {
             return Optional.of(this);
-        } else if (context.isEmpty()) {
+        } else if (context.isRoot()) {
             return Optional.empty();
         }
-        return syntax.canAcceptEmptyTokenString
+        return syntax.canAcceptEmptyTokenSequence
             .map(v -> context.unfocusToNextSyntax(v).unfocusToNext(kind));
     }
 
@@ -58,7 +59,7 @@ public class Focus<V extends Value, K extends TokenKind, T extends Token> {
      * Replaces the current syntax node with one that represents the given value.
      */
     public Focus<V, K> withValue(V value) {
-        return new Focus(new ValidSyntax.Success(value), context);
+        return new Focus<>(new ValidSyntax.Success<>(value), context);
     }
 
     public interface Context<V extends Value, K extends TokenKind> {
@@ -66,6 +67,8 @@ public class Focus<V extends Value, K extends TokenKind, T extends Token> {
          * Also known in literature as "plug"
          */
         Focus<V, K> unfocusToNextSyntax(V v);
+
+        boolean isRoot();
         
         public static class FollowBy<V extends Value, K extends TokenKind> implements Context<V, K> {
             public final ValidSyntax<V, K> syntax;
@@ -78,7 +81,12 @@ public class Focus<V extends Value, K extends TokenKind, T extends Token> {
     
             @Override
             public Focus<V, K> unfocusToNextSyntax(V v) {
-                return new Focus<>(syntax, new Prepend(v, next));
+                return new Focus<>(syntax, new Prepend<>(v, next));
+            }
+
+            @Override
+            public boolean isRoot() {
+                return false;
             }
         }
         
@@ -94,6 +102,11 @@ public class Focus<V extends Value, K extends TokenKind, T extends Token> {
             public Focus<V, K> unfocusToNextSyntax(V v) {
                 return next.unfocusToNextSyntax(v.prepend(value));
             }
+
+            @Override
+            public boolean isRoot() {
+                return false;
+            }
         }
         
         public static class Apply<V extends Value, K extends TokenKind> implements Context<V, K> {
@@ -106,14 +119,24 @@ public class Focus<V extends Value, K extends TokenKind, T extends Token> {
             
             @Override
             public Focus<V, K> unfocusToNextSyntax(V v) {
-                return next.unfocusToNextSyntax(mapper.map(v));
+                return next.unfocusToNextSyntax(mapper.apply(v));
+            }
+
+            @Override
+            public boolean isRoot() {
+                return false;
             }
         }
         
         public static class Root<V extends Value, K extends TokenKind> implements Context<V, K> {
             @Override
             public Focus<V, K> unfocusToNextSyntax(V v) {
-                return new Focus<>(new ValidSyntax.ValueNode(v), this);
+                return new Focus<>(new ValidSyntax.Success<>(v), this);
+            }
+
+            @Override
+            public boolean isRoot() {
+                return true;
             }
         }
     }

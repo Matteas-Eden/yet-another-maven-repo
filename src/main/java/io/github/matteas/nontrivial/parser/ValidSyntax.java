@@ -1,5 +1,11 @@
 package io.github.matteas.nontrivial.parser;
 
+import java.util.Set;
+import java.util.Optional;
+import java.util.Collections;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
+
 public abstract class ValidSyntax<V extends Value, K extends TokenKind> {
     /**
      * Also known in literature as the "FIRST" set.
@@ -71,11 +77,6 @@ public abstract class ValidSyntax<V extends Value, K extends TokenKind> {
         }
         
         @Override
-        protected void realize() {
-            // Nothing to do.
-        }
-        
-        @Override
         public Focus<V, K> focus(K kind, Focus.Context<V, K> context) {
             assert this.kind == kind;
             return new Focus<>(this, context);
@@ -92,7 +93,7 @@ public abstract class ValidSyntax<V extends Value, K extends TokenKind> {
             Set<K> acceptableKinds,
             Optional<V> canAcceptEmptyTokenSequence,
             boolean canAcceptSomeTokenSequence,
-            Set<ShouldNotFollow> shouldNotFollow
+            Set<ShouldNotFollowEntry<V, K>> shouldNotFollow
         ) {
             super(
                 acceptableKinds,
@@ -124,7 +125,7 @@ public abstract class ValidSyntax<V extends Value, K extends TokenKind> {
             Set<K> acceptableKinds,
             Optional<V> canAcceptEmptyTokenSequence,
             boolean canAcceptSomeTokenSequence,
-            Set<ShouldNotFollow> shouldNotFollow
+            Set<ShouldNotFollowEntry<V, K>> shouldNotFollow
         ) {
             super(
                 acceptableKinds,
@@ -139,8 +140,8 @@ public abstract class ValidSyntax<V extends Value, K extends TokenKind> {
 
         @Override
         public Focus<V, K> focus(K kind, Focus.Context<V, K> context) {
-            final Supplier<Focus.Context> leftFocus = () ->
-                left.focus(kind, new Focus.Context.FollowBy(right, context));
+            final Supplier<Focus<V, K>> leftFocus = () ->
+                left.focus(kind, new Focus.Context.FollowBy<>(right, context));
             
             return left.canAcceptEmptyTokenSequence
                 .map(v -> {
@@ -153,7 +154,7 @@ public abstract class ValidSyntax<V extends Value, K extends TokenKind> {
         }
     }
     
-    public static class Transform<V extends Value, K extends TokenKind> implements ValidSyntax<V, K> {
+    public static class Transform<V extends Value, K extends TokenKind> extends ValidSyntax<V, K> {
         public final UnaryOperator<V> transformation;
         public final ValidSyntax<V, K> syntax;
 
@@ -166,8 +167,7 @@ public abstract class ValidSyntax<V extends Value, K extends TokenKind> {
                 syntax.acceptableKinds,
                 canAcceptEmptyTokenSequence,
                 syntax.canAcceptSomeTokenSequence,
-                syntax.shouldNotFollow,
-                syntax.conflicts
+                syntax.shouldNotFollow
             );
             this.transformation = transformation;
             this.syntax = syntax;

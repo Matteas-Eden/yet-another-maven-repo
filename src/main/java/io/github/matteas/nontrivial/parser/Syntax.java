@@ -46,16 +46,6 @@ public abstract class Syntax<V extends Value, K extends TokenKind> {
         this.conflicts = conflicts;
     }
 
-    public static class ShouldNotFollowEntry<V extends Value, K extends TokenKind> {
-        public final Disjunction<V, K> source;
-        public final Set<K> disallowedKinds;
-
-        public ShouldNotFollowEntry(Disjunction<V, K> source, Set<K> disallowedKinds) {
-            this.source = source;
-            this.disallowedKinds = disallowedKinds;
-        }
-    }
-
     public interface Conflict {}
 
     /**
@@ -95,14 +85,14 @@ public abstract class Syntax<V extends Value, K extends TokenKind> {
     }
 
     protected abstract void realize();
-    protected abstract ValidSyntax toValidSyntaxUnchecked();
+    protected abstract ValidSyntax<V, K> toValidSyntaxUnchecked();
 
-    public final ValidationResult validate() {
+    public final ValidationResult<V, K> validate() {
         realize();
         if (conflicts.get().isEmpty()) {
-            return new ValidationResult.Ok(toValidSyntaxUnchecked());
+            return new ValidationResult.Ok<>(toValidSyntaxUnchecked());
         }
-        return new ValidationResult.Error(this);
+        return new ValidationResult.Error<>(this);
     }
 
     public static class Success<V extends Value, K extends TokenKind> extends Syntax<V, K> {
@@ -126,8 +116,8 @@ public abstract class Syntax<V extends Value, K extends TokenKind> {
         }
         
         @Override
-        protected ValidSyntax toValidSyntaxUnchecked() {
-            return new ValidSyntax.Success(value);
+        protected ValidSyntax<V, K> toValidSyntaxUnchecked() {
+            return new ValidSyntax.Success<>(value);
         }
     }
 
@@ -152,8 +142,8 @@ public abstract class Syntax<V extends Value, K extends TokenKind> {
         }
         
         @Override
-        protected ValidSyntax toValidSyntaxUnchecked() {
-            return new ValidSyntax.Element(kind);
+        protected ValidSyntax<V, K> toValidSyntaxUnchecked() {
+            return new ValidSyntax.Element<>(kind);
         }
     }
     
@@ -247,8 +237,8 @@ public abstract class Syntax<V extends Value, K extends TokenKind> {
         }
         
         @Override
-        protected ValidSyntax toValidSyntaxUnchecked() {
-            return new ValidSyntax.Disjunction(
+        protected ValidSyntax<V, K> toValidSyntaxUnchecked() {
+            return new ValidSyntax.Disjunction<>(
                 left.toValidSyntaxUnchecked(),
                 right.toValidSyntaxUnchecked(),
                 acceptableKinds.get(),
@@ -351,8 +341,8 @@ public abstract class Syntax<V extends Value, K extends TokenKind> {
         }
         
         @Override
-        protected ValidSyntax toValidSyntaxUnchecked() {
-            return new ValidSyntax.Disjunction(
+        protected ValidSyntax<V, K> toValidSyntaxUnchecked() {
+            return new ValidSyntax.Sequence<>(
                 left.toValidSyntaxUnchecked(),
                 right.toValidSyntaxUnchecked(),
                 acceptableKinds.get(),
@@ -363,7 +353,7 @@ public abstract class Syntax<V extends Value, K extends TokenKind> {
         }
     }
     
-    public static class Transform<V extends Value, K extends TokenKind> implements Syntax<V, K> {
+    public static class Transform<V extends Value, K extends TokenKind> extends Syntax<V, K> {
         public final UnaryOperator<V> transformation;
         public final Syntax<V, K> syntax;
 
@@ -388,8 +378,8 @@ public abstract class Syntax<V extends Value, K extends TokenKind> {
         }
         
         @Override
-        protected ValidSyntax toValidSyntaxUnchecked() {
-            return new ValidSyntax.Disjunction(
+        protected ValidSyntax<V, K> toValidSyntaxUnchecked() {
+            return new ValidSyntax.Transform<>(
                 transformation,
                 syntax.toValidSyntaxUnchecked(),
                 canAcceptEmptyTokenSequence.get()
@@ -410,7 +400,7 @@ public abstract class Syntax<V extends Value, K extends TokenKind> {
             = new InductiveProperty.Deferred<>(Optional.empty());
         private final InductiveProperty.Deferred<Boolean> deferredCanAcceptSomeTokenSequence
             = new InductiveProperty.Deferred<>(false);
-        private final InductiveProperty.Deferred<Set<ShouldNotFollowEntry>> deferredShouldNotFollow
+        private final InductiveProperty.Deferred<Set<ShouldNotFollowEntry<V, K>>> deferredShouldNotFollow
             = new InductiveProperty.Deferred<>(Collections.emptySet());
         private final InductiveProperty.Deferred<Set<Conflict>> deferredConflicts
             = new InductiveProperty.Deferred<>(Collections.emptySet());
@@ -428,16 +418,17 @@ public abstract class Syntax<V extends Value, K extends TokenKind> {
 
         @Override
         protected void realize() {
-            realizedSyntax = Optional.of(syntaxGetter.get());
-            deferredAcceptableKinds.realize(realizedSyntax.acceptableKinds);
-            deferredCanAcceptEmptyTokenSequence.realize(realizedSyntax.canAcceptEmptyTokenSequence);
-            deferredCanAcceptSomeTokenSequence.realize(realizedSyntax.canAcceptSomeTokenSequence);
-            deferredShouldNotFollow.realize(realizedSyntax.shouldNotFollow);
-            deferredConflicts.realize(realizedSyntax.conflicts);
+            final var syntax = syntaxGetter.get();
+            realizedSyntax = Optional.of(syntax);
+            deferredAcceptableKinds.realize(syntax.acceptableKinds);
+            deferredCanAcceptEmptyTokenSequence.realize(syntax.canAcceptEmptyTokenSequence);
+            deferredCanAcceptSomeTokenSequence.realize(syntax.canAcceptSomeTokenSequence);
+            deferredShouldNotFollow.realize(syntax.shouldNotFollow);
+            deferredConflicts.realize(syntax.conflicts);
         }
         
         @Override
-        protected ValidSyntax toValidSyntaxUnchecked() {
+        protected ValidSyntax<V, K> toValidSyntaxUnchecked() {
             return realizedSyntax.get().toValidSyntaxUnchecked();
         }
 
