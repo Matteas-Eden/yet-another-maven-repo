@@ -3,8 +3,8 @@ package io.github.matteas.nontrivial.parser;
 import java.util.Optional;
 import java.util.Iterator;
 
-public class Parser<V extends Value<V>, K extends TokenKind> {
-    public Focus<V, K> parse(Iterator<Token<V, K>> tokens, Focus<V, K> focus) {
+public class Parser<V extends Value<V>, K extends TokenKind, T extends V & TokenKind<V, K>> {
+    public Focus<V, K> parse(Iterator<T tokens, Focus<V, K> focus) {
         while (tokens.hasNext()) {
             final var nextFocus = next(tokens.next(), focus);
             if (!nextFocus.isPresent()) {
@@ -15,7 +15,7 @@ public class Parser<V extends Value<V>, K extends TokenKind> {
         return focus;
     }
     
-    public Optional<Focus<V, K>> next(Token<V, K> token, Focus<V, K> focus) {
+    public Optional<Focus<V, K>> next(T token, Focus<V, K> focus) {
         return focus
             .refocusToNext(token.kind())
             .map(nextFocus -> nextFocus.withValue(token));
