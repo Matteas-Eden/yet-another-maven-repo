@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 
-public class StringLanguage<V, K> extends Language<StringLanguage.SimpleValue<V>, StringLanguage.StringTokenKind> {
+public class StringLanguage<V, K> extends Language<StringLanguage.SimpleValue<V>, K, StringLanguage.StringTokenKind> {
     public final BiFunction<String, StringTokenKind, V> tokenToValue;
     public final BinaryOperator<V> joiner;
     

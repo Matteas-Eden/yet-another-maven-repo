@@ -7,78 +7,60 @@ import java.util.Arrays;
 /**
  * Syntax sugar for {@link Syntax}.
  */
-public class Language<V extends Value<V>, K extends TokenKind> {
-    public final Map<String, K> dictionary;
+public class Language<V extends Value<V>, KK, K extends TokenKind> {
+    public final Map<KK, K> dictionary;
+    public final Class<KK> kindKeyClass;
 
-    public Language(Map<String, K> dictionary) {
+    public Language(Map<KK, K> dictionary, Class<KK> kindKeyClass) {
         this.dictionary = dictionary;
+        this.kindKeyClass = kindKeyClass;
     }
     
-    public Rule<V, K> rule() {
-        return new Rule<>(dictionary);
-    }
-
-    public Rule<V, K> seq(Syntax<V, K> ... syntaxes) {
-        if (syntaxes.length == 0) {
-            throw new IllegalArgumentException("Sequence must have at least one syntax");
-        }
-        if (syntaxes.length == 1) {
-            return rule().is(syntaxes[0]);
-        }
-        final var tail = Arrays.copyOfRange(syntaxes, 1, syntaxes.length);
-        return rule().is(new Syntax.Sequence<>(syntaxes[0], seq(tail)));
+    public Rule<V, KK, K> rule() {
+        return new Rule<>(dictionary, kindKeyClass);
     }
     
-    public static class Rule<V extends Value<V>, K extends TokenKind> extends Syntax.Deferred<V, K> {
-        public final Map<String, K> dictionary;
+    public static class Rule<V extends Value<V>, KK, K extends TokenKind> extends Syntax.Deferred<V, K> {
+        public final Map<KK, K> dictionary;
+        public final Class<KK> kindKeyClass;
         
-        public Rule(Map<String, K> dictionary) {
+        public Rule(Map<KK, K> dictionary, Class<KK> kindKeyClass) {
             this.dictionary = dictionary;
-        }
-        
-        public Rule<V, K> is(Syntax<V, K> ... syntaxes) {
-            assert !realized().isPresent();
-            return is(seq(syntaxes));
-        }
-        
-        public Rule<V, K> is(String string) {
-            assert !realized().isPresent();
-            return is(dictionary.get(string));
-        }
-        
-        public Rule<V, K> is(K kind) {
-            assert !realized().isPresent();
-            return is(new Syntax.Element<>(kind));
+            this.kindKeyClass = kindKeyClass;
         }
 
-        public Rule<V, K> is(Syntax<V, K> syntax) {
+        private Syntax<V, K> desugar(Object ... items) {
+            if (items.length == 0) {
+                throw new IllegalArgumentException("Sequence must contain something");
+            }
+            Syntax<V, K> head;
+            if (kindKeyClass.isInstance(items[0])) {
+                head = new Syntax.Element<>(dictionary.get(kindKeyClass.cast(items[0])));
+            } else if (getClass().isInstance(items[0])) {
+                head = getClass().cast(items[0]);
+            } else {
+                throw new IllegalArgumentException("Items must be either a token kind identifier or a rule of the right type");
+            }
+            if (items.length == 1) {
+                return head;
+            }
+            final var tail = Arrays.copyOfRange(items, 1, items.length);
+            return new Syntax.Sequence<>(head, desugar(tail));
+        }
+        
+        public Rule<V, KK, K> is(Object ... items) {
             assert !realized().isPresent();
-            realize(syntax);
+            realize(desugar(items));
             return this;
         }
         
-        public Rule<V, K> or(Syntax<V, K> ... syntaxes) {
+        public Rule<V, KK, K> or(Object ... items) {
             assert realized().isPresent();
-            return or(seq(syntaxes));
-        }
-        
-        public Rule<V, K> or(String string) {
-            assert realized().isPresent();
-            return or(dictionary.get(string));
-        }
-        
-        public Rule<V, K> or(K kind) {
-            assert realized().isPresent();
-            return or(new Syntax.Element<>(kind));
-        }
-        
-        public Rule<V, K> or(Syntax<V, K> syntax) {
-            assert realized().isPresent();
-            realize(new Syntax.Disjunction<>(realized().get(), syntax));
+            realize(new Syntax.Disjunction<>(realized().get(), desugar(item)));
             return this;
         }
         
-        public Rule<V, K> map(UnaryOperator<V> transformation) {
+        public Rule<V, KK, K> map(UnaryOperator<V> transformation) {
             assert realized().isPresent();
             realize(new Syntax.Transform<V, K>(transformation, realized().get()));
             return this;
