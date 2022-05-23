@@ -19,6 +19,10 @@ public class Focus<V extends Value<V>, K extends TokenKind> {
      * of the tree drawn the opposite direction.
      */
     public final Context<V, K> context;
+    
+    public Focus(ValidSyntax<V, K> syntax) {
+        this(syntax, new Context.Root<>());
+    }
 
     public Focus(ValidSyntax<V, K> syntax, Context<V, K> context) {
         this.syntax = syntax;
