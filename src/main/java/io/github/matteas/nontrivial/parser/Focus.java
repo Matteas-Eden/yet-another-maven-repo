@@ -43,7 +43,7 @@ public class Focus<V extends Value<V>, K extends TokenKind> {
             return Optional.empty();
         }
         return syntax.canAcceptEmptyTokenSequence
-            .map(v -> context.unfocusToNextSyntax(v).unfocusToNext(kind));
+            .flatMap(v -> context.unfocusToNextSyntax(v).unfocusToNext(kind));
     }
 
     /**
