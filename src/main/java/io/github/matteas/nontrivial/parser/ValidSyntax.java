@@ -60,6 +60,15 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
             
             this.value = value;
         }
+        
+        @Override
+        public Focus<V, K> focus(K kind, Focus.Context<V, K> context) {
+            throw new UnsupportedOperationException(
+                "Focussing torwards a node that can accept any non-empty "
+                + "token should never reach a Success node, since the success "
+                + "node only accepts the empty token sequence."
+            );
+        }
     }
 
     public static class Element<V extends Value<V>, K extends TokenKind> extends ValidSyntax<V, K> {
