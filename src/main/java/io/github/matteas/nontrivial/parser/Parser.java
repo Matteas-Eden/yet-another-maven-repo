@@ -30,7 +30,7 @@ public class Parser<
             focus = nextFocus.get();
         }
         final var finalFocus = focus;
-        return focus.syntax.canAcceptEmptyTokenSequence
+        return focus.syntax.canComplete
             .<Result<V, K, T>>map(
                 value -> new Result.Ok<>(value, new Parser<>(finalFocus))
             )

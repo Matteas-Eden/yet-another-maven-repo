@@ -46,7 +46,7 @@ public class Focus<V extends Value<V>, K extends TokenKind> {
         } else if (context.isRoot()) {
             return Optional.empty();
         }
-        return syntax.canAcceptEmptyTokenSequence
+        return syntax.canComplete
             .flatMap(v -> context.unfocusToNextSyntax(v).unfocusToNext(kind));
     }
 

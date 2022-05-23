@@ -22,7 +22,7 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
     /**
      * Also known in literature as the "nullability".
      */
-    protected final InductiveProperty<Optional<V>> canAcceptEmptyTokenSequence;
+    protected final InductiveProperty<Optional<V>> canComplete;
     
     /**
      * Also known in literature as the "productivity".
@@ -34,13 +34,13 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
 
     protected Syntax(
         InductiveProperty<Set<K>> acceptableKinds,
-        InductiveProperty<Optional<V>> canAcceptEmptyTokenSequence,
+        InductiveProperty<Optional<V>> canComplete,
         InductiveProperty<Boolean> canAcceptSomeTokenSequence,
         InductiveProperty<Set<ShouldNotFollowEntry<V, K>>> shouldNotFollow,
         InductiveProperty<Set<Conflict>> conflicts
     ) {
         this.acceptableKinds = acceptableKinds;
-        this.canAcceptEmptyTokenSequence = canAcceptEmptyTokenSequence;
+        this.canComplete = canComplete;
         this.canAcceptSomeTokenSequence = canAcceptSomeTokenSequence;
         this.shouldNotFollow = shouldNotFollow;
         this.conflicts = conflicts;
@@ -175,9 +175,9 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                     ).collect(Collectors.toSet())
                 ),
                 new InductiveProperty.Rule<>(
-                    List.of(left.canAcceptEmptyTokenSequence, right.canAcceptEmptyTokenSequence),
-                    () -> left.canAcceptEmptyTokenSequence.get()
-                        .or(() -> right.canAcceptEmptyTokenSequence.get())
+                    List.of(left.canComplete, right.canComplete),
+                    () -> left.canComplete.get()
+                        .or(() -> right.canComplete.get())
                 ),
                 new InductiveProperty.Rule<>(
                     List.of(left.canAcceptSomeTokenSequence, right.canAcceptSomeTokenSequence),
@@ -198,9 +198,9 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                 new InductiveProperty.Rule<>(
                     List.of(
                         left.acceptableKinds,
-                        left.canAcceptEmptyTokenSequence,
+                        left.canComplete,
                         right.acceptableKinds,
-                        right.canAcceptEmptyTokenSequence
+                        right.canComplete
                     ),
                     () -> {
                         final Set<ShouldNotFollowEntry<V, K>> entries = Stream.concat(
@@ -208,10 +208,10 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                             right.shouldNotFollow.get().stream()
                         ).collect(Collectors.toCollection(HashSet::new));
                         
-                        if (left.canAcceptEmptyTokenSequence.get().isPresent()) {
+                        if (left.canComplete.get().isPresent()) {
                             entries.add(new ShouldNotFollowEntry<>(this, right.acceptableKinds.get()));
                         }
-                        if (right.canAcceptEmptyTokenSequence.get().isPresent()) {
+                        if (right.canComplete.get().isPresent()) {
                             entries.add(new ShouldNotFollowEntry<>(this, left.acceptableKinds.get()));
                         }
                         
@@ -222,11 +222,11 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
             conflicts.realize(
                 new InductiveProperty.Rule<>(
                     List.of(
-                        left.canAcceptEmptyTokenSequence,
+                        left.canComplete,
                         left.acceptableKinds,
                         left.shouldNotFollow,
                         left.conflicts,
-                        right.canAcceptEmptyTokenSequence,
+                        right.canComplete,
                         right.acceptableKinds,
                         right.shouldNotFollow,
                         right.conflicts
@@ -237,8 +237,8 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                             right.conflicts.get().stream()
                         ).collect(Collectors.toCollection(HashSet::new));
                         
-                        if (left.canAcceptEmptyTokenSequence.get().isPresent()
-                                && right.canAcceptEmptyTokenSequence.get().isPresent()) {
+                        if (left.canComplete.get().isPresent()
+                                && right.canComplete.get().isPresent()) {
                             entries.add(new BothAcceptsEmptySequenceConflict(this));
                         }
     
@@ -266,7 +266,7 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                 left.toValidSyntaxUnchecked(),
                 right.toValidSyntaxUnchecked(),
                 acceptableKinds.get(),
-                canAcceptEmptyTokenSequence.get(),
+                canComplete.get(),
                 canAcceptSomeTokenSequence.get(),
                 shouldNotFollow.get()
             );
@@ -294,7 +294,7 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                 new InductiveProperty.Rule<>(
                     List.of(
                         left.acceptableKinds,
-                        left.canAcceptEmptyTokenSequence,
+                        left.canComplete,
                         right.canAcceptSomeTokenSequence,
                         right.acceptableKinds
                     ),
@@ -303,16 +303,16 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                         if (right.canAcceptSomeTokenSequence.get()) {
                             kinds.addAll(left.acceptableKinds.get());
                         }
-                        if (left.canAcceptEmptyTokenSequence.get().isPresent()) {
+                        if (left.canComplete.get().isPresent()) {
                             kinds.addAll(right.acceptableKinds.get());
                         }
                         return kinds;
                     }
                 ),
                 new InductiveProperty.Rule<>(
-                    List.of(left.canAcceptEmptyTokenSequence, right.canAcceptEmptyTokenSequence),
-                    () -> left.canAcceptEmptyTokenSequence.get().flatMap(
-                        leftValue -> right.canAcceptEmptyTokenSequence.get().map(
+                    List.of(left.canComplete, right.canComplete),
+                    () -> left.canComplete.get().flatMap(
+                        leftValue -> right.canComplete.get().map(
                             rightValue -> rightValue.prepend(leftValue)
                         )
                     )
@@ -326,12 +326,12 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                     List.of(
                         left.shouldNotFollow,
                         left.canAcceptSomeTokenSequence,
-                        right.canAcceptEmptyTokenSequence,
+                        right.canComplete,
                         right.shouldNotFollow
                     ),
                     () -> {
                         final Set<ShouldNotFollowEntry<V, K>> entries = new HashSet<>();
-                        if (right.canAcceptEmptyTokenSequence.get().isPresent()) {
+                        if (right.canComplete.get().isPresent()) {
                             entries.addAll(left.shouldNotFollow.get());
                         }
                         if (left.canAcceptSomeTokenSequence.get()) {
@@ -389,7 +389,7 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                 left.toValidSyntaxUnchecked(),
                 right.toValidSyntaxUnchecked(),
                 acceptableKinds.get(),
-                canAcceptEmptyTokenSequence.get(),
+                canComplete.get(),
                 canAcceptSomeTokenSequence.get(),
                 shouldNotFollow.get()
             );
@@ -404,8 +404,8 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
             super(
                 syntax.acceptableKinds,
                 new InductiveProperty.Rule<>(
-                    List.of(syntax.canAcceptEmptyTokenSequence),
-                    () -> syntax.canAcceptEmptyTokenSequence.get().map(transformation)
+                    List.of(syntax.canComplete),
+                    () -> syntax.canComplete.get().map(transformation)
                 ),
                 syntax.canAcceptSomeTokenSequence,
                 syntax.shouldNotFollow,
@@ -425,7 +425,7 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
             return new ValidSyntax.Transform<>(
                 transformation,
                 syntax.toValidSyntaxUnchecked(),
-                canAcceptEmptyTokenSequence.get()
+                canComplete.get()
             );
         }
     }
@@ -438,7 +438,7 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
         private Optional<Syntax<V, K>> realizedSyntax;
         
         private final InductiveProperty.Deferred<Set<K>> deferredAcceptableKinds;
-        private final InductiveProperty.Deferred<Optional<V>> deferredCanAcceptEmptyTokenSequence;
+        private final InductiveProperty.Deferred<Optional<V>> deferredCanComplete;
         private final InductiveProperty.Deferred<Boolean> deferredCanAcceptSomeTokenSequence;
         private final InductiveProperty.Deferred<Set<ShouldNotFollowEntry<V, K>>> deferredShouldNotFollow;
         private final InductiveProperty.Deferred<Set<Conflict>> deferredConflicts;
@@ -457,21 +457,21 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
         private Deferred(
             Supplier<Syntax<V, K>> syntaxGetter,
             InductiveProperty.Deferred<Set<K>> acceptableKinds,
-            InductiveProperty.Deferred<Optional<V>> canAcceptEmptyTokenSequence,
+            InductiveProperty.Deferred<Optional<V>> canComplete,
             InductiveProperty.Deferred<Boolean> canAcceptSomeTokenSequence,
             InductiveProperty.Deferred<Set<ShouldNotFollowEntry<V, K>>> shouldNotFollow,
             InductiveProperty.Deferred<Set<Conflict>> conflicts
         ) {
             super(
                 acceptableKinds,
-                canAcceptEmptyTokenSequence,
+                canComplete,
                 canAcceptSomeTokenSequence,
                 shouldNotFollow,
                 conflicts
             );
             this.syntaxGetter = syntaxGetter;
             this.deferredAcceptableKinds = acceptableKinds;
-            this.deferredCanAcceptEmptyTokenSequence = canAcceptEmptyTokenSequence;
+            this.deferredCanComplete = canComplete;
             this.deferredCanAcceptSomeTokenSequence = canAcceptSomeTokenSequence;
             this.deferredShouldNotFollow = shouldNotFollow;
             this.deferredConflicts = conflicts;
@@ -482,7 +482,7 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
             final var syntax = syntaxGetter.get();
             realizedSyntax = Optional.of(syntax);
             deferredAcceptableKinds.realize(syntax.acceptableKinds);
-            deferredCanAcceptEmptyTokenSequence.realize(syntax.canAcceptEmptyTokenSequence);
+            deferredCanComplete.realize(syntax.canComplete);
             deferredCanAcceptSomeTokenSequence.realize(syntax.canAcceptSomeTokenSequence);
             deferredShouldNotFollow.realize(syntax.shouldNotFollow);
             deferredConflicts.realize(syntax.conflicts);

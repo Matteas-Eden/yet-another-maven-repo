@@ -17,7 +17,7 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
     /**
      * Also known in literature as the "nullability".
      */
-    public final Optional<V> canAcceptEmptyTokenSequence;
+    public final Optional<V> canComplete;
     
     /**
      * Also known in literature as the "productivity".
@@ -28,12 +28,12 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
 
     protected ValidSyntax(
         Set<K> acceptableKinds,
-        Optional<V> canAcceptEmptyTokenSequence,
+        Optional<V> canComplete,
         boolean canAcceptSomeTokenSequence,
         Set<ShouldNotFollowEntry<V, K>> shouldNotFollow
     ) {
         this.acceptableKinds = Set.copyOf(acceptableKinds);
-        this.canAcceptEmptyTokenSequence = canAcceptEmptyTokenSequence;
+        this.canComplete = canComplete;
         this.canAcceptSomeTokenSequence = canAcceptSomeTokenSequence;
         this.shouldNotFollow = Set.copyOf(shouldNotFollow);
     }
@@ -100,13 +100,13 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
             ValidSyntax<V, K> left,
             ValidSyntax<V, K> right,
             Set<K> acceptableKinds,
-            Optional<V> canAcceptEmptyTokenSequence,
+            Optional<V> canComplete,
             boolean canAcceptSomeTokenSequence,
             Set<ShouldNotFollowEntry<V, K>> shouldNotFollow
         ) {
             super(
                 acceptableKinds,
-                canAcceptEmptyTokenSequence,
+                canComplete,
                 canAcceptSomeTokenSequence,
                 shouldNotFollow
             );
@@ -132,13 +132,13 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
             ValidSyntax<V, K> left,
             ValidSyntax<V, K> right,
             Set<K> acceptableKinds,
-            Optional<V> canAcceptEmptyTokenSequence,
+            Optional<V> canComplete,
             boolean canAcceptSomeTokenSequence,
             Set<ShouldNotFollowEntry<V, K>> shouldNotFollow
         ) {
             super(
                 acceptableKinds,
-                canAcceptEmptyTokenSequence,
+                canComplete,
                 canAcceptSomeTokenSequence,
                 shouldNotFollow
             );
@@ -152,7 +152,7 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
             final Supplier<Focus<V, K>> leftFocus = () ->
                 left.focus(kind, new Focus.Context.FollowBy<>(right, context));
             
-            return left.canAcceptEmptyTokenSequence
+            return left.canComplete
                 .map(v -> {
                     if (left.accepts(kind)) {
                         return leftFocus.get();
@@ -170,11 +170,11 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
         public Transform(
             UnaryOperator<V> transformation,
             ValidSyntax<V, K> syntax,
-            Optional<V> canAcceptEmptyTokenSequence
+            Optional<V> canComplete
         ) {
             super(
                 syntax.acceptableKinds,
-                canAcceptEmptyTokenSequence,
+                canComplete,
                 syntax.canAcceptSomeTokenSequence,
                 syntax.shouldNotFollow
             );
