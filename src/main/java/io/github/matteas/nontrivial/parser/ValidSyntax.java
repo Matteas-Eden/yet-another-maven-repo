@@ -6,6 +6,13 @@ import java.util.Collections;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
+/**
+ * Validated version of {@link Syntax} that can be safely used for parsing
+ * via a {@link Parser}.
+ *
+ * To validate a syntax, call {@link Syntax@validate()}. A syntax is valid
+ * if it is an ll(1) grammar.
+ */
 public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
     /**
      * Also known in literature as the "FIRST" set.
@@ -49,8 +56,14 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
 
     public static class Success<V extends Value<V>, K extends TokenKind> extends ValidSyntax<V, K> {
         public final V value;
-        
-        public Success(V value) {
+
+        /**
+         * Create a validated version of {@link Syntax.Success} syntax node.
+         * Assumes node is already validated.
+         * This constructor is package private so that the only way
+         * to obtain a ValidSyntax node is by {@link Syntax#validate()}
+         */
+        Success(V value) {
             super(
                 Collections.emptySet(),
                 Optional.of(value),
@@ -74,7 +87,13 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
     public static class Element<V extends Value<V>, K extends TokenKind> extends ValidSyntax<V, K> {
         public final K kind;
         
-        public Element(K kind) {
+        /**
+         * Create a validated version of {@link Syntax.Element} syntax node.
+         * Assumes node is already validated.
+         * This constructor is package private so that the only way
+         * to obtain a ValidSyntax node is by {@link Syntax#validate()}
+         */
+        Element(K kind) {
             super(
                 Set.of(kind),
                 Optional.empty(),
@@ -96,7 +115,13 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
         public final ValidSyntax<V, K> left;
         public final ValidSyntax<V, K> right;
 
-        public Disjunction(
+        /**
+         * Create a validated version of {@link Syntax.Disjunction} syntax node.
+         * Assumes node is already validated.
+         * This constructor is package private so that the only way
+         * to obtain a ValidSyntax node is by {@link Syntax#validate()}
+         */
+        Disjunction(
             ValidSyntax<V, K> left,
             ValidSyntax<V, K> right,
             Set<K> acceptableKinds,
@@ -128,7 +153,13 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
         public final ValidSyntax<V, K> left;
         public final ValidSyntax<V, K> right;
 
-        public Sequence(
+        /**
+         * Create a validated version of {@link Syntax.Sequence} syntax node.
+         * Assumes node is already validated.
+         * This constructor is package private so that the only way
+         * to obtain a ValidSyntax node is by {@link Syntax#validate()}
+         */
+        Sequence(
             ValidSyntax<V, K> left,
             ValidSyntax<V, K> right,
             Set<K> acceptableKinds,
@@ -167,7 +198,13 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
         public final UnaryOperator<V> transformation;
         public final ValidSyntax<V, K> syntax;
 
-        public Transform(
+        /**
+         * Create a validated version of {@link Syntax.Transform} syntax node.
+         * Assumes node is already validated.
+         * This constructor is package private so that the only way
+         * to obtain a ValidSyntax node is by {@link Syntax#validate()}
+         */
+        Transform(
             UnaryOperator<V> transformation,
             ValidSyntax<V, K> syntax,
             Optional<V> canComplete
