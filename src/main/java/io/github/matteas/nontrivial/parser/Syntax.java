@@ -152,6 +152,20 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
         public final Syntax<V, K> right;
 
         public Disjunction(Syntax<V, K> left, Syntax<V, K> right) {
+            this(
+                left,
+                right,
+                new InductiveProperty.Deferred<>(Collections.emptySet()),
+                new InductiveProperty.Deferred<>(Collections.emptySet())
+            );
+        }
+        
+        private Disjunction(
+            Syntax<V, K> left,
+            Syntax<V, K> right,
+            InductiveProperty.Deferred<Set<ShouldNotFollowEntry<V, K>>> shouldNotFollow,
+            InductiveProperty.Deferred<Set<Conflict>> conflicts
+        ) {
             super(
                 new InductiveProperty.Rule<>(
                     List.of(left.acceptableKinds, right.acceptableKinds),
@@ -170,6 +184,17 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                     () -> left.canAcceptSomeTokenSequence.get()
                         || right.canAcceptSomeTokenSequence.get()
                 ),
+                shouldNotFollow,
+                conflicts
+            );
+            
+            this.left = left;
+            this.right = right;
+
+            // We can't refer to `this` in the super constructor call, so
+            // we defer the initialization of those inductive properties to
+            // here:
+            shouldNotFollow.realize(
                 new InductiveProperty.Rule<>(
                     List.of(
                         left.acceptableKinds,
@@ -192,7 +217,9 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                         
                         return entries;
                     }
-                ),
+                )
+            );
+            conflicts.realize(
                 new InductiveProperty.Rule<>(
                     List.of(
                         left.canAcceptEmptyTokenSequence,
@@ -205,29 +232,26 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                         right.conflicts
                     ),
                     () -> {
-                        final Set<Conflict> conflicts = Stream.concat(
+                        final Set<Conflict> entries = Stream.concat(
                             left.conflicts.get().stream(),
                             right.conflicts.get().stream()
                         ).collect(Collectors.toCollection(HashSet::new));
                         
                         if (left.canAcceptEmptyTokenSequence.get().isPresent()
                                 && right.canAcceptEmptyTokenSequence.get().isPresent()) {
-                            conflicts.add(new BothAcceptsEmptySequenceConflict(this));
+                            entries.add(new BothAcceptsEmptySequenceConflict(this));
                         }
     
                         final Set<K> firstFirstAmbiguities = new HashSet<>(left.acceptableKinds.get());
                         firstFirstAmbiguities.retainAll(right.acceptableKinds.get());
                         if (!firstFirstAmbiguities.isEmpty()) {
-                            conflicts.add(new BothAcceptsSameFirstTokenKindConflict(this, firstFirstAmbiguities));
+                            entries.add(new BothAcceptsSameFirstTokenKindConflict(this, firstFirstAmbiguities));
                         }
                         
-                        return conflicts;
+                        return entries;
                     }
                 )
             );
-            
-            this.left = left;
-            this.right = right;
         }
         
         @Override
@@ -252,8 +276,20 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
     public static class Sequence<V extends Value<V>, K extends TokenKind> extends Syntax<V, K> {
         public final Syntax<V, K> left;
         public final Syntax<V, K> right;
-        
+
         public Sequence(Syntax<V, K> left, Syntax<V, K> right) {
+            this(
+                left,
+                right,
+                new InductiveProperty.Deferred<>(Collections.emptySet())
+            );
+        }
+        
+        private Sequence(
+            Syntax<V, K> left,
+            Syntax<V, K> right,
+            InductiveProperty.Deferred<Set<Conflict>> conflicts
+        ) {
             super(
                 new InductiveProperty.Rule<>(
                     List.of(
@@ -304,6 +340,16 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                         return entries;
                     }
                 ),
+                conflicts
+            );
+            
+            this.left = left;
+            this.right = right;
+            
+            // We can't refer to `this` in the super constructor call, so
+            // we defer the initialization of those inductive properties to
+            // here:
+            conflicts.realize(
                 new InductiveProperty.Rule<Set<Conflict>>(
                     List.of(
                         left.shouldNotFollow,
@@ -312,7 +358,7 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                         right.conflicts
                     ),
                     () -> {
-                        final Set<Conflict> conflicts = Stream.concat(
+                        final Set<Conflict> entries = Stream.concat(
                             left.conflicts.get().stream(),
                             right.conflicts.get().stream()
                         ).collect(Collectors.toCollection(HashSet::new));
@@ -321,17 +367,14 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                             final Set<K> followAmbiguities = new HashSet<>(shouldNotFollowEntry.disallowedKinds);
                             followAmbiguities.retainAll(right.acceptableKinds.get());
                             if (!followAmbiguities.isEmpty()) {
-                                conflicts.add(new FollowConflict(shouldNotFollowEntry.source, this, followAmbiguities));
+                                entries.add(new FollowConflict(shouldNotFollowEntry.source, this, followAmbiguities));
                             }
                         }
                         
-                        return conflicts;
+                        return entries;
                     }
                 )
             );
-            
-            this.left = left;
-            this.right = right;
         }
         
         @Override
