@@ -4,12 +4,12 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 
-public class StringLanguage<V> extends Language<SimpleValue<V>, StringLanguage.StringTokenKind> {
+public class StringLanguage<V, K> extends Language<SimpleValue<V>, StringLanguage.StringTokenKind> {
     public final BiFunction<String, StringTokenKind, V> tokenToValue;
     public final BinaryOperator<V> joiner;
     
     public StringLanguage(
-        Map<String, String> dictionary,
+        Map<K, String> dictionary,
         BiFunction<String, StringTokenKind, V> tokenToValue,
         BinaryOperator<V> joiner
     ) {
