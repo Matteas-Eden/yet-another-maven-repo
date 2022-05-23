@@ -36,6 +36,11 @@ public class Language<V extends Value<V>, K extends TokenKind> {
             this.dictionary = dictionary;
         }
         
+        public Rule<V, K> is(Syntax<V, K> ... syntaxes) {
+            assert !realized().isPresent();
+            return is(seq(syntaxes));
+        }
+        
         public Rule<V, K> is(String string) {
             assert !realized().isPresent();
             return is(dictionary.get(string));
@@ -50,6 +55,11 @@ public class Language<V extends Value<V>, K extends TokenKind> {
             assert !realized().isPresent();
             realize(syntax);
             return this;
+        }
+        
+        public Rule<V, K> or(Syntax<V, K> ... syntaxes) {
+            assert realized().isPresent();
+            return or(seq(syntaxes));
         }
         
         public Rule<V, K> or(String string) {

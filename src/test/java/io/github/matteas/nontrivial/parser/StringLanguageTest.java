@@ -18,7 +18,7 @@ class StringLanguageTest {
         );
         final var expression = lang.rule();
         expression
-            .is("helloworld").or(lang.seq("(", expression, ")"))
+            .is("helloworld").or("(", expression, ")")
             .map(value -> value + 1);
         
         final var parser = new Parser<>(expression.validate().expectOk());
