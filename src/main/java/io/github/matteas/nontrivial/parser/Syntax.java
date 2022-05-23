@@ -83,11 +83,9 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
         }
     }
 
-    protected abstract void realize();
     protected abstract ValidSyntax<V, K> toValidSyntaxUnchecked();
 
     public final ValidationResult<V, K> validate() {
-        realize();
         if (conflicts.get().isEmpty()) {
             return new ValidationResult.Ok<>(toValidSyntaxUnchecked());
         }
@@ -110,11 +108,6 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
         }
         
         @Override
-        protected void realize() {
-            // Nothing to do.
-        }
-        
-        @Override
         protected ValidSyntax<V, K> toValidSyntaxUnchecked() {
             return new ValidSyntax.Success<>(value);
         }
@@ -133,11 +126,6 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
             );
             
             this.kind = kind;
-        }
-        
-        @Override
-        protected void realize() {
-            // Nothing to do.
         }
         
         @Override
@@ -251,12 +239,6 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                     }
                 )
             );
-        }
-        
-        @Override
-        protected void realize() {
-            left.realize();
-            right.realize();
         }
         
         @Override
@@ -377,12 +359,6 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
         }
         
         @Override
-        protected void realize() {
-            left.realize();
-            right.realize();
-        }
-        
-        @Override
         protected ValidSyntax<V, K> toValidSyntaxUnchecked() {
             return new ValidSyntax.Sequence<>(
                 left.toValidSyntaxUnchecked(),
@@ -415,11 +391,6 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
         }
         
         @Override
-        protected void realize() {
-            syntax.realize();
-        }
-        
-        @Override
         protected ValidSyntax<V, K> toValidSyntaxUnchecked() {
             return new ValidSyntax.Transform<>(
                 transformation,
@@ -433,7 +404,6 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
      * Used to create recursive syntaxes.
      */
     public static class Deferred<V extends Value<V>, K extends TokenKind> extends Syntax<V, K> {
-        private final Supplier<Syntax<V, K>> syntaxGetter;
         private Optional<Syntax<V, K>> realizedSyntax;
         
         private final InductiveProperty.Deferred<Set<K>> deferredAcceptableKinds;
@@ -442,9 +412,8 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
         private final InductiveProperty.Deferred<Set<ShouldNotFollowEntry<V, K>>> deferredShouldNotFollow;
         private final InductiveProperty.Deferred<Set<Conflict>> deferredConflicts;
 
-        public Deferred(Supplier<Syntax<V, K>> syntaxGetter) {
+        public Deferred() {
             this(
-                syntaxGetter,
                 new InductiveProperty.Deferred<>(Collections.emptySet()),
                 new InductiveProperty.Deferred<>(Optional.empty()),
                 new InductiveProperty.Deferred<>(false),
@@ -454,7 +423,6 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
         }
 
         private Deferred(
-            Supplier<Syntax<V, K>> syntaxGetter,
             InductiveProperty.Deferred<Set<K>> acceptableKinds,
             InductiveProperty.Deferred<Optional<V>> canComplete,
             InductiveProperty.Deferred<Boolean> canAcceptSomeTokenSequence,
@@ -468,7 +436,6 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
                 shouldNotFollow,
                 conflicts
             );
-            this.syntaxGetter = syntaxGetter;
             this.deferredAcceptableKinds = acceptableKinds;
             this.deferredCanComplete = canComplete;
             this.deferredCanAcceptSomeTokenSequence = canAcceptSomeTokenSequence;
@@ -476,15 +443,17 @@ public abstract class Syntax<V extends Value<V>, K extends TokenKind> {
             this.deferredConflicts = conflicts;
         }
 
-        @Override
-        protected void realize() {
-            final var syntax = syntaxGetter.get();
+        protected void realize(Syntax<V, K> syntax) {
             realizedSyntax = Optional.of(syntax);
             deferredAcceptableKinds.realize(syntax.acceptableKinds);
             deferredCanComplete.realize(syntax.canComplete);
             deferredCanAcceptSomeTokenSequence.realize(syntax.canAcceptSomeTokenSequence);
             deferredShouldNotFollow.realize(syntax.shouldNotFollow);
             deferredConflicts.realize(syntax.conflicts);
+        }
+
+        public Optional<Syntax<V, K>> realized() {
+            return realizedSyntax;
         }
         
         @Override
