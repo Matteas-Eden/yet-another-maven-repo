@@ -3,17 +3,37 @@ package io.github.matteas.nontrivial.parser;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
 
 public class StringLanguage<V, K> extends Language<StringLanguage.SimpleValue<V>, K, StringLanguage.StringTokenKind> {
     public final BiFunction<String, StringTokenKind, V> tokenToValue;
     public final BinaryOperator<V> joiner;
+
+    public StringLanguage(
+        Map<K, String> dictionary,
+        BiFunction<String, StringTokenKind, V> tokenToValue,
+        BinaryOperator<V> joiner,
+        Class<K> kindKeyClass
+    ) {
+    }
     
     public StringLanguage(
         Map<K, String> dictionary,
         BiFunction<String, StringTokenKind, V> tokenToValue,
-        BinaryOperator<V> joiner
+        BinaryOperator<V> joiner,
+        Class<K> kindKeyClass
     ) {
-        super(TODO);
+        super(dictionary
+            .entrySet()
+            .stream()
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                entry -> {
+                    return new StringTokenKind(entry.getValue());
+                }
+            )),
+            kindKeyClass
+        );
         this.tokenToValue = tokenToValue;
         this.joiner = joiner;
     }
