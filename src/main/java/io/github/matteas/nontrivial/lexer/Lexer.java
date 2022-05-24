@@ -13,12 +13,16 @@ public class Lexer<C, T> {
     }
     
     public Iterator<T> tokenize(Iterator<C> input) {
-        var state = initialState;
         final var iterator = new LookaheadIterator(input);
         final List<T> tokens = new ArrayList<>();
         
         while (iterator.hasNext()) {
+            // Start of a new token, so start lexing from the initial state.
+            var state = initialState;
+
+            // Let the iterator know that we might want to backtrack back to this point later.
             iterator.mark();
+            
             Optional<Rule.Completer<C, T>> completer = Optional.empty();
             
             while (iterator.hasNext() && state.hasNext) {
