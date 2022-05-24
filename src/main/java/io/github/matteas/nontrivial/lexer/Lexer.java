@@ -35,7 +35,7 @@ public class Lexer<C, T> {
             }
 
             if (completer.isPresent()) {
-                tokens.add(completer.complete(iterator.getLookahead()));
+                tokens.add(completer.get().complete(iterator.getLookahead()));
             } else {
                 // Failed to find any matching tokens, so backtrack and skip over to the next token.
                 iterator.reset();
