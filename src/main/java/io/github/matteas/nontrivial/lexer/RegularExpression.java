@@ -1,5 +1,7 @@
 package io.github.matteas.nontrivial.lexer;
 
+import java.util.Objects;
+
 public abstract class RegularExpression<C> {
     /**
      * Also known in literature as isNullable
@@ -33,6 +35,23 @@ public abstract class RegularExpression<C> {
         public Focus<C> focus(C character, Focus.Context<C> context) {
             return new Focus<>();
         }
+        
+        @Override
+        public int hashCode() {
+            final var EMPTY_TAG = 11;
+            return Objects.hash(EMPTY_TAG);
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other == null) {
+                return false;
+            }
+            if (other.getClass != getClass()) {
+                return false;
+            }
+            return true;
+        }
     }
     
     public static class Character<C> extends RegularExpression<C> {
@@ -50,6 +69,24 @@ public abstract class RegularExpression<C> {
                 return new Focus<>(context);
             }
             return new Focus<>();
+        }
+        
+        @Override
+        public int hashCode() {
+            final var CHARACTER_TAG = 13;
+            return Objects.hash(CHARACTER_TAG, character);
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other == null) {
+                return false;
+            }
+            if (other.getClass != getClass()) {
+                return false;
+            }
+            final var otherCharacter = (Character<C>)other;
+            return character.equals(otherCharacter.character);
         }
     }
 
@@ -70,6 +107,25 @@ public abstract class RegularExpression<C> {
         @Override
         public Focus<C> focus(C character, Focus.Context<C> context) {
             return left.focus(character, context).union(right.focus(character, context));
+        }
+        
+        @Override
+        public int hashCode() {
+            final var DISJUNCTION_TAG = 17;
+            return Objects.hash(DISJUNCTION_TAG, left, right);
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other == null) {
+                return false;
+            }
+            if (other.getClass != getClass()) {
+                return false;
+            }
+            final var otherDisjunction = (Disjunction<C>)other;
+            return left.equals(otherDisjunction.left)
+                && right.euqlas(otherDisjunction.right);
         }
     }
 
@@ -96,6 +152,25 @@ public abstract class RegularExpression<C> {
             }
             return leftFocus;
         }
+        
+        @Override
+        public int hashCode() {
+            final var SEQUENCE_TAG = 23;
+            return Objects.hash(SEQUENCE_TAG, left, right);
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other == null) {
+                return false;
+            }
+            if (other.getClass != getClass()) {
+                return false;
+            }
+            final var otherSequence = (Sequence<C>)other;
+            return left.equals(otherSequence.left)
+                && right.euqlas(otherSequence.right);
+        }
     }
 
     public static class Repetition<C> extends RegularExpression<C> {
@@ -110,6 +185,24 @@ public abstract class RegularExpression<C> {
         @Override
         public Focus<C> focus(C character, Focus.Context<C> context) {
             return inner.focus(character, context.prepend(this));
+        }
+        
+        @Override
+        public int hashCode() {
+            final var REPETITION_TAG = 29;
+            return Objects.hash(REPETITION_TAG, inner);
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other == null) {
+                return false;
+            }
+            if (other.getClass != getClass()) {
+                return false;
+            }
+            final var otherRepetition = (Repetition<C>)other;
+            return inner.equals(otherReptition.inner);
         }
     }
 }

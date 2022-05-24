@@ -6,10 +6,10 @@ import java.util.Iterator;
 import java.util.Optional;
 
 public class Lexer<C, T> {
-    public final AutomatonState<C, T> initialState;
+    public final Automaton<C, T> automaton;
     
     public Lexer(List<Rule<C, T>> rules) {
-        
+        automaton = new Automaton<>(rules);
     }
     
     public Iterator<T> tokenize(Iterator<C> input) {
@@ -18,7 +18,7 @@ public class Lexer<C, T> {
         
         while (iterator.hasNext()) {
             // Start of a new token, so start lexing from the initial state.
-            var state = initialState;
+            var state = automaton.initialState;
 
             // Let the iterator know that we might want to backtrack back to this point later.
             iterator.mark();

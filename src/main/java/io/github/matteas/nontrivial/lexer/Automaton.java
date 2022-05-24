@@ -6,31 +6,36 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 import java.util.Optional;
 
-//public class Automaton<C, T> {
-//    private final Map<List<Rule<C, T>>, State> memoized = new HashMap<>();
-//    
-//    public State getState(List<Rule<C, T>> rules) {
-//        if (memoized.containsKey(rules)) {
-//            return memoized.get(rules);
-//        }
-//        
-//        final var ruleStates = rules
-//            .stream()
-//            .map(Rule::state)
-//            .collect(Collectors.toList());
-//        
-//        final var state = new State(ruleStates);
-//        memoized.put(rules, state);
-//        return state;
-//    }
+public class Automaton<C, T> {
+    private final Map<List<Rule<C, T>.State>, State> memoized = new HashMap<>();
+    public final State initialState;
 
-    public class AutomatonState<C, T> {
-        private final Map<C, AutomatonState<C, T>> pastTransitions = new HashMap<>();
+    public Automaton(List<Rule<C, T>> rules) {
+        final var ruleStates = rules
+            .stream()
+            .map(Rule::initialState)
+            .collect(Collectors.toList());
+
+        initialState = getState(ruleStates);
+    }
+    
+    public State getState(List<Rule<C, T>.State> ruleStates) {
+        if (memoized.containsKey(ruleStates)) {
+            return memoized.get(ruleStates);
+        }
+        
+        final var state = new State(ruleStates);
+        memoized.put(ruleStates, state);
+        return state;
+    }
+
+    public class State {
+        private final Map<C, State> pastTransitions = new HashMap<>();
         public final List<Rule<C, T>.State> ruleStates;
         public final boolean hasNext;
         public final Optional<Rule.Completer<C, T>> completer;
 
-        public AutomatonState(List<Rule<C, T>.State> ruleStates) {
+        public State(List<Rule<C, T>.State> ruleStates) {
             this.ruleStates = ruleStates;
             
             this.hasNext = ruleStates
@@ -46,7 +51,7 @@ import java.util.Optional;
                 .map(ruleState -> ruleState.completer);
         }
 
-        public AutomatonState<C, T> next(C character) {
+        public State next(C character) {
             if (pastTransitions.containsKey(character)) {
                 return pastTransitions.get(character);
             }
@@ -56,9 +61,9 @@ import java.util.Optional;
                 .map(ruleState -> ruleState.next(character))
                 .collect(Collectors.toList());
             
-            final var nextState = new AutomatonState<C, T>(nextRuleStates);
+            final var nextState = getState(nextRuleStates);
             pastTransitions.put(character, nextState);
             return nextState;
         }
     }
-//}
+}

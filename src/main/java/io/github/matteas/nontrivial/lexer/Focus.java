@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class Focus<C> {
     public final Set<Context<C>> contexts;
@@ -50,6 +51,23 @@ public class Focus<C> {
                 .collect(Collectors.toSet())
         );
     }
+
+    @Override
+    public int hashCode() {
+        return contexts.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
+        if (other.getClass() != getClass()) {
+            return false;
+        }
+        final var otherFocus = (Focus<C>)other;
+        return contexts.equals(otherFocus.contexts);
+    }
     
     public static class Context<C> {
         public final RegularExpression<C> nextExpression;
@@ -84,6 +102,24 @@ public class Focus<C> {
                 return nextFocus.union(context.get().unfocus(character));
             }
             return nextFocus;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(context, nextExpression);
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other == null) {
+                return false;
+            }
+            if (other.getClass != getClass()) {
+                return false;
+            }
+            final var otherContext = (Context<C>)other;
+            return nextExpression.equals(otherContext.nextExpression)
+                && context.equals(otherContext.context);
         }
     }
 }
