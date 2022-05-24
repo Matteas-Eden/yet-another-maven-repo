@@ -13,7 +13,7 @@ public class Lexer<C, T> {
     }
     
     public Iterator<T> tokenize(Iterator<C> input) {
-        final var iterator = new LookaheadIterator(input);
+        final var iterator = new LookaheadIterator<C>(input);
         final List<T> tokens = new ArrayList<>();
         
         while (iterator.hasNext()) {
