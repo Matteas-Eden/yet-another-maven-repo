@@ -56,7 +56,7 @@ public class Language<V extends Value<V>, KK, K extends TokenKind> {
         
         public Rule<V, KK, K> or(Object ... items) {
             assert realized().isPresent();
-            realize(new Syntax.Disjunction<>(realized().get(), desugar(item)));
+            realize(new Syntax.Disjunction<>(realized().get(), desugar(items)));
             return this;
         }
         
