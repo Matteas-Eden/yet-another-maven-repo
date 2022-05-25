@@ -52,7 +52,7 @@ public class Rule<C, T> {
             if (other == null) {
                 return false;
             }
-            if (other.getClass != getClass()) {
+            if (other.getClass() != getClass()) {
                 return false;
             }
             final var otherState = (State)other;

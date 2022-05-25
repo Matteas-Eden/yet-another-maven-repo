@@ -47,7 +47,7 @@ public abstract class RegularExpression<C> {
             if (other == null) {
                 return false;
             }
-            if (other.getClass != getClass()) {
+            if (other.getClass() != getClass()) {
                 return false;
             }
             return true;
@@ -82,7 +82,7 @@ public abstract class RegularExpression<C> {
             if (other == null) {
                 return false;
             }
-            if (other.getClass != getClass()) {
+            if (other.getClass() != getClass()) {
                 return false;
             }
             final var otherCharacter = (Character<C>)other;
@@ -120,12 +120,12 @@ public abstract class RegularExpression<C> {
             if (other == null) {
                 return false;
             }
-            if (other.getClass != getClass()) {
+            if (other.getClass() != getClass()) {
                 return false;
             }
             final var otherDisjunction = (Disjunction<C>)other;
             return left.equals(otherDisjunction.left)
-                && right.euqlas(otherDisjunction.right);
+                && right.equals(otherDisjunction.right);
         }
     }
 
@@ -164,12 +164,12 @@ public abstract class RegularExpression<C> {
             if (other == null) {
                 return false;
             }
-            if (other.getClass != getClass()) {
+            if (other.getClass() != getClass()) {
                 return false;
             }
             final var otherSequence = (Sequence<C>)other;
             return left.equals(otherSequence.left)
-                && right.euqlas(otherSequence.right);
+                && right.equals(otherSequence.right);
         }
     }
 
@@ -198,11 +198,11 @@ public abstract class RegularExpression<C> {
             if (other == null) {
                 return false;
             }
-            if (other.getClass != getClass()) {
+            if (other.getClass() != getClass()) {
                 return false;
             }
             final var otherRepetition = (Repetition<C>)other;
-            return inner.equals(otherReptition.inner);
+            return inner.equals(otherRepetition.inner);
         }
     }
 }

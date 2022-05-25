@@ -114,7 +114,7 @@ public class Focus<C> {
             if (other == null) {
                 return false;
             }
-            if (other.getClass != getClass()) {
+            if (other.getClass() != getClass()) {
                 return false;
             }
             final var otherContext = (Context<C>)other;
