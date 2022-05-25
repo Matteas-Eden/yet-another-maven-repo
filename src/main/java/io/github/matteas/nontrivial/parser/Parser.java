@@ -48,7 +48,7 @@ public class Parser<
             .map(nextFocus -> nextFocus.withValue(token.value()));
     }
 
-    public abstract class Result<
+    public static abstract class Result<
         V extends Value<V>,
         K,
         T extends Token<V, K>
