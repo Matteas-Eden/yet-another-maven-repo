@@ -12,7 +12,7 @@ public class Lexer<C, T> {
         automaton = new Automaton<>(rules);
     }
     
-    public Iterator<T> tokenize(Iterator<C> input) {
+    public List<T> tokenize(Iterator<C> input) {
         final var iterator = new LookaheadIterator<C>(input);
         final List<T> tokens = new ArrayList<>();
         
