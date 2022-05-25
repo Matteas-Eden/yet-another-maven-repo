@@ -8,7 +8,7 @@ import java.util.List;
 public class LookaheadIterator<T> implements Iterator<T> {
     private final Iterator<T> inner;
     private final Queue<T> lookahead = new ArrayDeque<>();
-    private bool isLookingAhead = false;
+    private boolean isLookingAhead = false;
     
     public LookaheadIterator(Iterator<T> iterator) {
         inner = iterator;
