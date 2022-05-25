@@ -6,7 +6,7 @@ import java.util.Optional;
 /**
  * Also known as a Huet zipper, the derivative of the type {@link Syntax}, or the one-hole context of {@link Syntax}.
  */
-public class Focus<V extends Value<V>, K extends TokenKind> {
+public class Focus<V extends Value<V>, K> {
     /**
      * The current focal point in the syntax tree.
      */
@@ -66,7 +66,7 @@ public class Focus<V extends Value<V>, K extends TokenKind> {
         return new Focus<>(new ValidSyntax.Success<>(value), context);
     }
 
-    public interface Context<V extends Value<V>, K extends TokenKind> {
+    public interface Context<V extends Value<V>, K> {
         /**
          * Also known in literature as "plug"
          */
@@ -74,7 +74,7 @@ public class Focus<V extends Value<V>, K extends TokenKind> {
 
         boolean isRoot();
         
-        public static class FollowBy<V extends Value<V>, K extends TokenKind> implements Context<V, K> {
+        public static class FollowBy<V extends Value<V>, K> implements Context<V, K> {
             public final ValidSyntax<V, K> syntax;
             public final Context<V, K> next;
             
@@ -94,7 +94,7 @@ public class Focus<V extends Value<V>, K extends TokenKind> {
             }
         }
         
-        public static class Prepend<V extends Value<V>, K extends TokenKind> implements Context<V, K> {
+        public static class Prepend<V extends Value<V>, K> implements Context<V, K> {
             public final V value;
             public final Context<V, K> next;
             public Prepend(V value, Context<V, K> next) {
@@ -113,7 +113,7 @@ public class Focus<V extends Value<V>, K extends TokenKind> {
             }
         }
         
-        public static class Apply<V extends Value<V>, K extends TokenKind> implements Context<V, K> {
+        public static class Apply<V extends Value<V>, K> implements Context<V, K> {
             public final UnaryOperator<V> mapper;
             public final Context<V, K> next;
             public Apply(UnaryOperator<V> mapper, Context<V, K> next) {
@@ -132,7 +132,7 @@ public class Focus<V extends Value<V>, K extends TokenKind> {
             }
         }
         
-        public static class Root<V extends Value<V>, K extends TokenKind> implements Context<V, K> {
+        public static class Root<V extends Value<V>, K> implements Context<V, K> {
             @Override
             public Focus<V, K> unfocusToNextSyntax(V v) {
                 return new Focus<>(new ValidSyntax.Success<>(v), this);

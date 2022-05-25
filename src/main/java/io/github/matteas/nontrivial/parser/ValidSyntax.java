@@ -13,7 +13,7 @@ import java.util.function.UnaryOperator;
  * To validate a syntax, call {@link Syntax@validate()}. A syntax is valid
  * if it is an ll(1) grammar.
  */
-public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
+public abstract class ValidSyntax<V extends Value<V>, K> {
     /**
      * Also known in literature as the "FIRST" set.
      * This is the {@link Set} of {@link TokenKind} that starts
@@ -54,7 +54,7 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
      */
     public abstract Focus<V, K> focus(K kind, Focus.Context<V, K> context);
 
-    public static class Success<V extends Value<V>, K extends TokenKind> extends ValidSyntax<V, K> {
+    public static class Success<V extends Value<V>, K> extends ValidSyntax<V, K> {
         public final V value;
 
         /**
@@ -84,7 +84,7 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
         }
     }
 
-    public static class Element<V extends Value<V>, K extends TokenKind> extends ValidSyntax<V, K> {
+    public static class Element<V extends Value<V>, K> extends ValidSyntax<V, K> {
         public final K kind;
         
         /**
@@ -111,7 +111,7 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
         }
     }
     
-    public static class Disjunction<V extends Value<V>, K extends TokenKind> extends ValidSyntax<V, K> {
+    public static class Disjunction<V extends Value<V>, K> extends ValidSyntax<V, K> {
         public final ValidSyntax<V, K> left;
         public final ValidSyntax<V, K> right;
 
@@ -149,7 +149,7 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
         }
     }
     
-    public static class Sequence<V extends Value<V>, K extends TokenKind> extends ValidSyntax<V, K> {
+    public static class Sequence<V extends Value<V>, K> extends ValidSyntax<V, K> {
         public final ValidSyntax<V, K> left;
         public final ValidSyntax<V, K> right;
 
@@ -194,7 +194,7 @@ public abstract class ValidSyntax<V extends Value<V>, K extends TokenKind> {
         }
     }
     
-    public static class Transform<V extends Value<V>, K extends TokenKind> extends ValidSyntax<V, K> {
+    public static class Transform<V extends Value<V>, K> extends ValidSyntax<V, K> {
         public final UnaryOperator<V> transformation;
         public final ValidSyntax<V, K> syntax;
 

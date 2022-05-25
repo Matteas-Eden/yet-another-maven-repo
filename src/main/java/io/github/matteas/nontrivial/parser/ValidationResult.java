@@ -2,10 +2,10 @@ package io.github.matteas.nontrivial.parser;
 
 import java.util.function.Function;
 
-interface ValidationResult<V extends Value<V>, K extends TokenKind> {
+interface ValidationResult<V extends Value<V>, K> {
     <T> T match(Function<ValidSyntax<V, K>, T> success, Function<Syntax<V, K>, T> failure);
     
-    public class Ok<V extends Value<V>, K extends TokenKind> implements ValidationResult<V, K> {
+    public class Ok<V extends Value<V>, K> implements ValidationResult<V, K> {
         public final ValidSyntax<V, K> syntax;
         
         public Ok(ValidSyntax<V, K> syntax) {
@@ -18,7 +18,7 @@ interface ValidationResult<V extends Value<V>, K extends TokenKind> {
         }
     }
     
-    public class Error<V extends Value<V>, K extends TokenKind> implements ValidationResult<V, K> {
+    public class Error<V extends Value<V>, K> implements ValidationResult<V, K> {
         public final Syntax<V, K> syntax;
         
         public Error(Syntax<V, K> syntax) {

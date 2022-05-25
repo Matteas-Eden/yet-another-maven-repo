@@ -3,28 +3,35 @@ package io.github.matteas.nontrivial.parser;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Map;
+import java.util.List;
 
 class StringLanguageTest {
     @Test
     void countNesting() {
         final var lang = new StringLanguage<Integer>(
-            Map.of(
-                "(", "(",
-                ")", ")",
-                "helloworld", "Hello World!"
-            ),
             (tokenContents, kind) -> 0,
-            (left, right) -> 0
+            ((left, right) -> 0),
+            (Class<StringLanguage<Integer>.StringTokenKind>)(Class<?>)StringLanguage.StringTokenKind.class // ewww
         );
+        final var lparen = lang.token('(');
+        final var rparen = lang.token(')');
+        final var helloworld = lang.token("Hello World!");
+        
         final var expression = lang.rule();
         expression
-            .is("helloworld").or("(", expression, ")")
+            .is(helloworld).or(lparen, expression, rparen)
             .map(value -> value + 1);
+
+        final var lexer = lang.lexer(List.of(lparen, rparen, helloworld));
+        final var parser = lang.parser(expression);
         
-        final var parser = new Parser<>(expression.validate().expectOk());
         assertEquals(
             8,
-            parser.parse("((((((((Hello World!))))))))").expectOk().value
+            parser.parse(
+                lexer.tokenize(
+                    new StringIteratore("((((((((Hello World!))))))))")
+                )
+            ).expectOk().value
         );
     }
 }

@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Parser<
     V extends Value<V>,
-    K extends TokenKind,
+    K,
     T extends Token<V, K>
 > {
     public final Focus<V, K> focus;
@@ -48,22 +48,36 @@ public class Parser<
             .map(nextFocus -> nextFocus.withValue(token.value()));
     }
 
-    public interface Result<
+    public abstract class Result<
         V extends Value<V>,
-        K extends TokenKind,
+        K,
         T extends Token<V, K>
     > {
-        <R> R match(
+        public abstract <R> R match(
             Function<Ok<V, K, T>, R> ok,
             Function<UnexpectedToken<V, K, T>, R> unexpectedToken,
             Function<UnexpectedEnd<V, K, T>, R> unexpectedEnd
         );
+
+        public final Ok<V, K, T> expectOk() {
+            return match(
+                ok -> ok,
+                unexpectedToken -> {
+                    // TODO: Improve error reporting
+                    throw new RuntimeException("Unexpected token");
+                },
+                unexpectedEnd -> {
+                    // TODO: Improve error reporting
+                    throw new RuntimeException("Unexpected end");
+                }
+            );
+        }
         
         public static class Ok<
             V extends Value<V>,
-            K extends TokenKind,
+            K,
             T extends Token<V, K>
-        > implements Result<V, K, T> {
+        > extends Result<V, K, T> {
             public final V value;
             public final Parser<V, K, T> parser;
             
@@ -84,9 +98,9 @@ public class Parser<
         
         public static class UnexpectedToken<
             V extends Value<V>,
-            K extends TokenKind,
+            K,
             T extends Token<V, K>
-        > implements Result<V, K, T> {
+        > extends Result<V, K, T> {
             public final T token;
             public final Parser<V, K, T> parser;
             
@@ -107,9 +121,9 @@ public class Parser<
         
         public static class UnexpectedEnd<
             V extends Value<V>,
-            K extends TokenKind,
+            K,
             T extends Token<V, K>
-        > implements Result<V, K, T> {
+        > extends Result<V, K, T> {
             public final Set<K> expected;
             public final Parser<V, K, T> parser;
             

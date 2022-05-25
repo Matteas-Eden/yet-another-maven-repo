@@ -2,7 +2,7 @@ package io.github.matteas.nontrivial.parser;
 
 import java.util.Set;
 
-public class ShouldNotFollowEntry<V extends Value<V>, K extends TokenKind> {
+public class ShouldNotFollowEntry<V extends Value<V>, K> {
     public final Syntax.Disjunction<V, K> source;
     public final Set<K> disallowedKinds;
 

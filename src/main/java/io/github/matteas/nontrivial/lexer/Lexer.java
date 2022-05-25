@@ -8,8 +8,12 @@ import java.util.Optional;
 public class Lexer<C, T> {
     public final Automaton<C, T> automaton;
     
-    public Lexer(List<Rule<C, T>> rules) {
+    public Lexer(List<LexerRule<C, T>> rules) {
         automaton = new Automaton<>(rules);
+    }
+
+    public List<T> tokenize(Iterable<C> input) {
+        return tokenize(input.iterator());
     }
     
     public List<T> tokenize(Iterator<C> input) {
@@ -23,7 +27,7 @@ public class Lexer<C, T> {
             // Let the iterator know that we might want to backtrack back to this point later.
             iterator.mark();
             
-            Optional<Rule.Completer<C, T>> completer = Optional.empty();
+            Optional<LexerRule.Completer<C, T>> completer = Optional.empty();
             
             while (iterator.hasNext() && state.hasNext) {
                 state = state.next(iterator.next());

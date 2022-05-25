@@ -7,19 +7,19 @@ import java.util.stream.Collectors;
 import java.util.Optional;
 
 public class Automaton<C, T> {
-    private final Map<List<Rule<C, T>.State>, State> memoized = new HashMap<>();
+    private final Map<List<LexerRule<C, T>.State>, State> memoized = new HashMap<>();
     public final State initialState;
 
-    public Automaton(List<Rule<C, T>> rules) {
+    public Automaton(List<LexerRule<C, T>> rules) {
         final var ruleStates = rules
             .stream()
-            .map(Rule::initialState)
+            .map(LexerRule::initialState)
             .collect(Collectors.toList());
 
         initialState = getState(ruleStates);
     }
     
-    public State getState(List<Rule<C, T>.State> ruleStates) {
+    public State getState(List<LexerRule<C, T>.State> ruleStates) {
         if (memoized.containsKey(ruleStates)) {
             return memoized.get(ruleStates);
         }
@@ -31,11 +31,11 @@ public class Automaton<C, T> {
 
     public class State {
         private final Map<C, State> pastTransitions = new HashMap<>();
-        public final List<Rule<C, T>.State> ruleStates;
+        public final List<LexerRule<C, T>.State> ruleStates;
         public final boolean hasNext;
-        public final Optional<Rule.Completer<C, T>> completer;
+        public final Optional<LexerRule.Completer<C, T>> completer;
 
-        public State(List<Rule<C, T>.State> ruleStates) {
+        public State(List<LexerRule<C, T>.State> ruleStates) {
             this.ruleStates = ruleStates;
             
             this.hasNext = ruleStates

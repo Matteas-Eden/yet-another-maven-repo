@@ -1,14 +1,13 @@
 package io.github.matteas.nontrivial.lexer;
 
-import java.util.function.Function;
 import java.util.List;
 import java.util.Objects;
 
-public class Rule<C, T> {
+public class LexerRule<C, T> {
     public final RegularExpression<C> expression;
     public final Completer<C, T> completer;
 
-    public Rule(RegularExpression<C> expression, Completer<C, T> completer) {
+    public LexerRule(RegularExpression<C> expression, Completer<C, T> completer) {
         this.expression = expression;
         this.completer = completer;
     }
@@ -24,7 +23,7 @@ public class Rule<C, T> {
 
     public class State {
         public final Focus<C> focus;
-        public final Completer<C, T> completer = Rule.this.completer;
+        public final Completer<C, T> completer = LexerRule.this.completer;
         public final boolean canComplete;
         public final boolean canAcceptCharacter;
 
