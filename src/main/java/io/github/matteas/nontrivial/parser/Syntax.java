@@ -417,7 +417,7 @@ public abstract class Syntax<V extends Value<V>, K> {
      * Used to create recursive syntaxes.
      */
     public static class Deferred<V extends Value<V>, K> extends Syntax<V, K> {
-        private Optional<Syntax<V, K>> realizedSyntax;
+        private Optional<Syntax<V, K>> realizedSyntax = Optional.empty();
         
         private final InductiveProperty.Deferred<Set<K>> deferredAcceptableKinds;
         private final InductiveProperty.Deferred<Optional<V>> deferredCanComplete;
