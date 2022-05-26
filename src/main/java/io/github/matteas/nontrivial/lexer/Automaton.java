@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 import java.util.Optional;
 
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.checker.nullness.qual.UnderInitialization;
+
 public class Automaton<C, T> {
     private final Map<List<LexerRule<C, T>.State>, State> memoized = new HashMap<>();
     public final State initialState;
@@ -18,8 +21,12 @@ public class Automaton<C, T> {
 
         initialState = getState(ruleStates);
     }
-    
-    public State getState(List<LexerRule<C, T>.State> ruleStates) {
+
+    @RequiresNonNull("memoized")
+    public State getState(
+        @UnderInitialization(Automaton<C, T>.class) Automaton<C, T> this, 
+        List<LexerRule<C, T>.State> ruleStates
+    ) {
         if (memoized.containsKey(ruleStates)) {
             return memoized.get(ruleStates);
         }
