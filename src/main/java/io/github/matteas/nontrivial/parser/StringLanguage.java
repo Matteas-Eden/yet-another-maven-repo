@@ -32,7 +32,7 @@ public class StringLanguage<V> extends Language<
     
     private RegularExpression<Character> desugar(Iterator<Object> items) {
         if (!items.hasNext()) {
-            throw new IllegalArgumentException("Sequence must contain something");
+            throw new IllegalArgumentException("Token must contain something");
         }
 
         final var headItem = items.next();
@@ -47,7 +47,7 @@ public class StringLanguage<V> extends Language<
         } else if (headItem instanceof RegularExpression<?>) {
             head = (RegularExpression<Character>)headItem;
         } else {
-            throw new IllegalArgumentException("Items must be either a string, a character, or a RegularExpression");
+            throw new IllegalArgumentException("Items must be either a string, a character, or a RegularExpression. Instead, got: " + headItem + " of type " + headItem.getClass().getSimpleName());
         }
         
         if (!items.hasNext()) {

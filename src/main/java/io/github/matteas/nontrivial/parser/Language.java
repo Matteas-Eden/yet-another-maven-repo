@@ -60,7 +60,7 @@ public abstract class Language<
     public class Rule extends Syntax.Deferred<SimpleValue, K> {
         private Syntax<SimpleValue, K> desugar(Object ... items) {
             if (items.length == 0) {
-                throw new IllegalArgumentException("Sequence must contain something");
+                throw new IllegalArgumentException("Parser rule must contain something");
             }
             
             Syntax<SimpleValue, K> head;
@@ -69,7 +69,7 @@ public abstract class Language<
             } else if (getClass().isInstance(items[0])) {
                 head = getClass().cast(items[0]);
             } else {
-                throw new IllegalArgumentException("Items must be either a token kind or a rule of the right type");
+                throw new IllegalArgumentException("Items must be either a token kind or a rule of the right type. Instead, got: " + items[0] + " of type " + headItem.getClass().getSimpleName());
             }
             
             if (items.length == 1) {
