@@ -69,7 +69,7 @@ public abstract class Language<
             } else if (getClass().isInstance(items[0])) {
                 head = getClass().cast(items[0]);
             } else {
-                throw new IllegalArgumentException("Items must be either a token kind or a rule of the right type. Instead, got: " + items[0] + " of type " + headItem.getClass().getSimpleName());
+                throw new IllegalArgumentException("Items must be either a token kind or a rule of the right type. Instead, got: " + items[0] + " of type " + items[0].getClass().getSimpleName());
             }
             
             if (items.length == 1) {
