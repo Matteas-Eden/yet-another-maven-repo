@@ -19,6 +19,10 @@ public class Parser<
     public Parser(Focus<V, K> focus) {
         this.focus = focus;
     }
+
+    public Result<V, K, T> parse(Iterable<T> tokens) {
+        return parse(tokens.iterator());
+    }
     
     public Result<V, K, T> parse(Iterator<T> tokens) {
         var currentFocus = focus;
