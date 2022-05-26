@@ -18,8 +18,10 @@ class StringLanguageTest {
         final var helloworld = lang.token("Hello World!");
         
         final var expression = lang.rule();
+        System.out.println("expression = " + expression);
         expression
-            .is(helloworld).or(lparen, expression, rparen)
+            .is(helloworld)
+            .or(lparen, expression, rparen)
             .map(value -> value + 1);
 
         final var lexer = lang.lexer(List.of(lparen, rparen, helloworld));
