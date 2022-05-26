@@ -3,6 +3,8 @@ package io.github.matteas.trivial.combinator.ffi;
 import io.github.matteas.trivial.combinator.Combinator;
 import io.github.matteas.trivial.combinator.EvalError;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 public class Pair<X, Y> implements Combinator {
     public final X x;
     public final Y y;
@@ -23,7 +25,7 @@ public class Pair<X, Y> implements Combinator {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(@Nullable Object other) {
         if (this == other) {
             return true;
         }
@@ -31,6 +33,6 @@ public class Pair<X, Y> implements Combinator {
             return false;
         }
         final var otherPair = getClass().cast(other);
-        return x.equals(otherPair.x) && y.equals(otherPair.y);
+        return Object.equals(x, otherPair.x) && Object.equals(y, otherPair.y);
     }
 }
