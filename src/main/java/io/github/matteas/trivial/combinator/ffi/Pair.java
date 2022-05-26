@@ -19,7 +19,7 @@ public class Pair<X, Y> implements Combinator {
 
     @Override
     public String toString() {
-        return "(" + x.toString() + "," + y.toString() + ")";
+        return "(" + String.valueOf(x) + "," + String.valueOf(y) + ")";
     }
 
     @Override
