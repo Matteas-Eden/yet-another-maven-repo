@@ -7,6 +7,7 @@ import java.awt.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
+@org.junit.jupiter.api.Disabled
 class PersonTest {
 
     @Test

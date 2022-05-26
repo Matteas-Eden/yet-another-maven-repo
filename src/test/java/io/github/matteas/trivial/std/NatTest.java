@@ -20,6 +20,7 @@ import io.github.matteas.trivial.combinator.ffi.PairExporter;
 import io.github.matteas.trivial.combinator.ffi.NatExporter;
 import static io.github.matteas.trivial.combinator.ffi.NatExporter.natExporter;
 
+@org.junit.jupiter.api.Disabled
 class NatTest {
     static final int MAX_NAT_TO_TEST = 4;
     

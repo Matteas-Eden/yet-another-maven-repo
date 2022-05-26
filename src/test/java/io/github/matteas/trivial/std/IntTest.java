@@ -16,6 +16,7 @@ import io.github.matteas.trivial.Repl;
 import static io.github.matteas.trivial.combinator.ffi.IntExporter.exportInt;
 import static io.github.matteas.trivial.combinator.ffi.NatExporter.exportNat;
 
+@org.junit.jupiter.api.Disabled
 class IntTest {
     static final int MAX_INT_TO_TEST = 2;
     
