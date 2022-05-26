@@ -7,7 +7,7 @@ import io.github.matteas.trivial.combinator.EvalError;
 import static io.github.matteas.trivial.ast.parse.Parse.parse;
 import static io.github.matteas.trivial.StandardLibrary.STANDARD_LIBRARY;
 
-public class Repl {
+public final class Repl {
     private Scope scope = new Scope(PRIMITIVES);
 
     public Repl() {
