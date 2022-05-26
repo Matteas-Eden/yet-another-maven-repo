@@ -20,16 +20,17 @@ public class Parser<
         this.focus = focus;
     }
     
-    public Result<V, K, T> parse(Iterator<T> tokens, Focus<V, K> focus) {
+    public Result<V, K, T> parse(Iterator<T> tokens) {
+        var currentFocus = focus;
         while (tokens.hasNext()) {
             final var token = tokens.next();
-            final var nextFocus = next(token, focus);
+            final var nextFocus = next(token, currentFocus);
             if (!nextFocus.isPresent()) {
                 return new Result.UnexpectedToken<>(token, new Parser<>(focus));
             }
-            focus = nextFocus.get();
+            currentFocus = nextFocus.get();
         }
-        final var finalFocus = focus;
+        final var finalFocus = currentFocus;
         return focus.syntax.canComplete
             .<Result<V, K, T>>map(
                 value -> new Result.Ok<>(value, new Parser<>(finalFocus))
