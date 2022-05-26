@@ -275,7 +275,7 @@ public abstract class Syntax<V extends Value<V>, K> {
             this(
                 left,
                 right,
-                new InductiveProperty.Deferred<>(Collections.emptySet())
+                InductiveProperty.deferred(Collections.emptySet())
             );
         }
         
