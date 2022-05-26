@@ -2,7 +2,6 @@ package io.github.matteas.nontrivial.parser;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.util.Map;
 import java.util.List;
 import io.github.matteas.nontrivial.lexer.CharacterIterator;
 
