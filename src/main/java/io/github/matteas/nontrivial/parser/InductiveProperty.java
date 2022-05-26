@@ -14,7 +14,7 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
  */
 public interface InductiveProperty<T> {
     T get();
-    void dependedBy(@UnknownInitialization InductiveProperty<?> dependent);
+    void dependedBy(InductiveProperty<?> dependent);
     void update();
 
     public static <T> Constant<T> constant(T value) {
@@ -46,7 +46,7 @@ public interface InductiveProperty<T> {
         }
 
         @Override
-        public void dependedBy(@UnknownInitialization InductiveProperty<?> dependent) {
+        public void dependedBy(InductiveProperty<?> dependent) {
             // Nothing to do.
         }
 
@@ -67,7 +67,7 @@ public interface InductiveProperty<T> {
         }
 
         @Override
-        public void dependedBy(@UnknownInitialization InductiveProperty<?> dependent) {    
+        public void dependedBy(InductiveProperty<?> dependent) {    
             listeners.add(dependent);
         }
 
@@ -104,7 +104,7 @@ public interface InductiveProperty<T> {
         }
         
         @Override
-        public void dependedBy(@UnknownInitialization InductiveProperty<?> dependent) {
+        public void dependedBy(InductiveProperty<?> dependent) {
             listeners.add(dependent);
         }
 
