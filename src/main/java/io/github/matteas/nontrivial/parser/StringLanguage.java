@@ -3,8 +3,10 @@ package io.github.matteas.nontrivial.parser;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.Arrays;
+import java.util.Iterator;
 import io.github.matteas.nontrivial.lexer.LexerRule;
 import io.github.matteas.nontrivial.lexer.RegularExpression;
+import io.github.matteas.nontrivial.lexer.CharacterIterator;
 
 public class StringLanguage<V> extends Language<
     Character,
@@ -25,29 +27,34 @@ public class StringLanguage<V> extends Language<
     }
 
     private RegularExpression<Character> desugar(Object ... items) {
-        if (items.length == 0) {
+        return desugar(Arrays.stream(items).iterator());
+    }
+    
+    private RegularExpression<Character> desugar(Iterator<Object> items) {
+        if (!items.hasNext()) {
             throw new IllegalArgumentException("Sequence must contain something");
         }
+
+        final var headItem = items.next();
         
         RegularExpression<Character> head;
-        if (items[0] instanceof String) {
-            final var string = (String)items[0];
-            head = desugar(string.toCharArray());
-        } else if (items[0] instanceof Character) {
-            final var character = (Character)items[0];
+        if (headItem instanceof String) {
+            final var string = (String)headItem;
+            head = desugar(new CharacterIterator(string));
+        } else if (headItem instanceof Character) {
+            final var character = (Character)headItem;
             head = new RegularExpression.Character<>(character);
-        } else if (items[0] instanceof RegularExpression<?>) {
-            head = (RegularExpression<Character>)items[0];
+        } else if (headItem instanceof RegularExpression<?>) {
+            head = (RegularExpression<Character>)headItem;
         } else {
             throw new IllegalArgumentException("Items must be either a string, a character, or a RegularExpression");
         }
         
-        if (items.length == 1) {
+        if (!items.hasNext()) {
             return head;
         }
         
-        final var tail = Arrays.copyOfRange(items, 1, items.length);
-        return new RegularExpression.Sequence<>(head, desugar(tail));
+        return new RegularExpression.Sequence<>(head, desugar(items));
     }
 
     @Override
