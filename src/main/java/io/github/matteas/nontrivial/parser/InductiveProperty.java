@@ -74,7 +74,7 @@ public interface InductiveProperty<T> {
         @Override
         public void update() {
             final var newValue = calculation.get();
-            if (!newValue.equals(value)) {
+            if (!Object.equals(newValue, value)) {
                 value = newValue;
                 for (final var listener : listeners) {
                     listener.update();
