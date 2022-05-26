@@ -28,6 +28,9 @@ public class Pair<X, Y> implements Combinator {
 
     @Override
     public boolean equals(@Nullable Object other) {
+        if (other == null) {
+            return false;
+        }
         if (this == other) {
             return true;
         }
