@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.function.Supplier;
 import java.util.Optional;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+
 /**
  * A cell in a Propagation Network used to find the steady state value.
  * Each InductiveProperty reacts to changes of its dependencies, and the
@@ -12,8 +14,8 @@ import java.util.Optional;
  */
 public interface InductiveProperty<T> {
     T get();
+    void dependedBy(@UnknownInitialization InductiveProperty<?> dependent);
     void update();
-    void dependedBy(InductiveProperty<?> dependent);
 
     public class Constant<T> implements InductiveProperty<T> {
         private final T value;
@@ -28,12 +30,12 @@ public interface InductiveProperty<T> {
         }
 
         @Override
-        public void update() {
+        public void dependedBy(@UnknownInitialization InductiveProperty<?> dependent) {
             // Nothing to do.
         }
 
         @Override
-        public void dependedBy(InductiveProperty<?> dependent) {
+        public void update() {
             // Nothing to do.
         }
     }
@@ -52,7 +54,7 @@ public interface InductiveProperty<T> {
         }
 
         @Override
-        public void dependedBy(InductiveProperty<?> dependent) {
+        public void dependedBy(@UnknownInitialization InductiveProperty<?> dependent) {
             listeners.add(dependent);
         }
 
@@ -60,6 +62,7 @@ public interface InductiveProperty<T> {
         public void update() {
             final var newValue = rule.get();
             if (!newValue.equals(value)) {
+                value = newValue;
                 for (final var listener : listeners) {
                     listener.update();
                 }
@@ -75,7 +78,7 @@ public interface InductiveProperty<T> {
     public class Deferred<T> implements InductiveProperty<T> {
         private final List<InductiveProperty<?>> listeners = new ArrayList<>();
         private final T defaultValue;
-        private Optional<InductiveProperty<T>> realized;
+        private Optional<InductiveProperty<T>> realized = Optional.empty();
 
         public Deferred(T defaultValue) {
             this.defaultValue = defaultValue;
@@ -88,7 +91,7 @@ public interface InductiveProperty<T> {
         }
         
         @Override
-        public void dependedBy(InductiveProperty<?> dependent) {
+        public void dependedBy(@UnknownInitialization InductiveProperty<?> dependent) {
             listeners.add(dependent);
         }
 

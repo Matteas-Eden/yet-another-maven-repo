@@ -7,6 +7,8 @@ import java.util.stream.Stream;
 import java.util.stream.Collectors;
 import java.util.Objects;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 public class Focus<C> {
     public final Set<Context<C>> contexts;
     public final boolean canComplete;
@@ -58,7 +60,7 @@ public class Focus<C> {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(@Nullable Object other) {
         if (other == null) {
             return false;
         }
@@ -110,7 +112,7 @@ public class Focus<C> {
         }
 
         @Override
-        public boolean equals(Object other) {
+        public boolean equals(@Nullable Object other) {
             if (other == null) {
                 return false;
             }

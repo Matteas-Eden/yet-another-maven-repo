@@ -3,6 +3,8 @@ package io.github.matteas.nontrivial.lexer;
 import java.util.List;
 import java.util.Objects;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 public class LexerRule<C, T> {
     public final RegularExpression<C> expression;
     public final Completer<C, T> completer;
@@ -47,7 +49,7 @@ public class LexerRule<C, T> {
         }
 
         @Override
-        public boolean equals(Object other) {
+        public boolean equals(@Nullable Object other) {
             if (other == null) {
                 return false;
             }

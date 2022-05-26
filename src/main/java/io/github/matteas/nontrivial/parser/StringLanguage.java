@@ -8,6 +8,8 @@ import io.github.matteas.nontrivial.lexer.LexerRule;
 import io.github.matteas.nontrivial.lexer.RegularExpression;
 import io.github.matteas.nontrivial.lexer.CharacterIterator;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+
 public class StringLanguage<V> extends Language<
     Character,
     V,
@@ -83,7 +85,7 @@ public class StringLanguage<V> extends Language<
         public final StringTokenKind kind;
         public final String contents;
 
-        public StringToken(StringTokenKind kind, String contents) {
+        public StringToken(@UnknownInitialization StringTokenKind kind, String contents) {
             this.kind = kind;
             this.contents = contents;
         }

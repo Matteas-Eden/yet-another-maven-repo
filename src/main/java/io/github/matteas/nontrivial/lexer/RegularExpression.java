@@ -2,6 +2,8 @@ package io.github.matteas.nontrivial.lexer;
 
 import java.util.Objects;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 public abstract class RegularExpression<C> {
     /**
      * Also known in literature as isNullable
@@ -43,7 +45,7 @@ public abstract class RegularExpression<C> {
         }
 
         @Override
-        public boolean equals(Object other) {
+        public boolean equals(@Nullable Object other) {
             if (other == null) {
                 return false;
             }
@@ -78,7 +80,7 @@ public abstract class RegularExpression<C> {
         }
 
         @Override
-        public boolean equals(Object other) {
+        public boolean equals(@Nullable Object other) {
             if (other == null) {
                 return false;
             }
@@ -116,7 +118,7 @@ public abstract class RegularExpression<C> {
         }
 
         @Override
-        public boolean equals(Object other) {
+        public boolean equals(@Nullable Object other) {
             if (other == null) {
                 return false;
             }
@@ -160,7 +162,7 @@ public abstract class RegularExpression<C> {
         }
 
         @Override
-        public boolean equals(Object other) {
+        public boolean equals(@Nullable Object other) {
             if (other == null) {
                 return false;
             }
@@ -194,7 +196,7 @@ public abstract class RegularExpression<C> {
         }
 
         @Override
-        public boolean equals(Object other) {
+        public boolean equals(@Nullable Object other) {
             if (other == null) {
                 return false;
             }
