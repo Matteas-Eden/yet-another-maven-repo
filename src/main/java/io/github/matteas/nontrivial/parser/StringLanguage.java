@@ -31,7 +31,6 @@ public class StringLanguage<V> extends Language<
         
         RegularExpression<Character> head;
         if (items[0] instanceof String) {
-            // todo head = seq recursive
             final var string = (String)items[0];
             head = desugar(string.toCharArray());
         } else if (items[0] instanceof Character) {
