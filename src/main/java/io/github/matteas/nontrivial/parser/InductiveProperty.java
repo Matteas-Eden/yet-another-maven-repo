@@ -50,7 +50,7 @@ public interface InductiveProperty<T> {
                 dependency.dependedBy(this);
             }
             this.rule = rule;
-            update();
+            this.value = rule.get();
         }
 
         @Override
