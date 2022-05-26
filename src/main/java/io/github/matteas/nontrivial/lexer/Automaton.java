@@ -24,7 +24,7 @@ public class Automaton<C, T> {
 
     @RequiresNonNull("memoized")
     public State getState(
-        @UnderInitialization(Automaton<C, T>.class) Automaton<C, T> this, 
+        @UnderInitialization Automaton<C, T> this, 
         List<LexerRule<C, T>.State> ruleStates
     ) {
         if (memoized.containsKey(ruleStates)) {
