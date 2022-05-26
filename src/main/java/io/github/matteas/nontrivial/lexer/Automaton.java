@@ -43,7 +43,7 @@ public class Automaton<C extends @NonNull Object, T> {
         public final boolean hasNext;
         public final Optional<LexerRule.Completer<C, T>> completer;
 
-        public State(List<LexerRule<C, T>.State> ruleStates) {
+        private State(List<LexerRule<C, T>.State> ruleStates) {
             this.ruleStates = ruleStates;
             
             this.hasNext = ruleStates
