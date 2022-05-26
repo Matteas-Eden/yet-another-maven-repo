@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 
 public class Automaton<C extends @NonNull Object, T> {
     private final Map<List<LexerRule<C, T>.State>, State> memoized = new HashMap<>();
@@ -25,7 +25,7 @@ public class Automaton<C extends @NonNull Object, T> {
 
     @RequiresNonNull("memoized")
     public State getState(
-        @UnderInitialization Automaton<C, T> this, 
+        @UnknownInitialization Automaton<C, T> this, 
         List<LexerRule<C, T>.State> ruleStates
     ) {
         if (memoized.containsKey(ruleStates)) {
