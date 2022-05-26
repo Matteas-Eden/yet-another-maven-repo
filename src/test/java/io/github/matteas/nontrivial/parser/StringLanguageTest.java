@@ -14,8 +14,11 @@ class StringLanguageTest {
             (Class<StringLanguage<Integer>.StringTokenKind>)(Class<?>)StringLanguage.StringTokenKind.class // ewww
         );
         final var lparen = lang.token('(');
+        System.out.println("lparen = " + lparen);
         final var rparen = lang.token(')');
+        System.out.println("rparen = " + rparen);
         final var helloworld = lang.token("Hello World!");
+        System.out.println("helloworld = " + helloworld);
         
         final var expression = lang.rule();
         System.out.println("expression = " + expression);
