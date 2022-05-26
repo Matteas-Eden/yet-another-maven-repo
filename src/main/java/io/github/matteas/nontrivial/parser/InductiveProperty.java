@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 import java.util.Optional;
+import java.util.Objects;
 
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 
@@ -74,7 +75,7 @@ public interface InductiveProperty<T> {
         @Override
         public void update() {
             final var newValue = calculation.get();
-            if (!Object.equals(newValue, value)) {
+            if (!Objects.equals(newValue, value)) {
                 value = newValue;
                 for (final var listener : listeners) {
                     listener.update();
