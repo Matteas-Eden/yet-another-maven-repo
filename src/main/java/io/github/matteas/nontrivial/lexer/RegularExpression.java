@@ -67,7 +67,7 @@ public abstract class RegularExpression<C> {
 
         @Override
         public Focus<C> focus(C character, Focus.Context<C> context) {
-            if (this.character.equals(character)) {
+            if (Objects.equals(this.character, character)) {
                 return new Focus<>(context);
             }
             return new Focus<>();
@@ -88,7 +88,7 @@ public abstract class RegularExpression<C> {
                 return false;
             }
             final var otherCharacter = (Character<C>)other;
-            return character.equals(otherCharacter.character);
+            return Objects.equals(character, otherCharacter.character);
         }
     }
 
