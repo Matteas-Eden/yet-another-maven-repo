@@ -27,10 +27,10 @@ public class StringLanguage<V> extends Language<
     }
 
     private RegularExpression<Character> desugar(Object ... items) {
-        return desugar(Arrays.stream(items).iterator());
+        return desugarIterator(Arrays.stream(items).iterator());
     }
     
-    private RegularExpression<Character> desugar(Iterator<Object> items) {
+    private RegularExpression<Character> desugarIterator(Iterator<?> items) {
         if (!items.hasNext()) {
             throw new IllegalArgumentException("Token must contain something");
         }
@@ -40,7 +40,7 @@ public class StringLanguage<V> extends Language<
         RegularExpression<Character> head;
         if (headItem instanceof String) {
             final var string = (String)headItem;
-            head = desugar(new CharacterIterator(string));
+            head = desugarIterator(new CharacterIterator(string));
         } else if (headItem instanceof Character) {
             final var character = (Character)headItem;
             head = new RegularExpression.Character<>(character);
@@ -54,7 +54,7 @@ public class StringLanguage<V> extends Language<
             return head;
         }
         
-        return new RegularExpression.Sequence<>(head, desugar(items));
+        return new RegularExpression.Sequence<>(head, desugarIterator(items));
     }
 
     @Override
