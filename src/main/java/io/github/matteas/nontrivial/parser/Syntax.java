@@ -105,7 +105,7 @@ public abstract class Syntax<V extends Value<V>, K> {
         return new ValidationResult.Error<>(this);
     }
 
-    public static class Success<V extends Value<V>, K> extends Syntax<V, K> {
+    public static final class Success<V extends Value<V>, K> extends Syntax<V, K> {
         public final V value;
         
         public Success(V value) {
@@ -126,7 +126,7 @@ public abstract class Syntax<V extends Value<V>, K> {
         }
     }
 
-    public static class Element<V extends Value<V>, K> extends Syntax<V, K> {
+    public static final class Element<V extends Value<V>, K> extends Syntax<V, K> {
         public final K kind;
         
         public Element(K kind) {
@@ -147,7 +147,7 @@ public abstract class Syntax<V extends Value<V>, K> {
         }
     }
     
-    public static class Disjunction<V extends Value<V>, K> extends Syntax<V, K> {
+    public static final class Disjunction<V extends Value<V>, K> extends Syntax<V, K> {
         public final Syntax<V, K> left;
         public final Syntax<V, K> right;
 
@@ -267,7 +267,7 @@ public abstract class Syntax<V extends Value<V>, K> {
         }
     }
     
-    public static class Sequence<V extends Value<V>, K> extends Syntax<V, K> {
+    public static final class Sequence<V extends Value<V>, K> extends Syntax<V, K> {
         public final Syntax<V, K> left;
         public final Syntax<V, K> right;
 
@@ -384,7 +384,7 @@ public abstract class Syntax<V extends Value<V>, K> {
         }
     }
     
-    public static class Transform<V extends Value<V>, K> extends Syntax<V, K> {
+    public static final class Transform<V extends Value<V>, K> extends Syntax<V, K> {
         public final UnaryOperator<V> transformation;
         public final Syntax<V, K> syntax;
 
