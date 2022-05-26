@@ -17,10 +17,26 @@ public interface InductiveProperty<T> {
     void dependedBy(@UnknownInitialization InductiveProperty<?> dependent);
     void update();
 
+    public static <T> Constant<T> constant(T value) {
+        return new Constant<>(value);
+    }
+
+    public static <T> Rule<T> rule(Iterable<InductiveProperty<?>> dependencies, Supplier<T> calculation) {
+        final var rule = new Rule<>(calculation);
+        for (final var dependency : dependencies) {
+            dependency.dependedBy(rule);
+        }
+        return rule;
+    }
+
+    public static <T> Deferred<T> deferred(T defaultValue) {
+        return new Deferred<>(defaultValue);
+    }
+
     public class Constant<T> implements InductiveProperty<T> {
         private final T value;
         
-        public Constant(T value) {
+        private Constant(T value) {
             this.value = value;
         }
 
@@ -42,25 +58,22 @@ public interface InductiveProperty<T> {
     
     public class Rule<T> implements InductiveProperty<T> {
         private final List<InductiveProperty<?>> listeners = new ArrayList<>();
-        private final Supplier<T> rule;
+        private final Supplier<T> calculation;
         private T value;
         
-        public Rule(Iterable<InductiveProperty<?>> dependencies, Supplier<T> rule) {
-            for (final var dependency : dependencies) {
-                dependency.dependedBy(this);
-            }
-            this.rule = rule;
-            this.value = rule.get();
+        private Rule(Supplier<T> calculation) {
+            this.calculation = calculation;
+            this.value = calculation.get();
         }
 
         @Override
-        public void dependedBy(@UnknownInitialization InductiveProperty<?> dependent) {
+        public void dependedBy(@UnknownInitialization InductiveProperty<?> dependent) {    
             listeners.add(dependent);
         }
 
         @Override
         public void update() {
-            final var newValue = rule.get();
+            final var newValue = calculation.get();
             if (!newValue.equals(value)) {
                 value = newValue;
                 for (final var listener : listeners) {
@@ -80,7 +93,7 @@ public interface InductiveProperty<T> {
         private final T defaultValue;
         private Optional<InductiveProperty<T>> realized = Optional.empty();
 
-        public Deferred(T defaultValue) {
+        private Deferred(T defaultValue) {
             this.defaultValue = defaultValue;
         }
 

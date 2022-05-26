@@ -97,11 +97,11 @@ public abstract class Syntax<V extends Value<V>, K> {
         
         public Success(V value) {
             super(
-                new InductiveProperty.Constant<>(Collections.emptySet()),
-                new InductiveProperty.Constant<>(Optional.of(value)),
-                new InductiveProperty.Constant<>(true),
-                new InductiveProperty.Constant<>(Collections.emptySet()),
-                new InductiveProperty.Constant<>(Collections.emptySet())
+                InductiveProperty.constant(Collections.emptySet()),
+                InductiveProperty.constant(Optional.of(value)),
+                InductiveProperty.constant(true),
+                InductiveProperty.constant(Collections.emptySet()),
+                InductiveProperty.constant(Collections.emptySet())
             );
             
             this.value = value;
@@ -118,11 +118,11 @@ public abstract class Syntax<V extends Value<V>, K> {
         
         public Element(K kind) {
             super(
-                new InductiveProperty.Constant<>(Set.of(kind)),
-                new InductiveProperty.Constant<>(Optional.empty()),
-                new InductiveProperty.Constant<>(true),
-                new InductiveProperty.Constant<>(Collections.emptySet()),
-                new InductiveProperty.Constant<>(Collections.emptySet())
+                InductiveProperty.constant(Set.of(kind)),
+                InductiveProperty.constant(Optional.empty()),
+                InductiveProperty.constant(true),
+                InductiveProperty.constant(Collections.emptySet()),
+                InductiveProperty.constant(Collections.emptySet())
             );
             
             this.kind = kind;
@@ -142,8 +142,8 @@ public abstract class Syntax<V extends Value<V>, K> {
             this(
                 left,
                 right,
-                new InductiveProperty.Deferred<>(Collections.emptySet()),
-                new InductiveProperty.Deferred<>(Collections.emptySet())
+                InductiveProperty.deferred(Collections.emptySet()),
+                InductiveProperty.deferred(Collections.emptySet())
             );
         }
         
@@ -154,19 +154,19 @@ public abstract class Syntax<V extends Value<V>, K> {
             InductiveProperty.Deferred<Set<Conflict>> conflicts
         ) {
             super(
-                new InductiveProperty.Rule<>(
+                InductiveProperty.rule(
                     List.of(left.acceptableKinds, right.acceptableKinds),
                     () -> Stream.concat(
                         left.acceptableKinds.get().stream(),
                         right.acceptableKinds.get().stream()
                     ).collect(Collectors.toSet())
                 ),
-                new InductiveProperty.Rule<>(
+                InductiveProperty.rule(
                     List.of(left.canComplete, right.canComplete),
                     () -> left.canComplete.get()
                         .or(() -> right.canComplete.get())
                 ),
-                new InductiveProperty.Rule<>(
+                InductiveProperty.rule(
                     List.of(left.canAcceptSomeTokenSequence, right.canAcceptSomeTokenSequence),
                     () -> left.canAcceptSomeTokenSequence.get()
                         || right.canAcceptSomeTokenSequence.get()
@@ -182,7 +182,7 @@ public abstract class Syntax<V extends Value<V>, K> {
             // we defer the initialization of those inductive properties to
             // here:
             shouldNotFollow.realize(
-                new InductiveProperty.Rule<>(
+                InductiveProperty.rule(
                     List.of(
                         left.acceptableKinds,
                         left.canComplete,
@@ -207,7 +207,7 @@ public abstract class Syntax<V extends Value<V>, K> {
                 )
             );
             conflicts.realize(
-                new InductiveProperty.Rule<>(
+                InductiveProperty.rule(
                     List.of(
                         left.canComplete,
                         left.acceptableKinds,
@@ -272,7 +272,7 @@ public abstract class Syntax<V extends Value<V>, K> {
             InductiveProperty.Deferred<Set<Conflict>> conflicts
         ) {
             super(
-                new InductiveProperty.Rule<>(
+                InductiveProperty.rule(
                     List.of(
                         left.acceptableKinds,
                         left.canComplete,
@@ -290,7 +290,7 @@ public abstract class Syntax<V extends Value<V>, K> {
                         return kinds;
                     }
                 ),
-                new InductiveProperty.Rule<>(
+                InductiveProperty.rule(
                     List.of(left.canComplete, right.canComplete),
                     () -> left.canComplete.get().flatMap(
                         leftValue -> right.canComplete.get().map(
@@ -298,12 +298,12 @@ public abstract class Syntax<V extends Value<V>, K> {
                         )
                     )
                 ),
-                new InductiveProperty.Rule<>(
+                InductiveProperty.rule(
                     List.of(left.canAcceptSomeTokenSequence, right.canAcceptSomeTokenSequence),
                     () -> left.canAcceptSomeTokenSequence.get()
                         && right.canAcceptSomeTokenSequence.get()
                 ),
-                new InductiveProperty.Rule<>(
+                InductiveProperty.rule(
                     List.of(
                         left.shouldNotFollow,
                         left.canAcceptSomeTokenSequence,
@@ -331,7 +331,7 @@ public abstract class Syntax<V extends Value<V>, K> {
             // we defer the initialization of those inductive properties to
             // here:
             conflicts.realize(
-                new InductiveProperty.Rule<Set<Conflict>>(
+                InductiveProperty.rule(
                     List.of(
                         left.shouldNotFollow,
                         left.conflicts,
@@ -378,7 +378,7 @@ public abstract class Syntax<V extends Value<V>, K> {
         public Transform(UnaryOperator<V> transformation, Syntax<V, K> syntax) {
             super(
                 syntax.acceptableKinds,
-                new InductiveProperty.Rule<>(
+                InductiveProperty.rule(
                     List.of(syntax.canComplete),
                     () -> syntax.canComplete.get().map(transformation)
                 ),
@@ -414,11 +414,11 @@ public abstract class Syntax<V extends Value<V>, K> {
 
         public Deferred() {
             this(
-                new InductiveProperty.Deferred<>(Collections.emptySet()),
-                new InductiveProperty.Deferred<>(Optional.empty()),
-                new InductiveProperty.Deferred<>(false),
-                new InductiveProperty.Deferred<>(Collections.emptySet()),
-                new InductiveProperty.Deferred<>(Collections.emptySet())
+                InductiveProperty.deferred(Collections.emptySet()),
+                InductiveProperty.deferred(Optional.empty()),
+                InductiveProperty.deferred(false),
+                InductiveProperty.deferred(Collections.emptySet()),
+                InductiveProperty.deferred(Collections.emptySet())
             );
         }
 
