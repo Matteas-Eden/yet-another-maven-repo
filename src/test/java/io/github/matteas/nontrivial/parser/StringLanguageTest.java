@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Map;
 import java.util.List;
-import io.github.matteas.nontrivial.lexer.StringIterator;
+import io.github.matteas.nontrivial.lexer.CharacterIterator;
 
 class StringLanguageTest {
     @Test
@@ -30,7 +30,7 @@ class StringLanguageTest {
             8,
             parser.parse(
                 lexer.tokenize(
-                    new StringIterator("((((((((Hello World!))))))))")
+                    new CharacterIterator("((((((((Hello World!))))))))")
                 )
             ).expectOk().value
         );
