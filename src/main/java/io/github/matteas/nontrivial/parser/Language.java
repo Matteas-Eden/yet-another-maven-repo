@@ -8,11 +8,13 @@ import java.util.stream.Collectors;
 import io.github.matteas.nontrivial.lexer.Lexer;
 import io.github.matteas.nontrivial.lexer.LexerRule;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * Syntax sugar for {@link Syntax} and {@link LexerRule}.
  */
 public abstract class Language<
-    C,
+    C extends @NonNull Object,
     V,
     K extends Language.TokenKind<C, T, K>,
     T extends Token<Language<C, V, K, T>.SimpleValue, K>

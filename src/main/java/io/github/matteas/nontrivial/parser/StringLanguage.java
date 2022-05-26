@@ -8,10 +8,11 @@ import io.github.matteas.nontrivial.lexer.LexerRule;
 import io.github.matteas.nontrivial.lexer.RegularExpression;
 import io.github.matteas.nontrivial.lexer.CharacterIterator;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 
 public class StringLanguage<V> extends Language<
-    Character,
+    @NonNull Character,
     V,
     StringLanguage<V>.StringTokenKind,
     StringLanguage<V>.StringToken

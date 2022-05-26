@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
 
-public class Lexer<C, T> {
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+public class Lexer<C extends @NonNull Object, T> {
     public final Automaton<C, T> automaton;
     
     public Lexer(List<LexerRule<C, T>> rules) {

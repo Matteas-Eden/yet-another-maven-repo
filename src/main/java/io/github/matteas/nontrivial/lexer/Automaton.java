@@ -7,9 +7,10 @@ import java.util.stream.Collectors;
 import java.util.Optional;
 
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 
-public class Automaton<C, T> {
+public class Automaton<C extends @NonNull Object, T> {
     private final Map<List<LexerRule<C, T>.State>, State> memoized = new HashMap<>();
     public final State initialState;
 
