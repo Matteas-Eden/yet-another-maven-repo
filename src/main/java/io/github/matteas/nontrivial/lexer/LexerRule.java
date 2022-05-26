@@ -4,12 +4,10 @@ import java.util.List;
 import java.util.Objects;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.initialization.qual.NotOnlyInitialized;
 
 public class LexerRule<C, T> {
     public final RegularExpression<C> expression;
 
-    @NotOnlyInitialized
     public final Completer<C, T> completer;
 
     public LexerRule(RegularExpression<C> expression, Completer<C, T> completer) {

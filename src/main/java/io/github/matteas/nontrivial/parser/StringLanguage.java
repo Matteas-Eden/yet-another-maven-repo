@@ -10,7 +10,6 @@ import io.github.matteas.nontrivial.lexer.CharacterIterator;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
-import org.checkerframework.checker.initialization.qual.NotOnlyInitialized;
 
 public class StringLanguage<V> extends Language<
     @NonNull Character,
@@ -104,11 +103,15 @@ public class StringLanguage<V> extends Language<
     }
 
     public class StringTokenKind implements Language.TokenKind<Character, StringToken, StringTokenKind> {
-        @NotOnlyInitialized
-        public final LexerRule<Character, StringToken> lexerRule;
+        public final RegularExpression<Character> expression;
         
         public StringTokenKind(RegularExpression<Character> expression) {
-            lexerRule = new LexerRule<>(
+            this.expression = expression;
+        }
+        
+        @Override
+        public LexerRule<Character, StringToken> toLexerRule() {
+            return new LexerRule<>(
                 expression,
                 contents -> {
                     final var builder = new StringBuilder(contents.size());
@@ -122,17 +125,12 @@ public class StringLanguage<V> extends Language<
                 }
             );
         }
-        
-        @Override
-        public LexerRule<Character, StringToken> toLexerRule() {
-            return lexerRule;
-        }
 
         @Override
         public StringTokenKind or(Object ... items) {
             return new StringTokenKind(
                 new RegularExpression.Disjunction<Character>(
-                    lexerRule.expression,
+                    expression,
                     desugar(items)
                 )
             );
