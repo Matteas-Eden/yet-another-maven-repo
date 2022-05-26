@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 public abstract class Syntax<V extends Value<V>, K> {
     /**
      * Also known in literature as the "FIRST" set.
@@ -52,8 +54,14 @@ public abstract class Syntax<V extends Value<V>, K> {
      */
     public class BothAcceptsEmptySequenceConflict implements Conflict {
         public final Disjunction<V, K> source;
+        
         public BothAcceptsEmptySequenceConflict(Disjunction<V, K> source) {
             this.source = source;
+        }
+
+        @Override
+        public boolean equals(@Nullable Object other) {
+            throw new UnsupportedOperationException("TODO - implement this for propagation networks to work correctly");
         }
     }
     
@@ -66,6 +74,11 @@ public abstract class Syntax<V extends Value<V>, K> {
         public BothAcceptsSameFirstTokenKindConflict(Disjunction<V, K> source, Set<K> ambiguities) {
             this.source = source;
             this.ambiguities = ambiguities;
+        }
+
+        @Override
+        public boolean equals(@Nullable Object other) {
+            throw new UnsupportedOperationException("TODO - implement this for propagation networks to work correctly");
         }
     }
     
