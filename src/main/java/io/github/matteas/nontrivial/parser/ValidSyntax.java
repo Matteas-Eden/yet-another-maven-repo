@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * Validated version of {@link Syntax} that can be safely used for parsing
  * via a {@link Parser}.
@@ -13,7 +15,7 @@ import java.util.function.UnaryOperator;
  * To validate a syntax, call {@link Syntax@validate()}. A syntax is valid
  * if it is an ll(1) grammar.
  */
-public abstract class ValidSyntax<V extends Value<V>, K> {
+public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object> {
     /**
      * Also known in literature as the "FIRST" set.
      * This is the {@link Set} of {@link TokenKind} that starts
