@@ -307,7 +307,18 @@ public abstract class Syntax<V extends Value<V>, K extends @NonNull Object> {
                     List.of(left.canComplete, right.canComplete),
                     () -> left.canComplete.get().flatMap(
                         leftValue -> right.canComplete.get().map(
-                            rightValue -> rightValue.prepend(leftValue)
+                            rightValue -> {
+                                /*
+                                 * TODO:
+                                 * error: [return] incompatible types in return.
+                                 * type of expression: V extends @Initialized @NonNull Value<V>
+                                 * method return type: V extends @Initialized @Nullable Value<V extends @Initialized @NonNull Value<V>>
+                                */
+                                @SuppressWarnings("type.incompatible")
+                                final var result = rightValue.prepend(leftValue);
+                                
+                                return result;
+                            }
                         )
                     )
                 ),

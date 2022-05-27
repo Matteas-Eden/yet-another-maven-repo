@@ -118,7 +118,19 @@ public interface InductiveProperty<T> {
 
         @Override
         public T get() {
-            return realized.map(InductiveProperty::get).orElse(defaultValue);
+            final var realizedValue = realized.map(InductiveProperty::get);
+
+            /*
+             * TODO: I have no idea what this error means:
+             *
+             * error: [return] incompatible types in return.
+             * type of expression: T[ extends @Initialized @Nullable Object super @Initialized @Nullable Void]
+             * method return type: T[ extends @Initialized @Nullable Object super @Initialized @NonNull Void]
+            */
+            @SuppressWarnings("type.incompatible")
+            final var result = realizedValue.orElse(defaultValue);
+            
+            return result;
         }
     }
 }
