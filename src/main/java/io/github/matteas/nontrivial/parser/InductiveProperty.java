@@ -127,8 +127,8 @@ public interface InductiveProperty<T> {
              * type of expression: T[ extends @Initialized @Nullable Object super @Initialized @Nullable Void]
              * method return type: T[ extends @Initialized @Nullable Object super @Initialized @NonNull Void]
             */
-            @SuppressWarnings("type.incompatible")
-            final var result = realizedValue.orElse(defaultValue);
+            //@SuppressWarnings("type.incompatible")
+            final T result = realizedValue.orElse(defaultValue);
             
             return result;
         }

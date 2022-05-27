@@ -314,8 +314,8 @@ public abstract class Syntax<V extends Value<V>, K extends @NonNull Object> {
                                  * type of expression: V extends @Initialized @NonNull Value<V>
                                  * method return type: V extends @Initialized @Nullable Value<V extends @Initialized @NonNull Value<V>>
                                 */
-                                @SuppressWarnings("type.incompatible")
-                                final var result = rightValue.prepend(leftValue);
+                                //@SuppressWarnings("type.incompatible")
+                                final V result = rightValue.prepend(leftValue);
                                 
                                 return result;
                             }
