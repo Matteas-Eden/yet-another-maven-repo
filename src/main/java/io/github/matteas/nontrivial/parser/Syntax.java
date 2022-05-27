@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import static org.checkerframework.checker.nullness.util.NullnessUtil.castNonNull;
 
 public abstract class Syntax<V extends Value<V>, K extends @NonNull Object> {
     /**
@@ -307,18 +308,13 @@ public abstract class Syntax<V extends Value<V>, K extends @NonNull Object> {
                     List.of(left.canComplete, right.canComplete),
                     () -> left.canComplete.get().flatMap(
                         leftValue -> right.canComplete.get().map(
-                            rightValue -> {
-                                /*
-                                 * TODO:
-                                 * error: [return] incompatible types in return.
-                                 * type of expression: V extends @Initialized @NonNull Value<V>
-                                 * method return type: V extends @Initialized @Nullable Value<V extends @Initialized @NonNull Value<V>>
-                                */
-                                //@SuppressWarnings("type.incompatible")
-                                final V result = rightValue.prepend(leftValue);
-                                
-                                return result;
-                            }
+                            /*
+                             * TODO:
+                             * error: [return] incompatible types in return.
+                             * type of expression: V extends @Initialized @NonNull Value<V>
+                             * method return type: V extends @Initialized @Nullable Value<V extends @Initialized @NonNull Value<V>>
+                            */
+                            rightValue -> castNonNull(rightValue.prepend(leftValue))
                         )
                     )
                 ),
