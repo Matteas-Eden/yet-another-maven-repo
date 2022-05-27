@@ -33,7 +33,7 @@ public class StringLanguage<V> extends Language<
         return desugarIterator(Arrays.stream(items).iterator());
     }
     
-    private RegularExpression<Character> desugarIterator(Iterator<?> items) {
+    private RegularExpression<Character> desugarIterator(Iterator<? extends @NonNull Object> items) {
         if (!items.hasNext()) {
             throw new IllegalArgumentException("Token must contain something");
         }
