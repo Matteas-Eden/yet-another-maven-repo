@@ -86,7 +86,7 @@ public class StringLanguage<V> extends Language<
         public final StringTokenKind kind;
         public final String contents;
 
-        public StringToken(@UnknownInitialization StringTokenKind kind, String contents) {
+        public StringToken(StringTokenKind kind, String contents) {
             this.kind = kind;
             this.contents = contents;
         }
