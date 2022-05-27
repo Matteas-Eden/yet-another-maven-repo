@@ -56,7 +56,7 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
      */
     public abstract Focus<V, K> focus(K kind, Focus.Context<V, K> context);
 
-    public static class Success<V extends Value<V>, K> extends ValidSyntax<V, K> {
+    public static class Success<V extends Value<V>, K extends @NonNull Object> extends ValidSyntax<V, K> {
         public final V value;
 
         /**
@@ -86,7 +86,7 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
         }
     }
 
-    public static class Element<V extends Value<V>, K> extends ValidSyntax<V, K> {
+    public static class Element<V extends Value<V>, K extends @NonNull Object> extends ValidSyntax<V, K> {
         public final K kind;
         
         /**
@@ -113,7 +113,7 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
         }
     }
     
-    public static class Disjunction<V extends Value<V>, K> extends ValidSyntax<V, K> {
+    public static class Disjunction<V extends Value<V>, K extends @NonNull Object> extends ValidSyntax<V, K> {
         public final ValidSyntax<V, K> left;
         public final ValidSyntax<V, K> right;
 
@@ -151,7 +151,7 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
         }
     }
     
-    public static class Sequence<V extends Value<V>, K> extends ValidSyntax<V, K> {
+    public static class Sequence<V extends Value<V>, K extends @NonNull Object> extends ValidSyntax<V, K> {
         public final ValidSyntax<V, K> left;
         public final ValidSyntax<V, K> right;
 
@@ -196,7 +196,7 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
         }
     }
     
-    public static class Transform<V extends Value<V>, K> extends ValidSyntax<V, K> {
+    public static class Transform<V extends Value<V>, K extends @NonNull Object> extends ValidSyntax<V, K> {
         public final UnaryOperator<V> transformation;
         public final ValidSyntax<V, K> syntax;
 

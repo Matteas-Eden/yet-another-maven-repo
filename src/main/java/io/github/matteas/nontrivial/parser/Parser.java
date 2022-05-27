@@ -5,9 +5,11 @@ import java.util.Iterator;
 import java.util.function.Function;
 import java.util.Set;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public class Parser<
     V extends Value<V>,
-    K,
+    K extends @NonNull Object,
     T extends Token<V, K>
 > {
     public final Focus<V, K> focus;
@@ -55,7 +57,7 @@ public class Parser<
 
     public static abstract class Result<
         V extends Value<V>,
-        K,
+        K extends @NonNull Object,
         T extends Token<V, K>
     > {
         public abstract <R> R match(
@@ -80,7 +82,7 @@ public class Parser<
         
         public static class Ok<
             V extends Value<V>,
-            K,
+            K extends @NonNull Object,
             T extends Token<V, K>
         > extends Result<V, K, T> {
             public final V value;
@@ -103,7 +105,7 @@ public class Parser<
         
         public static class UnexpectedToken<
             V extends Value<V>,
-            K,
+            K extends @NonNull Object,
             T extends Token<V, K>
         > extends Result<V, K, T> {
             public final T token;
@@ -126,7 +128,7 @@ public class Parser<
         
         public static class UnexpectedEnd<
             V extends Value<V>,
-            K,
+            K extends @NonNull Object,
             T extends Token<V, K>
         > extends Result<V, K, T> {
             public final Set<K> expected;

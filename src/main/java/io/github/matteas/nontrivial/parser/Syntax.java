@@ -11,8 +11,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-public abstract class Syntax<V extends Value<V>, K> {
+public abstract class Syntax<V extends Value<V>, K extends @NonNull Object> {
     /**
      * Also known in literature as the "FIRST" set.
      * This is the {@link Set} of {@link TokenKind} that starts
@@ -126,7 +127,7 @@ public abstract class Syntax<V extends Value<V>, K> {
         }
     }
 
-    public static final class Element<V extends Value<V>, K> extends Syntax<V, K> {
+    public static final class Element<V extends Value<V>, K extends @NonNull Object> extends Syntax<V, K> {
         public final K kind;
         
         public Element(K kind) {
@@ -147,7 +148,7 @@ public abstract class Syntax<V extends Value<V>, K> {
         }
     }
     
-    public static final class Disjunction<V extends Value<V>, K> extends Syntax<V, K> {
+    public static final class Disjunction<V extends Value<V>, K extends @NonNull Object> extends Syntax<V, K> {
         public final Syntax<V, K> left;
         public final Syntax<V, K> right;
 
@@ -267,7 +268,7 @@ public abstract class Syntax<V extends Value<V>, K> {
         }
     }
     
-    public static final class Sequence<V extends Value<V>, K> extends Syntax<V, K> {
+    public static final class Sequence<V extends Value<V>, K extends @NonNull Object> extends Syntax<V, K> {
         public final Syntax<V, K> left;
         public final Syntax<V, K> right;
 
@@ -384,7 +385,7 @@ public abstract class Syntax<V extends Value<V>, K> {
         }
     }
     
-    public static final class Transform<V extends Value<V>, K> extends Syntax<V, K> {
+    public static final class Transform<V extends Value<V>, K extends @NonNull Object> extends Syntax<V, K> {
         public final UnaryOperator<V> transformation;
         public final Syntax<V, K> syntax;
 
@@ -416,7 +417,7 @@ public abstract class Syntax<V extends Value<V>, K> {
     /**
      * Used to create recursive syntaxes.
      */
-    public static class Deferred<V extends Value<V>, K> extends Syntax<V, K> {
+    public static class Deferred<V extends Value<V>, K extends @NonNull Object> extends Syntax<V, K> {
         private Optional<Syntax<V, K>> realizedSyntax = Optional.empty();
         
         private final InductiveProperty.Deferred<Set<K>> deferredAcceptableKinds;
