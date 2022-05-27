@@ -59,6 +59,7 @@ public class Automaton<C extends @NonNull Object, T> {
                 .map(ruleState -> ruleState.completer);
         }
 
+        @RequiresNonNull("memoized")
         public State next(C character) {
             if (pastTransitions.containsKey(character)) {
                 return pastTransitions.get(character);
