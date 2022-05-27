@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
 
+import io.github.matteas.nontrivial.util.LookaheadIterator;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class Lexer<C extends @NonNull Object, T> {

@@ -1,4 +1,4 @@
-package io.github.matteas.nontrivial.lexer;
+package io.github.matteas.nontrivial.util;
 
 import java.util.Iterator;
 

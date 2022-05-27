@@ -4,9 +4,10 @@ import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.Arrays;
 import java.util.Iterator;
+
 import io.github.matteas.nontrivial.lexer.LexerRule;
 import io.github.matteas.nontrivial.lexer.RegularExpression;
-import io.github.matteas.nontrivial.lexer.CharacterIterator;
+import io.github.matteas.nontrivial.util.CharacterIterator;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;

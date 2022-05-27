@@ -226,4 +226,32 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
             return syntax.focus(kind, new Focus.Context.Apply<>(transformation, context));
         }
     }
+
+    public static class Deferred<V extends Value<V>, K extends @NonNull Object> extends ValidSyntax<V, K> {
+        private Optional<ValidSyntax<V, K>> realizedSyntax = Optional.empty();
+
+        public Deferred(
+            Set<K> acceptableKinds,
+            Optional<V> canComplete,
+            boolean canAcceptSomeTokenSequence,
+            Set<ShouldNotFollowEntry<V, K>> shouldNotFollow
+        ) {
+            super(
+                acceptableKinds,
+                canComplete,
+                canAcceptSomeTokenSequence,
+                shouldNotFollow
+            );
+        }
+
+        public void realize(ValidSyntax<V, K> syntax) {
+            assert !realizedSyntax.isPresent();
+            realizedSyntax = Optional.of(syntax);
+        }
+
+        @Override
+        public Focus<V, K> focus(K kind, Focus.Context<V, K> context) {
+            return realizedSyntax.get().focus(kind, context);
+        }
+    }
 }
