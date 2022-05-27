@@ -19,11 +19,11 @@ public interface InductiveProperty<T extends @NonNull Object> {
     void dependedBy(InductiveProperty<?> dependent);
     void update();
 
-    public static <T> Constant<T> constant(T value) {
+    public static <T extends @NonNull Object> Constant<T> constant(T value) {
         return new Constant<>(value);
     }
 
-    public static <T> Rule<T> rule(Iterable<InductiveProperty<?>> dependencies, Supplier<T> calculation) {
+    public static <T extends @NonNull Object> Rule<T> rule(Iterable<InductiveProperty<?>> dependencies, Supplier<T> calculation) {
         final var rule = new Rule<>(calculation);
         for (final var dependency : dependencies) {
             dependency.dependedBy(rule);
@@ -31,7 +31,7 @@ public interface InductiveProperty<T extends @NonNull Object> {
         return rule;
     }
 
-    public static <T> Deferred<T> deferred(T defaultValue) {
+    public static <T extends @NonNull Object> Deferred<T> deferred(T defaultValue) {
         return new Deferred<>(defaultValue);
     }
 
