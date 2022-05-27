@@ -1,5 +1,7 @@
 package io.github.matteas.nontrivial.parser;
 
-public interface Value<V extends Value<V>> {
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+public interface Value<V extends @NonNull Value<V>> {
     V prepend(V value);
 }
