@@ -7,13 +7,14 @@ import java.util.Optional;
 import java.util.Objects;
 
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A cell in a Propagation Network used to find the steady state value.
  * Each InductiveProperty reacts to changes of its dependencies, and the
  * network is calculated bottom-up.
  */
-public interface InductiveProperty<T> {
+public interface InductiveProperty<T extends @NonNull Object> {
     T get();
     void dependedBy(InductiveProperty<?> dependent);
     void update();
@@ -34,7 +35,7 @@ public interface InductiveProperty<T> {
         return new Deferred<>(defaultValue);
     }
 
-    public class Constant<T> implements InductiveProperty<T> {
+    public class Constant<T extends @NonNull Object> implements InductiveProperty<T> {
         private final T value;
         
         private Constant(T value) {
@@ -57,7 +58,7 @@ public interface InductiveProperty<T> {
         }
     }
     
-    public class Rule<T> implements InductiveProperty<T> {
+    public class Rule<T extends @NonNull Object> implements InductiveProperty<T> {
         private final List<InductiveProperty<?>> listeners = new ArrayList<>();
         private final Supplier<T> calculation;
         private T value;
@@ -89,7 +90,7 @@ public interface InductiveProperty<T> {
         }
     }
     
-    public class Deferred<T> implements InductiveProperty<T> {
+    public class Deferred<T extends @NonNull Object> implements InductiveProperty<T> {
         private final List<InductiveProperty<?>> listeners = new ArrayList<>();
         private final T defaultValue;
         private Optional<InductiveProperty<T>> realized = Optional.empty();
@@ -118,19 +119,9 @@ public interface InductiveProperty<T> {
 
         @Override
         public T get() {
-            final var realizedValue = realized.map(InductiveProperty::get);
-
-            /*
-             * TODO: I have no idea what this error means:
-             *
-             * error: [return] incompatible types in return.
-             * type of expression: T[ extends @Initialized @Nullable Object super @Initialized @Nullable Void]
-             * method return type: T[ extends @Initialized @Nullable Object super @Initialized @NonNull Void]
-            */
-            //@SuppressWarnings("type.incompatible")
-            final T result = realizedValue.orElse(defaultValue);
-            
-            return result;
+            return realized
+                .map(InductiveProperty::get)
+                .orElse(defaultValue);
         }
     }
 }
