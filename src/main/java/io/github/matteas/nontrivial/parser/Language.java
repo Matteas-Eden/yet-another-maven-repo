@@ -4,6 +4,7 @@ import java.util.function.UnaryOperator;
 import java.util.function.BinaryOperator;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 import io.github.matteas.nontrivial.lexer.Lexer;
 import io.github.matteas.nontrivial.lexer.LexerRule;
@@ -61,25 +62,30 @@ public abstract class Language<
     
     public class Rule extends Syntax.Deferred<SimpleValue, K> {
         private Syntax<SimpleValue, K> desugar(Object ... items) {
-            if (items.length == 0) {
+            return desugarIterator(Arrays.stream(items).iterator());
+        }
+        
+        private Syntax<SimpleValue, K> desugarIterator(Iterator<? extends @NonNull Object> items) {
+            if (!items.hasNext()) {
                 throw new IllegalArgumentException("Parser rule must contain something");
             }
+    
+            final var headItem = items.next();
             
             Syntax<SimpleValue, K> head;
-            if (kindClass.isInstance(items[0])) {
-                head = new Syntax.Element<>(kindClass.cast(items[0]));
-            } else if (getClass().isInstance(items[0])) {
-                head = getClass().cast(items[0]);
+            if (kindClass.isInstance(headItem)) {
+                head = new Syntax.Element<>(kindClass.cast(headItem));
+            } else if (getClass().isInstance(headItem)) {
+                head = getClass().cast(headItem);
             } else {
-                throw new IllegalArgumentException("Items must be either a token kind or a rule of the right type. Instead, got: " + items[0] + " of type " + items[0].getClass().getSimpleName());
+                throw new IllegalArgumentException("Items must be either a token kind or a rule of the right type. Instead, got: " + headItem + " of type " + headItem.getClass().getSimpleName());
             }
             
-            if (items.length == 1) {
+            if (!items.hasNext()) {
                 return head;
             }
             
-            final var tail = Arrays.copyOfRange(items, 1, items.length);
-            return new Syntax.Sequence<>(head, desugar(tail));
+            return new Syntax.Sequence<>(head, desugarIterator(items));
         }
         
         public Rule is(Object ... items) {
