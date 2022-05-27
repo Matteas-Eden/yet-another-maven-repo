@@ -2,7 +2,9 @@ package io.github.matteas.nontrivial.parser;
 
 import java.util.Set;
 
-public class ShouldNotFollowEntry<V extends Value<V>, K> {
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+public class ShouldNotFollowEntry<V extends Value<V>, K extends @NonNull Object> {
     public final Syntax.Disjunction<V, K> source;
     public final Set<K> disallowedKinds;
 

@@ -106,7 +106,7 @@ public abstract class Syntax<V extends Value<V>, K extends @NonNull Object> {
         return new ValidationResult.Error<>(this);
     }
 
-    public static final class Success<V extends Value<V>, K> extends Syntax<V, K> {
+    public static final class Success<V extends Value<V>, K extends @NonNull Object> extends Syntax<V, K> {
         public final V value;
         
         public Success(V value) {
