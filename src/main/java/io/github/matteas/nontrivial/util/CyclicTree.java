@@ -3,7 +3,8 @@ package io.github.matteas.nontrivial.util;
 import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.Set;
-import java.util.HashSet;
+import java.util.WeakHashMap;
+import java.util.Collections;
 
 /**
  * Also known as a graph, but they're pretending to be a tree.
@@ -13,11 +14,7 @@ public abstract class CyclicTree<T extends CyclicTree<T>> {
 
     protected abstract T self();
 
-    /**
-     * Monotonic set of past visitors that only grows over
-     * time - never shrinks. If abused, this becomes a memory leak.
-     */
-    private final Set<Consumer<T>> visited = new HashSet<>();
+    private final Set<Consumer<T>> visited = Collections.newSetFromMap(new WeakHashMap<Consume<T>, Boolean>()); 
 
     public void traversePostOrder(Consumer<T> visitor) {
         if (!visited.contains(visitor)) {
