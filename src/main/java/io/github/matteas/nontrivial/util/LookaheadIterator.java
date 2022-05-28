@@ -5,11 +5,13 @@ import java.util.Queue;
 import java.util.ArrayDeque;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.Collections;
 
 public class LookaheadIterator<T> implements Iterator<T> {
     private final Iterator<T> inner;
-    private final Queue<T> lookahead = new ArrayDeque<>();
-    private boolean isLookingAhead = false;
+    private Optional<Queue<T>> lookahead = Optional.empty();
+    private Queue<T> backtrack = new ArrayDeque<>();
     
     public LookaheadIterator(Iterator<T> iterator) {
         inner = iterator;
@@ -17,37 +19,42 @@ public class LookaheadIterator<T> implements Iterator<T> {
 
     @Override
     public boolean hasNext() {
-        if (isLookingAhead) {
-            return inner.hasNext();
-        }
-        return !lookahead.isEmpty() || inner.hasNext();
+        return inner.hasNext() || !backtrack.isEmpty();
     }
 
     @Override
     public T next() {
-        if (isLookingAhead) {
-            final var value = inner.next();
-            lookahead.add(value);
-            return value;
-        }
-        final var value = lookahead.poll();
-        if (value == null) {
-            return inner.next();
-        }
+        final var value = Optional
+            .ofNullable(backtrack.poll())
+            .orElseGet(() -> inner.next());
+        lookahead.map(queue -> queue.add(value));
         return value;
     }
 
     public void mark() {
-        isLookingAhead = true;
+        if (lookahead.isPresent()) {
+            throw new AlreadyMarkedException();
+        }
+
+        lookahead = Optional.of(new ArrayDeque<>());
     }
 
     public void reset() {
-        isLookingAhead = false;
+        if (!lookahead.isPresent()) {
+            throw new NotMarkedException();
+        }
+
+        final var queue = lookahead.get();
+        lookahead = Optional.empty();
+        queue.addAll(backtrack);
+        backtrack = queue;
     }
 
     public List<T> getLookahead() {
         // Copy to avoid returning something that could be invalidated later on.
-        return new ArrayList<>(lookahead);
+        return lookahead
+            .<List<T>>map(queue -> new ArrayList<>(queue))
+            .orElse(List.of());
     }
 
     public static abstract class Exception extends RuntimeException {
