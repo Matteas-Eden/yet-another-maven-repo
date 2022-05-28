@@ -49,4 +49,22 @@ public class LookaheadIterator<T> implements Iterator<T> {
         // Copy to avoid returning something that could be invalidated later on.
         return new ArrayList<>(lookahead);
     }
+
+    public static abstract class Exception extends RuntimeException {
+        public Exception(String message) {
+            super(message);
+        }
+    }
+
+    public static class AlreadyMarkedException extends Exception {
+        public AlreadyMarkedException() {
+            super("Cannot mark the lookahead iterator. Iterator is already marked");
+        }
+    }
+
+    public static class NotMarkedException extends Exception {
+        public NotMarkedException() {
+            super("Cannot reset the lookahead iterator. Iterator doesn't have any mark to reset to");
+        }
+    }
 }
