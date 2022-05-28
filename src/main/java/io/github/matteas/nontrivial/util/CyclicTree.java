@@ -14,7 +14,7 @@ public abstract class CyclicTree<T extends CyclicTree<T>> {
 
     protected abstract T self();
 
-    private final Set<Consumer<T>> visited = Collections.newSetFromMap(new WeakHashMap<Consume<T>, Boolean>()); 
+    private final Set<Consumer<T>> visited = Collections.newSetFromMap(new WeakHashMap<Consumer<T>, Boolean>()); 
 
     public void traversePostOrder(Consumer<T> visitor) {
         if (!visited.contains(visitor)) {
