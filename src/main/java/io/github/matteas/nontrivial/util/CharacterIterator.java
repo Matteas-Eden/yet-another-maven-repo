@@ -1,6 +1,7 @@
 package io.github.matteas.nontrivial.util;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class CharacterIterator implements Iterator<Character> {
     public final String string;
@@ -17,13 +18,12 @@ public class CharacterIterator implements Iterator<Character> {
 
     @Override
     public Character next() {
-        final var nextCharacter = string.charAt(position);
-        position++;
-        return nextCharacter;
-    }
-
-    @Override
-    public void remove() {
-        throw new UnsupportedOperationException();
+        try {
+            final var nextCharacter = string.charAt(position);
+            position++;
+            return nextCharacter;
+        } catch (IndexOutOfBoundsException e) {
+            throw new NoSuchElementException("No more characters to iterate", e);
+        }
     }
 }
