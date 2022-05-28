@@ -23,7 +23,9 @@ public class CharacterIterator implements Iterator<Character> {
             position++;
             return nextCharacter;
         } catch (IndexOutOfBoundsException e) {
-            throw new NoSuchElementException("No more characters to iterate", e);
+            final var newException = new NoSuchElementException("No more characters to iterate");
+            newException.initCause(e);
+            throw newException;
         }
     }
 }
