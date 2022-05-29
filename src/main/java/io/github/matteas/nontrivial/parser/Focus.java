@@ -53,6 +53,7 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
     }
 
     public Optional<V> canComplete() {
+        System.out.println("canComplete for focus: " + toString());
         if (context.isRoot()) {
             return syntax.canComplete;
         }
