@@ -101,6 +101,11 @@ public class StringLanguage<V> extends Language<
         public SimpleValue value() {
             return new SimpleValue(tokenToValue.apply(contents, kind));
         }
+
+        @Override
+        public String toString() {
+            return String.format("Token(%s)", contents);
+        }
     }
 
     public class StringTokenKind implements Language.TokenKind<Character, StringToken, StringTokenKind> {
