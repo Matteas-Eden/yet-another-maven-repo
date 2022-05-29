@@ -118,21 +118,22 @@ public abstract class Syntax<
     }
 
     public final ValidationResult<V, K> validate() {
-        if (conflicts.get().isEmpty()) {
-            traversePostOrder(syntax -> {
-                assert !syntax.validSyntax.isPresent();
-                syntax.validSyntax = Optional.of(syntax.createValidSyntaxUnchecked());
-            });
-            
-            assert validSyntax.isPresent();
-            
-            traversePostOrder(syntax -> {
-                syntax.realizeValidSyntax();
-            });
-            
-            return new ValidationResult.Ok<>(validSyntax.get());
+        if (!conflicts.get().isEmpty()) {
+            return new ValidationResult.Error<>(this);
         }
-        return new ValidationResult.Error<>(this);
+        
+        traversePostOrder(syntax -> {
+            assert !syntax.validSyntax.isPresent();
+            syntax.validSyntax = Optional.of(syntax.createValidSyntaxUnchecked());
+        });
+        
+        assert validSyntax.isPresent();
+        
+        traversePostOrder(syntax -> {
+            syntax.realizeValidSyntax();
+        });
+        
+        return new ValidationResult.Ok<>(validSyntax.get());
     }
 
     public static final class Success<V extends Value<V>, K extends @NonNull Object> extends Syntax<V, K> {

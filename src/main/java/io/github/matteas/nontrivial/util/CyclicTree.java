@@ -17,13 +17,17 @@ public abstract class CyclicTree<T extends CyclicTree<T>> {
     private final Set<Consumer<T>> visited = Collections.newSetFromMap(new WeakHashMap<Consumer<T>, Boolean>()); 
 
     public void traversePostOrder(Consumer<T> visitor) {
-        if (!visited.contains(visitor)) {
-            visited.add(visitor);
-            final var iterator = children();
-            while (iterator.hasNext()) {
-                iterator.next().traversePostOrder(visitor);
-            }
-            visitor.accept(self());
+        if (visited.contains(visitor)) {
+            return;
         }
+        
+        visited.add(visitor);
+        
+        final var iterator = children();
+        while (iterator.hasNext()) {
+            iterator.next().traversePostOrder(visitor);
+        }
+        
+        visitor.accept(self());
     }
 }
