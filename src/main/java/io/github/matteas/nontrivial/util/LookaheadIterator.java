@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Collections;
 
-public class LookaheadIterator<T> implements Iterator<T> {
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+public class LookaheadIterator<T extends @NonNull Object> implements Iterator<T> {
     private final Iterator<T> inner;
     private Optional<Queue<T>> lookahead = Optional.empty();
     private Queue<T> backtrack = new ArrayDeque<>();
