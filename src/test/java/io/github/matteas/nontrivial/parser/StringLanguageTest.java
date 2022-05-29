@@ -23,9 +23,9 @@ class StringLanguageTest {
         
         final var expression = lang.rule();
         expression
-            .is(helloworld)
-            .or(lparen, expression, rparen)
-            .map(value -> value + 1);
+            .is(lparen, expression, rparen)
+            .map(value -> value + 1)
+            .or(helloworld);
 
         final var lexer = lang.lexer(List.of(lparen, rparen, helloworld));
         final var parser = lang.parser(expression);
