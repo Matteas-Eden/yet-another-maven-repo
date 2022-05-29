@@ -79,7 +79,7 @@ public class Parser<
                 ok -> ok,
                 unexpectedToken -> {
                     // TODO: Improve error reporting
-                    final var expectedTokenKinds = Arrays.toString(unexpectedEnd.parser.acceptableKinds().toArray());
+                    final var expectedTokenKinds = Arrays.toString(unexpectedToken.parser.acceptableKinds().toArray());
                     throw new RuntimeException("Unexpected token: " + unexpectedToken.token.toString() + ", expected: " + expectedTokenKinds);
                 },
                 unexpectedEnd -> {
