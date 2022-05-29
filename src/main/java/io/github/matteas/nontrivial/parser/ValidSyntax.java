@@ -263,7 +263,7 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
         @Override
         public String toString() {
             return String.format(
-                "ValidSyntax.Transform(\n ransformation: %s\n syntax:\n%s\n)",
+                "ValidSyntax.Transform(\n transformation: %s\n syntax:\n%s\n)",
                 transformation,
                 syntax.toString().replaceAll("(?m)^", "  ")
             );
