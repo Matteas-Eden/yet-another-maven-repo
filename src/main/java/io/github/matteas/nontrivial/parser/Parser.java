@@ -28,33 +28,34 @@ public class Parser<
     }
     
     public Result<V, K, T> parse(Iterator<T> tokens) {
-        var currentFocus = focus;
+        var current = this;
         while (tokens.hasNext()) {
             final var token = tokens.next();
-            System.out.println("Parse: next token " + token.toString() + " with acceptable kinds: " + Arrays.toString(currentFocus.syntax.acceptableKinds.toArray()) + " and can complete: " + currentFocus.syntax.canComplete.map(v -> "Some(" + v + ")").orElse("None"));
-            final var nextFocus = next(token, currentFocus);
-            if (!nextFocus.isPresent()) {
-                return new Result.UnexpectedToken<>(token, new Parser<>(focus));
+            System.out.println("Parse: next token " + token.toString() + " with acceptable kinds: " + Arrays.toString(current.focus.syntax.acceptableKinds.toArray()) + " and can complete: " + current.focus.syntax.canComplete.map(v -> "Some(" + v + ")").orElse("None"));
+            final var nextState = current.next(token);
+            if (!nextState.isPresent()) {
+                return new Result.UnexpectedToken<>(token, nextState);
             }
-            currentFocus = nextFocus.get();
+            current = nextState.get();
         }
-        final var finalFocus = currentFocus;
-        return focus.syntax.canComplete
+        final var finalState = current;
+        return finalState.focus.syntax.canComplete
             .<Result<V, K, T>>map(
-                value -> new Result.Ok<>(value, new Parser<>(finalFocus))
+                value -> new Result.Ok<>(value, finalState)
             )
             .orElseGet(
                 () -> new Result.UnexpectedEnd<>(
-                    finalFocus.syntax.acceptableKinds,
-                    new Parser<>(finalFocus)
+                    finalState.focus.syntax.acceptableKinds,
+                    finalState
                 )
             );
     }
     
-    public Optional<Focus<V, K>> next(T token, Focus<V, K> focus) {
+    public Optional<Parser<V, K, T>> next(T token) {
         return focus
             .refocusToNext(token.kind())
-            .map(nextFocus -> nextFocus.withValue(token.value()));
+            .map(nextFocus -> nextFocus.withValue(token.value()))
+            .map(Parser::new);
     }
 
     public static abstract class Result<

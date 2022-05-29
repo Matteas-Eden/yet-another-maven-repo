@@ -49,7 +49,7 @@ class StringLanguageTest {
             rparen,
             rparen
         ), tokenKinds);
-        
+
         assertEquals(8, parser.parse(tokens).expectOk().value);
     }
 }
