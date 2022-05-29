@@ -34,7 +34,7 @@ public class Parser<
             System.out.println("Parse: next token " + token.toString() + " with acceptable kinds: " + Arrays.toString(current.acceptableKinds.toArray()) + " and can complete: " + current.canComplete.map(v -> "Some(" + v + ")").orElse("None"));
             final var nextState = current.next(token);
             if (!nextState.isPresent()) {
-                return new Result.UnexpectedToken<>(token, nextState.get());
+                return new Result.UnexpectedToken<>(token, current);
             }
             current = nextState.get();
         }
