@@ -39,7 +39,7 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
                     if (context.isRoot()) {
                         return Stream.empty();
                     }
-                    return context.unfocusToNextSyntax(v).acceptableKinds().stream());
+                    return context.unfocusToNextSyntax(v).acceptableKinds().stream();
                 })
                 .orElseGet(Stream::empty)
         ).collect(Collectors.toSet());
