@@ -39,7 +39,7 @@ public class Parser<
         var current = this;
         while (tokens.hasNext()) {
             final var token = tokens.next();
-            System.out.println("Parse: next token " + token.toString() + " with acceptable kinds: " + Arrays.toString(current.acceptableKinds().toArray()) + " and can complete: " + current.canComplete().map(v -> "Some(" + v + ")").orElse("None"));
+            System.out.println("Parse: next token " + token.toString() + " with parser " + toString());
             final var nextState = current.next(token);
             if (!nextState.isPresent()) {
                 return new Result.UnexpectedToken<>(token, current);
@@ -63,6 +63,26 @@ public class Parser<
             .map(Parser::new);
     }
 
+    @Override
+    public String toString() {
+        return String.format(
+            "Parser(\n\tacceptableKinds: %s,\n\tcanComplete: %s,\n\tfocus:\n%s\n)",
+            acceptableKindsToString(),
+            canCompleteToString(),
+            focus.toString().replaceAll("(?m)^", "\t\t")
+        );
+    }
+
+    private String acceptableKindsToString() {
+        return Arrays.toString(acceptableKinds().toArray());
+    }
+
+    private String canCompleteToString() {
+        return canComplete()
+            .map(value -> String.format("Some(%s)", value))
+            .orElseGet(() -> "None");
+    }
+
     public static abstract class Result<
         V extends Value<V>,
         K extends @NonNull Object,
@@ -79,13 +99,11 @@ public class Parser<
                 ok -> ok,
                 unexpectedToken -> {
                     // TODO: Improve error reporting
-                    final var expectedTokenKinds = Arrays.toString(unexpectedToken.parser.acceptableKinds().toArray());
-                    throw new RuntimeException("Unexpected token: " + unexpectedToken.token.toString() + ", expected: " + expectedTokenKinds);
+                    throw new RuntimeException("Unexpected token: " + unexpectedToken.token.toString() + ", expected: " + unexpectedToken.parser.acceptableKindsToString());
                 },
                 unexpectedEnd -> {
                     // TODO: Improve error reporting
-                    final var expectedTokenKinds = Arrays.toString(unexpectedEnd.parser.acceptableKinds().toArray());
-                    throw new RuntimeException("Unexpected end. Expected " + expectedTokenKinds);
+                    throw new RuntimeException("Unexpected end. Expected " + unexpectedEnd.parser.acceptableKindsToString());
                 }
             );
         }

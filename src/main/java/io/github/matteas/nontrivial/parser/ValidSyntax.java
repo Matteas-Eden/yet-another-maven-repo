@@ -84,6 +84,14 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
                 + "node only accepts the empty token sequence."
             );
         }
+        
+        @Override
+        public String toString() {
+            return String.format(
+                "ValidSyntax.Success(%s)",
+                value
+            );
+        }
     }
 
     public static class Element<V extends Value<V>, K extends @NonNull Object> extends ValidSyntax<V, K> {
@@ -110,6 +118,14 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
         public Focus<V, K> focus(K kind, Focus.Context<V, K> context) {
             assert this.kind == kind;
             return new Focus<>(this, context);
+        }
+        
+        @Override
+        public String toString() {
+            return String.format(
+                "ValidSyntax.Element(%s)",
+                kind
+            );
         }
     }
     
@@ -148,6 +164,15 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
                 return left.focus(kind, context);
             }
             return right.focus(kind, context);
+        }
+        
+        @Override
+        public String toString() {
+            return String.format(
+                "ValidSyntax.Disjunction(\n\tleft:\n%s\n\tright:\n%s\n)",
+                left.toString().replaceAll("(?m)^", "\t\t"),
+                right.toString().replaceAll("(?m)^", "\t\t")
+            );
         }
     }
     
@@ -194,6 +219,15 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
                 })
                 .orElseGet(leftFocus);
         }
+        
+        @Override
+        public String toString() {
+            return String.format(
+                "ValidSyntax.Sequence(\n\tleft:\n%s\n\tright:\n%s\n)",
+                left.toString().replaceAll("(?m)^", "\t\t"),
+                right.toString().replaceAll("(?m)^", "\t\t")
+            );
+        }
     }
     
     public static class Transform<V extends Value<V>, K extends @NonNull Object> extends ValidSyntax<V, K> {
@@ -224,6 +258,15 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
         @Override
         public Focus<V, K> focus(K kind, Focus.Context<V, K> context) {
             return syntax.focus(kind, new Focus.Context.Apply<>(transformation, context));
+        }
+        
+        @Override
+        public String toString() {
+            return String.format(
+                "ValidSyntax.Transform(\n\transformation: %s\n\tsyntax:\n%s\n)",
+                transformation,
+                syntax.toString().replaceAll("(?m)^", "\t\t")
+            );
         }
     }
 
@@ -259,6 +302,12 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
         @Override
         public Focus<V, K> focus(K kind, Focus.Context<V, K> context) {
             return realizedSyntax.get().focus(kind, context);
+        }
+        
+        @Override
+        public String toString() {
+            // Don't recurse as this could be cyclic
+            return "ValidSyntax.Deferred";
         }
     }
 }

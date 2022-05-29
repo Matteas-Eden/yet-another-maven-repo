@@ -102,6 +102,15 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
         return new Focus<>(new ValidSyntax.Success<>(value), context);
     }
 
+    @Override
+    public String toString() {
+        return String.format(
+            "Focus(\n\tfocal syntax:\n%s\n\tcontext:\n%s\n)",
+            syntax.toString().replaceAll("(?m)^", "\t\t"),
+            context.toString().replaceAll("(?m)^", "\t\t")
+        );
+    }
+
     public interface Context<V extends Value<V>, K extends @NonNull Object> {
         /**
          * Also known in literature as "plug"
@@ -129,6 +138,15 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
             public boolean isRoot() {
                 return false;
             }
+
+            @Override
+            public String toString() {
+                return String.format(
+                    "Context.FollowBy(\n\tsyntax:\n%s\n\tnext:\n%s\n)",
+                    syntax.toString().replaceAll("(?m)^", "\t\t"),
+                    next.toString().replaceAll("(?m)^", "\t\t")
+                );
+            }
         }
         
         public static class Prepend<V extends Value<V>, K extends @NonNull Object> implements Context<V, K> {
@@ -147,6 +165,15 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
             @Override
             public boolean isRoot() {
                 return false;
+            }
+
+            @Override
+            public String toString() {
+                return String.format(
+                    "Context.Prepend(\n\tvalue: %s\n\tnext:\n%s\n)",
+                    value,
+                    next.toString().replaceAll("(?m)^", "\t\t")
+                );
             }
         }
         
@@ -167,6 +194,15 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
             public boolean isRoot() {
                 return false;
             }
+
+            @Override
+            public String toString() {
+                return String.format(
+                    "Context.Apply(\n\tmapper: %s\n\tnext:\n%s\n)",
+                    mapper,
+                    next.toString().replaceAll("(?m)^", "\t\t")
+                );
+            }
         }
         
         public static class Root<V extends Value<V>, K extends @NonNull Object> implements Context<V, K> {
@@ -178,6 +214,11 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
             @Override
             public boolean isRoot() {
                 return true;
+            }
+
+            @Override
+            public String toString() {
+                return String.format("Context.Root");
             }
         }
     }
