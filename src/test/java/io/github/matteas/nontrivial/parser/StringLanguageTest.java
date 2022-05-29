@@ -30,13 +30,23 @@ class StringLanguageTest {
         final var lexer = lang.lexer(List.of(lparen, rparen, helloworld));
         final var parser = lang.parser(expression);
         
-        assertEquals(
-            8,
-            parser.parse(
-                lexer.tokenize(
-                    new CharacterIterator("((((((((Hello World!))))))))")
-                )
-            ).expectOk().value
+        final var tokens = lexer.tokenize(
+            new CharacterIterator("(((Hello World!)))")
         );
+        final var tokenKinds = tokens
+            .stream()
+            .map(Token::kind)
+            .collect(Collectors.toList());
+        assertEquals(List.of(
+            lparen,
+            lparen,
+            lparen,
+            helloworld,
+            rparen,
+            rparen,
+            rparen
+        ), tokenKinds);
+        
+        assertEquals(8, parser.parse(tokens).expectOk().value);
     }
 }
