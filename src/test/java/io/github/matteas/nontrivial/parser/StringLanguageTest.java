@@ -47,6 +47,6 @@ class StringLanguageTest {
         ), tokenKinds);
 
         final int finalValue = parser.parse(tokens).expectOk().value.value;
-        assertEquals(8, finalValue);
+        assertEquals(3, finalValue);
     }
 }
