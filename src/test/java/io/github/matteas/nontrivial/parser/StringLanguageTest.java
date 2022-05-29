@@ -9,11 +9,12 @@ import java.util.stream.Collectors;
 import io.github.matteas.nontrivial.util.CharacterIterator;
 
 class StringLanguageTest {
+    
     @Test
     void countNesting() {
         final var lang = new StringLanguage<Integer>(
             (tokenContents, kind) -> 0,
-            ((left, right) -> 0),
+            ((left, right) -> Math.max(left, right)),
             (Class<StringLanguage<Integer>.StringTokenKind>)(Class<?>)StringLanguage.StringTokenKind.class // ewww
         );
         final var lparen = lang.token('(').withDebugName("lparen");
