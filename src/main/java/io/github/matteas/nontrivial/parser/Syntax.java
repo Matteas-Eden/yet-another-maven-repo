@@ -111,9 +111,18 @@ public abstract class Syntax<
     private Optional<ValidSyntax<V, K>> validSyntax = Optional.empty();
 
     protected abstract ValidSyntax<V, K> createValidSyntaxUnchecked();
-    protected void realizeValidSyntax() {}
 
     protected final ValidSyntax<V, K> getValidSyntaxUnchecked() {
+        if (!validSyntax.isPresent()) {
+            validSyntax = Optional.of(
+                new ValidSyntax.Deferred<>(
+                    acceptableKinds.get(),
+                    canComplete.get(),
+                    canAcceptSomeTokenSequence.get(),
+                    shouldNotFollow.get()
+                )
+            );
+        }
         return validSyntax.get();
     }
 
@@ -123,14 +132,13 @@ public abstract class Syntax<
         }
         
         traversePostOrder(syntax -> {
-            assert !syntax.validSyntax.isPresent();
-            syntax.validSyntax = Optional.of(syntax.createValidSyntaxUnchecked());
-        });
-        
-        assert validSyntax.isPresent();
-        
-        traversePostOrder(syntax -> {
-            syntax.realizeValidSyntax();
+            final var realizedValidSyntax = syntax.createValidSyntaxUnchecked();
+            if (syntax.validSyntax.isPresent()) {
+                final var deferred = (ValidSyntax.Deferred<V, K>)syntax.validSyntax.get();
+                deferred.realize(realizedValidSyntax);
+            } else {
+                syntax.validSyntax = Optional.of(realizedValidSyntax);
+            }
         });
         
         return new ValidationResult.Ok<>(validSyntax.get());
@@ -159,11 +167,6 @@ public abstract class Syntax<
         @Override
         protected ValidSyntax<V, K> createValidSyntaxUnchecked() {
             return new ValidSyntax.Success<>(value);
-        }
-        
-        @Override
-        protected void realizeValidSyntax() {
-            // Nothing to do.
         }
     }
 
@@ -485,7 +488,6 @@ public abstract class Syntax<
      */
     public static class Deferred<V extends Value<V>, K extends @NonNull Object> extends Syntax<V, K> {
         private Optional<Syntax<V, K>> realizedSyntax = Optional.empty();
-        private Optional<ValidSyntax.Deferred<V, K>> deferredValidSyntax = Optional.empty();
         
         private final InductiveProperty.Deferred<Set<K>> deferredAcceptableKinds;
         private final InductiveProperty.Deferred<Optional<V>> deferredCanComplete;
@@ -546,24 +548,7 @@ public abstract class Syntax<
         @Override
         protected ValidSyntax<V, K> createValidSyntaxUnchecked() {
             assert realizedSyntax.isPresent();
-            deferredValidSyntax = Optional.of(
-                new ValidSyntax.Deferred<>(
-                    acceptableKinds.get(),
-                    canComplete.get(),
-                    canAcceptSomeTokenSequence.get(),
-                    shouldNotFollow.get()
-                )
-            );
-            return deferredValidSyntax.get();
-        }
-        
-        @Override
-        protected void realizeValidSyntax() {
-            assert deferredValidSyntax.isPresent();
-            assert realizedSyntax.isPresent();
-            deferredValidSyntax.get().realize(
-                realizedSyntax.get().getValidSyntaxUnchecked()
-            );
+            return realizedSyntax.get().getValidSyntaxUnchecked();
         }
     }
 }
