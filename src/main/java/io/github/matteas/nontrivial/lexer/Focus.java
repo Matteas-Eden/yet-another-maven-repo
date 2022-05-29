@@ -19,7 +19,7 @@ public class Focus<C> {
     }
 
     public Focus(RegularExpression<C> expression) {
-        this(new Context<>(expression));
+        this(new Context.Sequence<>(expression, new Context.Root<>()));
     }
     
     public Focus(Context<C> context) {
@@ -71,57 +71,93 @@ public class Focus<C> {
         return contexts.equals(otherFocus.contexts);
     }
     
-    public static class Context<C> {
-        public final RegularExpression<C> nextExpression;
-        public final Optional<Context<C>> context;
+    public static abstract class Context<C> {
         public final boolean canComplete;
         public final boolean canAcceptCharacter;
         public final boolean canAcceptWord;
+
+        public Context(
+            boolean canComplete,
+            boolean canAcceptCharacter,
+            boolean canAcceptWord
+        ) {
+            this.canComplete = canComplete;
+            this.canAcceptCharacter = canAcceptCharacter;
+            this.canAcceptWord = canAcceptWord;
+        }
         
-        public Context(RegularExpression<C> nextExpression) {
-            this.nextExpression = nextExpression;
-            context = Optional.empty();
-            canComplete = nextExpression.canComplete;
-            canAcceptCharacter = nextExpression.canAcceptCharacter;
-            canAcceptWord = nextExpression.canAcceptWord;
+        public final Context<C> prepend(RegularExpression<C> nextExpression) {
+            return new Sequence<>(nextExpression, this);
         }
 
-        public Context(RegularExpression<C> nextExpression, Context<C> context) {
-            this.nextExpression = nextExpression;
-            this.context = Optional.of(context);
-            canComplete = nextExpression.canComplete && context.canComplete;
-            canAcceptCharacter = nextExpression.canAcceptCharacter || context.canAcceptCharacter;
-            canAcceptWord = nextExpression.canAcceptWord && context.canAcceptWord;
-        }
+        public abstract Focus<C> unfocus(C character);
 
-        public Context<C> prepend(RegularExpression<C> nextExpression) {
-            return new Context<>(nextExpression, this);
-        }
-
-        public Focus<C> unfocus(C character) {
-            final var nextFocus = nextExpression.focus(character, context.get());
-            if (nextExpression.canComplete && context.isPresent()) {
-                return nextFocus.union(context.get().unfocus(character));
+        public static class Sequence<C> extends Context<C> {
+            public final RegularExpression<C> expression;
+            public final Context<C> next;
+    
+            public Sequence(RegularExpression<C> expression, Context<C> next) {
+                super(
+                    expression.canComplete && next.canComplete,
+                    expression.canAcceptCharacter || next.canAcceptCharacter,
+                    expression.canAcceptWord && next.canAcceptWord
+                );
+                this.expression = expression;
+                this.next = next;
             }
-            return nextFocus;
+
+            @Override
+            public Focus<C> unfocus(C character) {
+                final var nextFocus = expression.focus(character, next);
+                if (expression.canComplete) {
+                    return nextFocus.union(next.unfocus(character));
+                }
+                return nextFocus;
+            }
+
+            @Override
+            public int hashCode() {
+                final var SEQUENCE_TAG = 3;
+                return Objects.hash(expression, next);
+            }
+    
+            @Override
+            public boolean equals(@Nullable Object other) {
+                if (other == null) {
+                    return false;
+                }
+                if (other.getClass() != getClass()) {
+                    return false;
+                }
+                final var otherContext = (Sequence<C>)other;
+                return expression.equals(otherContext.expression)
+                    && next.equals(otherContext.next);
+            }
         }
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(context, nextExpression);
-        }
+        public static class Root<C> extends Context<C> {
+            public Root() {
+                super(true, false, true);
+            }
 
-        @Override
-        public boolean equals(@Nullable Object other) {
-            if (other == null) {
-                return false;
+            @Override
+            public Focus<C> unfocus(C character) {
+                return new Focus<>();
             }
-            if (other.getClass() != getClass()) {
-                return false;
+
+            @Override
+            public int hashCode() {
+                final var ROOT_TAG = 7;
+                return Objects.hash(ROOT_TAG);
             }
-            final var otherContext = (Context<C>)other;
-            return nextExpression.equals(otherContext.nextExpression)
-                && context.equals(otherContext.context);
+    
+            @Override
+            public boolean equals(@Nullable Object other) {
+                if (other == null) {
+                    return false;
+                }
+                return other.getClass() == getClass();
+            }
         }
     }
 }
