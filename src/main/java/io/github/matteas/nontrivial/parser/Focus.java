@@ -31,6 +31,30 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
         this.context = context;
     }
 
+    public Set<K> acceptableKinds() {
+        return Stream.concat(
+            syntax.acceptableKinds.stream(),
+            syntax.canComplete
+                .map(value -> {
+                    if (context.isRoot()) {
+                        return Stream.empty();
+                    }
+                    return context.unfocusToNextSyntax(v).acceptableKinds().stream());
+                })
+                .orElseGet(Stream::empty)
+        ).collect(Collectors.toSet());
+    }
+
+    public Optional<V> canComplete() {
+        return syntax.canComplete
+            .map(value -> {
+                if (context.isRoot()) {
+                    return value;
+                }
+                return context.unfocusToNextSyntax(v).canComplete();
+            });
+    }
+
     /**
      * Tries moving the focus to the next Element syntax node that accepts the given token kind.
      */
@@ -87,6 +111,7 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
     
             @Override
             public Focus<V, K> unfocusToNextSyntax(V v) {
+                // Found the next syntax, so we stop unfocusing here.
                 return new Focus<>(syntax, new Prepend<>(v, next));
             }
 

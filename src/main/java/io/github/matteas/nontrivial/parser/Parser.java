@@ -23,6 +23,14 @@ public class Parser<
         this.focus = focus;
     }
 
+    public Set<K> acceptableKinds() {
+        return focus.acceptableKinds();
+    }
+
+    public Optional<V> canComplete() {
+        return focus.canComplete();
+    }
+
     public Result<V, K, T> parse(Iterable<T> tokens) {
         return parse(tokens.iterator());
     }
@@ -31,7 +39,7 @@ public class Parser<
         var current = this;
         while (tokens.hasNext()) {
             final var token = tokens.next();
-            System.out.println("Parse: next token " + token.toString() + " with acceptable kinds: " + Arrays.toString(current.acceptableKinds.toArray()) + " and can complete: " + current.canComplete.map(v -> "Some(" + v + ")").orElse("None"));
+            System.out.println("Parse: next token " + token.toString() + " with acceptable kinds: " + Arrays.toString(current.acceptableKinds().toArray()) + " and can complete: " + current.canComplete().map(v -> "Some(" + v + ")").orElse("None"));
             final var nextState = current.next(token);
             if (!nextState.isPresent()) {
                 return new Result.UnexpectedToken<>(token, current);
@@ -39,7 +47,7 @@ public class Parser<
             current = nextState.get();
         }
         final var finalState = current;
-        return finalState.canComplete
+        return finalState.canComplete()
             .<Result<V, K, T>>map(
                 value -> new Result.Ok<>(value, finalState)
             )
