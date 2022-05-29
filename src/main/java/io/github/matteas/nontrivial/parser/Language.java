@@ -123,5 +123,10 @@ public abstract class Language<
         public SimpleValue prepend(SimpleValue left) {
             return new SimpleValue(joiner.apply(left.value, value));
         }
+
+        @Override
+        public String toString() {
+            return String.format("Value(%s)", value);
+        }
     }
 }

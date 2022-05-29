@@ -105,6 +105,7 @@ public class StringLanguage<V> extends Language<
 
     public class StringTokenKind implements Language.TokenKind<Character, StringToken, StringTokenKind> {
         public final RegularExpression<Character> expression;
+        public String debugName = "Unnamed";
         
         public StringTokenKind(RegularExpression<Character> expression) {
             this.expression = expression;
@@ -135,6 +136,16 @@ public class StringLanguage<V> extends Language<
                     desugar(items)
                 )
             );
+        }
+
+        public StringTokenKind withDebugName(String debugName) {
+            this.debugName = debugName;
+            return this;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("TokenKind(%s)", debugName);
         }
     }
 }

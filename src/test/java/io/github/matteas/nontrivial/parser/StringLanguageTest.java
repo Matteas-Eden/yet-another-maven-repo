@@ -16,9 +16,9 @@ class StringLanguageTest {
             ((left, right) -> 0),
             (Class<StringLanguage<Integer>.StringTokenKind>)(Class<?>)StringLanguage.StringTokenKind.class // ewww
         );
-        final var lparen = lang.token('(');
-        final var rparen = lang.token(')');
-        final var helloworld = lang.token("Hello World!");
+        final var lparen = lang.token('(').withDebugName("lparen");
+        final var rparen = lang.token(')').withDebugName("rparent");
+        final var helloworld = lang.token("Hello World!").withDebugName("helloworld");
         
         final var expression = lang.rule();
         expression
