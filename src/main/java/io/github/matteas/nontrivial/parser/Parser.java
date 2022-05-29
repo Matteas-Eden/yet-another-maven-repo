@@ -39,7 +39,7 @@ public class Parser<
         var current = this;
         while (tokens.hasNext()) {
             final var token = tokens.next();
-            System.out.println("Parse: next token " + token.toString() + " with parser " + toString());
+            System.out.println("Parse: next token " + token.toString() + " with parser " + current.toString());
             final var nextState = current.next(token);
             if (!nextState.isPresent()) {
                 return new Result.UnexpectedToken<>(token, current);
