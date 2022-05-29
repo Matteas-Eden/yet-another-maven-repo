@@ -34,10 +34,6 @@ public class LookaheadIterator<T extends @NonNull Object> implements Iterator<T>
     }
 
     public void mark() {
-        if (lookahead.isPresent()) {
-            throw new AlreadyMarkedException();
-        }
-
         lookahead = Optional.of(new ArrayDeque<>());
     }
 
@@ -62,12 +58,6 @@ public class LookaheadIterator<T extends @NonNull Object> implements Iterator<T>
     public static abstract class Exception extends RuntimeException {
         public Exception(String message) {
             super(message);
-        }
-    }
-
-    public static class AlreadyMarkedException extends Exception {
-        public AlreadyMarkedException() {
-            super("Cannot mark the lookahead iterator. Iterator is already marked");
         }
     }
 
