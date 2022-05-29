@@ -169,9 +169,9 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
         @Override
         public String toString() {
             return String.format(
-                "ValidSyntax.Disjunction(\n\tleft:\n%s\n\tright:\n%s\n)",
-                left.toString().replaceAll("(?m)^", "\t\t"),
-                right.toString().replaceAll("(?m)^", "\t\t")
+                "ValidSyntax.Disjunction(\n left:\n%s\n right:\n%s\n)",
+                left.toString().replaceAll("(?m)^", "  "),
+                right.toString().replaceAll("(?m)^", "  ")
             );
         }
     }
@@ -223,9 +223,9 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
         @Override
         public String toString() {
             return String.format(
-                "ValidSyntax.Sequence(\n\tleft:\n%s\n\tright:\n%s\n)",
-                left.toString().replaceAll("(?m)^", "\t\t"),
-                right.toString().replaceAll("(?m)^", "\t\t")
+                "ValidSyntax.Sequence(\n left:\n%s\n right:\n%s\n)",
+                left.toString().replaceAll("(?m)^", "  "),
+                right.toString().replaceAll("(?m)^", "  ")
             );
         }
     }
@@ -263,9 +263,9 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
         @Override
         public String toString() {
             return String.format(
-                "ValidSyntax.Transform(\n\transformation: %s\n\tsyntax:\n%s\n)",
+                "ValidSyntax.Transform(\n ransformation: %s\n syntax:\n%s\n)",
                 transformation,
-                syntax.toString().replaceAll("(?m)^", "\t\t")
+                syntax.toString().replaceAll("(?m)^", "  ")
             );
         }
     }

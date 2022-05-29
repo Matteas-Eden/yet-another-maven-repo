@@ -105,9 +105,9 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
     @Override
     public String toString() {
         return String.format(
-            "Focus(\n\tfocal syntax:\n%s\n\tcontext:\n%s\n)",
-            syntax.toString().replaceAll("(?m)^", "\t\t"),
-            context.toString().replaceAll("(?m)^", "\t\t")
+            "Focus(\n focal syntax:\n%s\n context:\n%s\n)",
+            syntax.toString().replaceAll("(?m)^", "  "),
+            context.toString().replaceAll("(?m)^", "  ")
         );
     }
 
@@ -142,9 +142,9 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
             @Override
             public String toString() {
                 return String.format(
-                    "Context.FollowBy(\n\tsyntax:\n%s\n\tnext:\n%s\n)",
-                    syntax.toString().replaceAll("(?m)^", "\t\t"),
-                    next.toString().replaceAll("(?m)^", "\t\t")
+                    "Context.FollowBy(\n syntax:\n%s\n next:\n%s\n)",
+                    syntax.toString().replaceAll("(?m)^", "  "),
+                    next.toString().replaceAll("(?m)^", "  ")
                 );
             }
         }
@@ -170,9 +170,9 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
             @Override
             public String toString() {
                 return String.format(
-                    "Context.Prepend(\n\tvalue: %s\n\tnext:\n%s\n)",
+                    "Context.Prepend(\n value: %s\n next:\n%s\n)",
                     value,
-                    next.toString().replaceAll("(?m)^", "\t\t")
+                    next.toString().replaceAll("(?m)^", "  ")
                 );
             }
         }
@@ -198,9 +198,9 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
             @Override
             public String toString() {
                 return String.format(
-                    "Context.Apply(\n\tmapper: %s\n\tnext:\n%s\n)",
+                    "Context.Apply(\n mapper: %s\n next:\n%s\n)",
                     mapper,
-                    next.toString().replaceAll("(?m)^", "\t\t")
+                    next.toString().replaceAll("(?m)^", "  ")
                 );
             }
         }

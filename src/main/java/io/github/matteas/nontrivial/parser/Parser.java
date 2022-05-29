@@ -66,10 +66,10 @@ public class Parser<
     @Override
     public String toString() {
         return String.format(
-            "Parser(\n\tacceptableKinds: %s,\n\tcanComplete: %s,\n\tfocus:\n%s\n)",
+            "Parser(\n acceptableKinds: %s,\n canComplete: %s,\n focus:\n%s\n)",
             acceptableKindsToString(),
             canCompleteToString(),
-            focus.toString().replaceAll("(?m)^", "\t\t")
+            focus.toString().replaceAll("(?m)^", "  ")
         );
     }
 
