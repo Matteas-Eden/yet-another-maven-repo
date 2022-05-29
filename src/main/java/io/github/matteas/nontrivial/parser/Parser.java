@@ -31,7 +31,7 @@ public class Parser<
         var current = this;
         while (tokens.hasNext()) {
             final var token = tokens.next();
-            System.out.println("Parse: next token " + token.toString() + " with acceptable kinds: " + Arrays.toString(current.focus.syntax.acceptableKinds.toArray()) + " and can complete: " + current.focus.syntax.canComplete.map(v -> "Some(" + v + ")").orElse("None"));
+            System.out.println("Parse: next token " + token.toString() + " with acceptable kinds: " + Arrays.toString(current.acceptableKinds.toArray()) + " and can complete: " + current.canComplete.map(v -> "Some(" + v + ")").orElse("None"));
             final var nextState = current.next(token);
             if (!nextState.isPresent()) {
                 return new Result.UnexpectedToken<>(token, nextState.get());
@@ -39,15 +39,12 @@ public class Parser<
             current = nextState.get();
         }
         final var finalState = current;
-        return finalState.focus.syntax.canComplete
+        return finalState.canComplete
             .<Result<V, K, T>>map(
                 value -> new Result.Ok<>(value, finalState)
             )
             .orElseGet(
-                () -> new Result.UnexpectedEnd<>(
-                    finalState.focus.syntax.acceptableKinds,
-                    finalState
-                )
+                () -> new Result.UnexpectedEnd<>(finalState)
             );
     }
     
@@ -135,11 +132,9 @@ public class Parser<
             K extends @NonNull Object,
             T extends Token<V, K>
         > extends Result<V, K, T> {
-            public final Set<K> expected;
             public final Parser<V, K, T> parser;
             
-            public UnexpectedEnd(Set<K> expected, Parser<V, K, T> parser) {
-                this.expected = expected;
+            public UnexpectedEnd(Parser<V, K, T> parser) {
                 this.parser = parser;
             }
 
