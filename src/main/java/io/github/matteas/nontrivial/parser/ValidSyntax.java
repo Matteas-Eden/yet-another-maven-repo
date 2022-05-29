@@ -230,7 +230,14 @@ public abstract class ValidSyntax<V extends Value<V>, K extends @NonNull Object>
     public static class Deferred<V extends Value<V>, K extends @NonNull Object> extends ValidSyntax<V, K> {
         private Optional<ValidSyntax<V, K>> realizedSyntax = Optional.empty();
 
-        public Deferred(
+        /**
+         * Create a valid syntax node that we don't know the definition of yet.
+         * This is to support recursive syntaxes where we need a way to refer to
+         * to the syntax node before we can define its contents.
+         * This constructor is package private so that the only way
+         * to obtain a ValidSyntax node is by {@link Syntax#validate()}
+         */
+        Deferred(
             Set<K> acceptableKinds,
             Optional<V> canComplete,
             boolean canAcceptSomeTokenSequence,
