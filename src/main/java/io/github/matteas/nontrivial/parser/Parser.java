@@ -79,11 +79,12 @@ public class Parser<
                 ok -> ok,
                 unexpectedToken -> {
                     // TODO: Improve error reporting
-                    throw new RuntimeException("Unexpected token " + unexpectedToken.token.toString());
+                    final var expectedTokenKinds = Arrays.toString(unexpectedEnd.parser.acceptableKinds().toArray());
+                    throw new RuntimeException("Unexpected token: " + unexpectedToken.token.toString() + ", expected: " + expectedTokenKinds);
                 },
                 unexpectedEnd -> {
                     // TODO: Improve error reporting
-                    final var expectedTokenKinds = Arrays.toString(unexpectedEnd.expected.toArray());
+                    final var expectedTokenKinds = Arrays.toString(unexpectedEnd.parser.acceptableKinds().toArray());
                     throw new RuntimeException("Unexpected end. Expected " + expectedTokenKinds);
                 }
             );

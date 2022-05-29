@@ -2,6 +2,9 @@ package io.github.matteas.nontrivial.parser;
 
 import java.util.function.UnaryOperator;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -39,7 +42,7 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
                     if (context.isRoot()) {
                         return Stream.empty();
                     }
-                    return context.unfocusToNextSyntax(v).acceptableKinds().stream();
+                    return context.unfocusToNextSyntax(value).acceptableKinds().stream();
                 })
                 .orElseGet(Stream::empty)
         ).collect(Collectors.toSet());
@@ -51,7 +54,7 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
                 if (context.isRoot()) {
                     return value;
                 }
-                return context.unfocusToNextSyntax(v).canComplete();
+                return context.unfocusToNextSyntax(value).canComplete();
             });
     }
 
