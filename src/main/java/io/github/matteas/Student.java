@@ -16,4 +16,3 @@ public class Student extends Person {
         return this.testScore;
     }
 }
-
