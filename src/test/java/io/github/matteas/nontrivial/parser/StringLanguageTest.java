@@ -2,7 +2,10 @@ package io.github.matteas.nontrivial.parser;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.List;
+import java.util.stream.Collectors;
+
 import io.github.matteas.nontrivial.util.CharacterIterator;
 
 class StringLanguageTest {
