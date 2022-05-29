@@ -50,6 +50,7 @@ class StringLanguageTest {
             rparen
         ), tokenKinds);
 
-        assertEquals(8, parser.parse(tokens).expectOk().value);
+        final int finalValue = parser.parse(tokens).expectOk().value.value;
+        assertEquals(8, finalValue);
     }
 }
