@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.Iterator;
 import java.util.function.Function;
 import java.util.Set;
+import java.util.Arrays;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -30,6 +31,7 @@ public class Parser<
         var currentFocus = focus;
         while (tokens.hasNext()) {
             final var token = tokens.next();
+            System.out.println("Parse: next token " + token.toString() + " with acceptable kinds: " + Arrays.toString(currentFocus.syntax.acceptableKinds.toArray()) + " and can complete: " + currentFocus.syntax.canComplete.map(v -> "Some(" + v + ")").orElse("None"));
             final var nextFocus = next(token, currentFocus);
             if (!nextFocus.isPresent()) {
                 return new Result.UnexpectedToken<>(token, new Parser<>(focus));
@@ -71,11 +73,12 @@ public class Parser<
                 ok -> ok,
                 unexpectedToken -> {
                     // TODO: Improve error reporting
-                    throw new RuntimeException("Unexpected token");
+                    throw new RuntimeException("Unexpected token " + unexpectedToken.token.toString());
                 },
                 unexpectedEnd -> {
                     // TODO: Improve error reporting
-                    throw new RuntimeException("Unexpected end");
+                    final var expectedTokenKinds = Arrays.toString(unexpectedEnd.expected.toArray());
+                    throw new RuntimeException("Unexpected end. Expected " + expectedTokenKinds);
                 }
             );
         }
