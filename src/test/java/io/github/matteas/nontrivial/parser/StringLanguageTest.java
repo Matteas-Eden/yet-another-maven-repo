@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import io.github.matteas.nontrivial.util.CharacterIterator;
 
 class StringLanguageTest {
-    
     @Test
     void countNesting() {
         final var lang = new StringLanguage<Integer>(
