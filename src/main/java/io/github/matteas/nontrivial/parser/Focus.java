@@ -35,27 +35,34 @@ public class Focus<V extends Value<V>, K extends @NonNull Object> {
     }
 
     public Set<K> acceptableKinds() {
+        if (context.isRoot()) {
+            return syntax.acceptableKinds;
+        }
+        
         return Stream.concat(
             syntax.acceptableKinds.stream(),
             syntax.canComplete
-                .map(value -> {
-                    if (context.isRoot()) {
-                        return Stream.empty();
-                    }
-                    return context.unfocusToNextSyntax(value).acceptableKinds().stream();
-                })
+                .map(
+                    value -> context
+                        .unfocusToNextSyntax(value)
+                        .acceptableKinds()
+                        .stream()
+                )
                 .orElseGet(Stream::empty)
         ).collect(Collectors.toSet());
     }
 
     public Optional<V> canComplete() {
+        if (context.isRoot()) {
+            return syntax.canComplete;
+        }
+        
         return syntax.canComplete
-            .map(value -> {
-                if (context.isRoot()) {
-                    return value;
-                }
-                return context.unfocusToNextSyntax(value).canComplete();
-            });
+            .flatMap(
+                value -> context
+                    .unfocusToNextSyntax(value)
+                    .canComplete()
+            );
     }
 
     /**
